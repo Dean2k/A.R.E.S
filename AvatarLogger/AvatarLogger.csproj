@@ -55,7 +55,7 @@
     </Reference>
     <Reference Include="ReMod.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>.\ReMod.Core.dll</HintPath>
+      <HintPath>E:\SteamLibrary\steamapps\common\VRChat\ReMod.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />

@@ -1,21 +1,22 @@
-﻿using SevenZipExtractor;
+﻿using SharpCompress.Common;
+using SharpCompress.Readers;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Reflection;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
 
 namespace ARES.UPDATER
 {
-    class Program
+    internal class Program
     {
-        static string fileLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        static string guiLocation = fileLocation + @"\GUI\ARES.exe";
-        static bool guiDownloaded;
-        static int timeout = 7200000;
-        static void Main(string[] args)
+        private static string fileLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        private static string guiLocation = fileLocation + @"\GUI\ARES.exe";
+        private static bool guiDownloaded;
+        private static int timeout = 7200000;
+
+        private static void Main(string[] args)
         {
             if (File.Exists("VRChat.exe"))
             {
@@ -39,7 +40,6 @@ namespace ARES.UPDATER
                     return;
                 }
 
-
                 string application = SHA256CheckSum(guiLocation);
                 string latestString = GetHashLatestAsync("https://raw.githubusercontent.com/Dean2k/A.R.E.S/main/VersionHashes/ARESGUI.txt");
 
@@ -56,25 +56,40 @@ namespace ARES.UPDATER
                 Console.WriteLine("The updater is not currently in the VRChat folder, please place it\nalongside your 'VRChat.exe' file for optimal preformance!\nYou can just hit enter to close meh!");
                 while (Console.ReadKey().Key != ConsoleKey.Enter) { }
             }
-
+            
         }
 
-        static void startGuiDownload()
+        private static void startGuiDownload()
         {
             FileDownloader fileDownloader = new FileDownloader("https://github.com/Dean2k/A.R.E.S/releases/latest/download/GUI.rar", fileLocation + @"\GUI.rar");
             fileDownloader.StartDownload(timeout, "GUI.rar");
             guiDownloaded = true;
         }
 
-        static void extractGUI()
+        private static void extractGUI()
         {
-            using (ArchiveFile archiveFile = new ArchiveFile(@"GUI.rar"))
+            try
             {
-                archiveFile.Extract(fileLocation + @"\GUI\", true); // extract all
+                using (Stream stream = File.OpenRead(fileLocation + @"\GUI.rar"))
+                {
+                    var reader = ReaderFactory.Open(stream);
+                    while (reader.MoveToNextEntry())
+                    {
+                        if (!reader.Entry.IsDirectory)
+                        {
+                            Console.WriteLine(reader.Entry.Key);
+                            reader.WriteEntryToDirectory(fileLocation + @"\GUI", new ExtractionOptions() { ExtractFullPath = true, Overwrite = true });
+                        }
+                    }
+                }
+            } catch (Exception ex)
+            {
+                Console.WriteLine("Extraction Error: " + ex.Message);
             }
+            
         }
 
-        static void startARES()
+        private static void startARES()
         {
             try
             {
@@ -94,7 +109,7 @@ namespace ARES.UPDATER
             catch { }
         }
 
-        static void killProcess(string processName)
+        private static void killProcess(string processName)
         {
             try
             {
@@ -104,7 +119,7 @@ namespace ARES.UPDATER
             catch { }
         }
 
-        static string SHA256CheckSum(string filePath)
+        private static string SHA256CheckSum(string filePath)
         {
             try
             {
@@ -113,10 +128,11 @@ namespace ARES.UPDATER
                     using (FileStream fileStream = File.OpenRead(filePath))
                         return BitConverter.ToString(SHA256.ComputeHash(fileStream)).Replace("-", "");
                 }
-            } catch { return "0"; }
+            }
+            catch { return "0"; }
         }
 
-        static string GetHashLatestAsync(string url)
+        private static string GetHashLatestAsync(string url)
         {
             string result;
             using (HttpClient client = new HttpClient())
