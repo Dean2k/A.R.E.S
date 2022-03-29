@@ -1,5 +1,7 @@
 # A.R.E.S
 
+For a little context, you can't sell code from ARES or use it without crediting/publishing the source freely for your application, I thaught this was common sense, guess it ain't but now i have to place this here so we dont have another A51 case ;-;
+
 ARES is an avatar recovery tool! It is only for educational uses! We do not condone theft of avatars, the tool soley exists to recover avatars from within VRChat back onto new accounts and into their unity packages keeping as much of the avatar in-tact as possible!
 
 Thx to Yui, they have chosen not to be marked as a developer on the project when they might as well be, they taught me everything I know about photon and it is an important part of the project as a whole. If you see him around thank him for me! The same thanks go out to Blaze for showing me a better/more stable way to create buttons ingame!
