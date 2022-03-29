@@ -1,6 +1,7 @@
 ﻿//Importing reqired modules
 using ComfyUtils;
 using MelonLoader;
+using ReMod.Core.Managers;
 using ReMod.Core.UI.QuickMenu;
 using ReMod.Core.UI.Wings;
 using System;
@@ -67,17 +68,12 @@ namespace Buttons
             FPage.AddButton("Restart VRC", "Restarts VRChat!", delegate { RVRC(false); });
             FPage.AddButton("Restart VRC (Persistent)", "Restarts VRChat and re-joins the room you were in!", delegate { RVRC(true); });
 
-            ReTabButton ARESTAB = ReTabButton.Create("ARES", "Access ARES Menus", "ARES", ButtonImage);
-            ReMenuPage TabPage = null;
-            try
-            {
-                TabPage = ReMenuPage.Create("ARES", true);
-            }
-            catch { }
+            UiManager uiManager = new UiManager("ARES Logger", ButtonImage);
+
             ReMenuPage LSMPT = null;
             try
             {
-                LSMPT = TabPage.AddMenuPage("Logging Settings", "Allows you to configure your ARES settings!");
+                LSMPT = uiManager.MainMenu.AddMenuPage("Logging Settings", "Allows you to configure your ARES settings!");
             }
             catch { }
 
@@ -93,7 +89,7 @@ namespace Buttons
             ReMenuPage FPageT = null;
             try
             {
-                FPageT = TabPage.AddMenuPage("ARES Functions", "Use the other features within ARES");
+                FPageT = uiManager.MainMenu.AddMenuPage("ARES Functions", "Use the other features within ARES");
             }
             catch { }
 
