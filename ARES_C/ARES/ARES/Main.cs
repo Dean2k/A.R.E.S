@@ -58,12 +58,22 @@ namespace ARES
             this.StyleManager = metroStyleManager;
         }
 
+        private void CleanHSB()
+        {
+            string programLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            killProcess("Unity Hub.exe");
+            killProcess("Unity.exe");
+            tryDelete(programLocation + "/HSBC.rar");
+            tryDeleteDirectory(programLocation + "/HSB");
+        }
+
         private void Main_Load(object sender, EventArgs e)
         {
             ApiGrab = new Api();
             CoreFunctions = new CoreFunctions();
             iniFile = new IniFile();
             generateHtml = new GenerateHtml();
+            string version = "";
 
             //just incase i forgot
             mTab.SelectedIndex = 0;
@@ -78,7 +88,7 @@ namespace ARES
             {
                 Assembly assembly = Assembly.GetExecutingAssembly();
                 FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-                string version = fileVersionInfo.ProductVersion;
+                version = fileVersionInfo.ProductVersion;
                 this.Text = "ARES V" + version;
             }
             catch { }
@@ -114,6 +124,13 @@ namespace ARES
                 {
                     rippedList.Add(line);
                 }
+            }
+
+            if (!iniFile.KeyExists("AresVersion"))
+            {
+                MessageBox.Show("ARES Version not detected in INI file HSB cleaning will now begin");
+                CleanHSB();
+                iniFile.Write("AresVersion", version); 
             }
 
             if (iniFile.KeyExists("avatarOutput"))
@@ -174,31 +191,16 @@ namespace ARES
 
             if (!iniFile.KeyExists("unity"))
             {
-                string unityPath = unityRegistry();
-                if (unityPath != null)
-                {
-                    DialogResult dlgResult = MessageBox.Show(string.Format("Possible unity path found, Location: '{0}' is this correct?", unityPath + @"\Unity.exe"), "Unity", MessageBoxButtons.YesNo);
-                    if (dlgResult == DialogResult.Yes)
-                    {
-                        iniFile.Write("unity", unityPath + @"\Unity.exe");
-                        MessageBox.Show("Leave the command window open it will close by itself after the unity setup is complete");
-                    }
-                    else
-                    {
-                        MessageBox.Show("Please select unity.exe, after doing this leave the command window open it will close by itself after setup is complete");
-                        selectFile();
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Please select unity.exe, after doing this leave the command window open it will close by itself after setup is complete");
-                    selectFile();
-                }
+                unitySetup();
 
             }
             else
             {
                 unityPath = iniFile.Read("unity");
+                if (!File.Exists(unityPath))
+                {
+                    unitySetup();
+                }
             }
 
             if (iniFile.KeyExists("theme"))
@@ -261,6 +263,38 @@ namespace ARES
                 scanThread.Start();
             }
             catch { }
+        }
+
+        private void unitySetup()
+        {
+            string unityPath = unityRegistry();
+            if (unityPath != null)
+            {
+                DialogResult dlgResult = MessageBox.Show(string.Format("Possible unity path found, Location: '{0}' is this correct?", unityPath + @"\Editor\Unity.exe"), "Unity", MessageBoxButtons.YesNo);
+                if (dlgResult == DialogResult.Yes)
+                {
+                    if (File.Exists(unityPath + @"\Editor\Unity.exe"))
+                    {
+                        iniFile.Write("unity", unityPath + @"\Editor\Unity.exe");
+                        MessageBox.Show("Leave the command window open it will close by itself after the unity setup is complete");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Someone didn't check because that file doesn't exist!");
+                        selectFile();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Please select unity.exe, after doing this leave the command window open it will close by itself after setup is complete");
+                    selectFile();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select unity.exe, after doing this leave the command window open it will close by itself after setup is complete");
+                selectFile();
+            }
         }
 
         private void selectFile()
@@ -1038,7 +1072,7 @@ namespace ARES
             }
             catch
             {
-                MetroMessageBox.Show(this, "Make sure you've started the build and publish on unity", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Make sure you've started the build and publish on unity", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 if (hotswapConsole.InvokeRequired)
                 {
                     hotswapConsole.Invoke((MethodInvoker)delegate
@@ -1056,7 +1090,7 @@ namespace ARES
             catch (Exception ex)
             {
                 CoreFunctions.WriteLog(string.Format("{0}", ex.Message), this);
-                MetroMessageBox.Show(this, "Error decompressing VRCA file", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error decompressing VRCA file", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 if (hotswapConsole.InvokeRequired)
                 {
                     hotswapConsole.Invoke((MethodInvoker)delegate
@@ -1075,7 +1109,7 @@ namespace ARES
             catch (Exception ex)
             {
                 CoreFunctions.WriteLog(string.Format("{0}", ex.Message), this);
-                MetroMessageBox.Show(this, "Error decompressing VRCA file", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error decompressing VRCA file", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 if (hotswapConsole.InvokeRequired)
                 {
                     hotswapConsole.Invoke((MethodInvoker)delegate
@@ -1089,7 +1123,7 @@ namespace ARES
             MatchModel matchModelOld = getMatches(fileDecompressed2, AvatarIdRegex, AvatarCabRegex, UnityRegex, AvatarPrefabIdRegex);
             if (matchModelOld.UnityVersion == null)
             {
-                DialogResult dialogResult = MetroMessageBox.Show(this, "Possible risky hotswap detected", "Risky Upload", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                DialogResult dialogResult = MessageBox.Show("Possible risky hotswap detected", "Risky Upload", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                 if (dialogResult == DialogResult.Cancel)
                 {
                     if (hotswapConsole.InvokeRequired)
@@ -1181,7 +1215,7 @@ namespace ARES
                 });
             }
 
-            MetroMessageBox.Show(this, string.Format("Got file sizes, comp:{0}, decomp:{1}", compressedSize, uncompressedSize), "Info", MessageBoxButtons.OK, MessageBoxIcon.Information); ;
+            MessageBox.Show(string.Format("Got file sizes, comp:{0}, decomp:{1}", compressedSize, uncompressedSize), "Info", MessageBoxButtons.OK, MessageBoxIcon.Information); ;
             File.AppendAllText(filePath + @"\Ripped.txt", matchModelOld.AvatarId + "\n");
             rippedList.Add(matchModelOld.AvatarId);
         }
@@ -1364,7 +1398,7 @@ namespace ARES
             }
         }
 
-        private void tryDeleteDirectory(string location)
+        private void tryDeleteDirectory(string location, bool showExceptions = true)
         {
             try
             {
@@ -1373,7 +1407,10 @@ namespace ARES
             }
             catch (Exception ex)
             {
-                CoreFunctions.WriteLog(string.Format("{0}", ex.Message), this);
+                if (showExceptions)
+                {
+                    CoreFunctions.WriteLog(string.Format("{0}", ex.Message), this);
+                }
             }
         }
 
@@ -1383,8 +1420,8 @@ namespace ARES
             string unityTemp = "\\Local\\Temp\\DefaultCompany\\HSB";
             string unityTemp2 = "\\LocalLow\\Temp\\DefaultCompany\\HSB";
 
-            tryDeleteDirectory(tempFolder + unityTemp);
-            tryDeleteDirectory(tempFolder + unityTemp2);
+            tryDeleteDirectory(tempFolder + unityTemp, false);
+            tryDeleteDirectory(tempFolder + unityTemp2, false);
 
             var unitySetup = CoreFunctions.setupHSB(this);
             if (unitySetup == (true, false))
@@ -1723,11 +1760,7 @@ namespace ARES
 
         private void btnHsbClean_Click(object sender, EventArgs e)
         {
-            string programLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            killProcess("Unity Hub.exe");
-            killProcess("Unity.exe");
-            tryDelete(programLocation + "/HSBC.rar");
-            tryDeleteDirectory(programLocation + "/HSB");
+            CleanHSB();
         }
 
         private void killProcess(string processName)

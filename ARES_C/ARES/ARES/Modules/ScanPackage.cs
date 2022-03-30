@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Reflection;
+using System.Windows.Forms;
 
 namespace ARES.Modules
 {
@@ -28,7 +29,17 @@ namespace ARES.Modules
         public static void WriteLog(string logText, Main main)
         {
             string logBuilder = string.Format("{0:yy/MM/dd H:mm:ss} | {1} \n", DateTime.Now, logText);
-            main.txtConsole.Text += logBuilder + Environment.NewLine;
+            if (main.txtConsole.InvokeRequired)
+            {
+                main.txtConsole.Invoke((MethodInvoker)delegate
+                {
+                    main.txtConsole.Text += logBuilder + Environment.NewLine;
+                });
+            }
+            else
+            {
+                main.txtConsole.Text += logBuilder + Environment.NewLine;
+            }
             File.AppendAllText("LatestLog.txt", logBuilder);
         }
 

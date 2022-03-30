@@ -173,8 +173,10 @@ namespace ARES.Modules
                 {
                     FileName = "CMD.EXE",
                     Arguments = commands,
-                    WorkingDirectory = filePath
-                };
+                    WorkingDirectory = filePath,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden
+            };
                 p.StartInfo = psi;
                 p.Start();
                 p.WaitForExit();
@@ -198,7 +200,9 @@ namespace ARES.Modules
                 {
                     FileName = "CMD.EXE",
                     Arguments = commands,
-                    WorkingDirectory = filePath
+                    WorkingDirectory = filePath,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden
                 };
                 p.StartInfo = psi;
                 p.Start();
@@ -224,7 +228,9 @@ namespace ARES.Modules
                 {
                     FileName = "CMD.EXE",
                     Arguments = commands,
-                    WorkingDirectory = filePath
+                    WorkingDirectory = filePath,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden
                 };
                 p.StartInfo = psi;
                 p.Start();
@@ -269,7 +275,9 @@ namespace ARES.Modules
                 {
                     FileName = "CMD.EXE",
                     Arguments = commands,
-                    WorkingDirectory = filePath
+                    WorkingDirectory = filePath,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden
                 };
                 p.StartInfo = psi;
                 p.Start();
@@ -284,10 +292,9 @@ namespace ARES.Modules
                     {
                         FileName = "CMD.EXE",
                         Arguments = commands,
-                        WorkingDirectory = filePath
+                        WorkingDirectory = filePath,
                     };
                     p.StartInfo = psi;
-                    p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                     p.Start();
                     //p.WaitForExit();
                 }
