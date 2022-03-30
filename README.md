@@ -98,4 +98,4 @@ License:
 
 For other software used within the project please refer to the LICENSE folder in our release binaries and GitHub repos.
 
-Simple, you aren't free to use this code as you please, you are free to read it, learn from it, debug and understand it but redistributing copies of it is a no no.
+Simple, you aren't free to use this code as you please, you are free to read it, learn from it, debug and understand it but redistributing copies of it is a no no. Even edited variants without the developers permission.
