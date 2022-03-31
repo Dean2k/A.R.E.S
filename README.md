@@ -6,8 +6,6 @@ Thx to Yui, they have chosen not to be marked as a developer on the project when
 
 Thx to [Blaze](https://github.com/WTFBlaze) for helping me fix a few bugs within the wear avatar by ID button added in V10!
 
-Thx to Afton (He doesn't have a GitHub ;-;) for helping me create the unlimited avatar favorites!
-
 Thx to [nesrak1](https://github.com/nesrak1/AssetsTools.NET) for the original "AssetTools.NET.dll" file that was edited by FACS01 and then packed into our HOTSWAP allowing for VRCA files to be compressed and decompressed!
 
 Thx to [Requi](https://github.com/RequiDev) for [ReMod.Core](https://github.com/RequiDev/ReMod.Core), we use this as our button API within ARES!
