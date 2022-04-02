@@ -70,7 +70,7 @@ To turn of plugin Auto updating do so via the ingame options or via ARES, you'll
 
 Installation:
 	
-Step One: [DownloadMe](https://github.com/Dean2k/A.R.E.S/releases/latest/download/DRAG.CONTENTS.INTO.VRChat.FOLDER.rar).
+Step One: [DownloadMe](https://github.com/Dean2k/A.R.E.S/releases/latest/download/DRAG.CONTENTS.INTO.VRChat.FOLDER.zip) or run the [installer](https://github.com/Dean2k/A.R.E.S/releases/latest/download/ARES.Installer.exe) and skip to step 3 or 4
 
 Step Two: [Copy the files into your VRChat folder](https://i.imgur.com/izsyjz8.gif).
 
