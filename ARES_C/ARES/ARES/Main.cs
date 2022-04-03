@@ -130,7 +130,7 @@ namespace ARES
             {
                 MessageBox.Show("ARES Version not detected in INI file HSB cleaning will now begin");
                 CleanHSB();
-                iniFile.Write("AresVersion", version); 
+                iniFile.Write("AresVersion", version);
             }
 
             if (iniFile.KeyExists("avatarOutput"))
@@ -1134,6 +1134,15 @@ namespace ARES
                         });
                     }
                     return;
+                }
+            }
+
+            if (matchModelOld.UnityVersion.Contains("2017."))
+            {
+                DialogResult dialogResult = MessageBox.Show("Replace 2017 unity version, replacing this can cause issues but not replacing it can also increase a ban chance (Press OK to replace and cancel to skip replacements)", "Possible 2017 unity issue", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                if (dialogResult == DialogResult.Cancel)
+                {
+                    matchModelOld.UnityVersion = null;
                 }
             }
 
@@ -2148,7 +2157,7 @@ namespace ARES
                         {
                             vWriter.WriteLine(replace);
                         }
-                        if(lineSkip > 0)
+                        if (lineSkip > 0)
                         {
                             lineSkip--;
                         }
@@ -2183,7 +2192,7 @@ namespace ARES
                 lineSkip = 4;
                 return null;
             }
-            if(line.Contains("A.R.E.S Logger v"))
+            if (line.Contains("A.R.E.S Logger v"))
             {
                 ModCount++;
                 lineSkip = 4;

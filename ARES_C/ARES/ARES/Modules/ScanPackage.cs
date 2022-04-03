@@ -31,10 +31,13 @@ namespace ARES.Modules
             string logBuilder = string.Format("{0:yy/MM/dd H:mm:ss} | {1} \n", DateTime.Now, logText);
             if (main.txtConsole.InvokeRequired)
             {
-                main.txtConsole.Invoke((MethodInvoker)delegate
+                try
                 {
-                    main.txtConsole.Text += logBuilder + Environment.NewLine;
-                });
+                    main.txtConsole.Invoke((MethodInvoker)delegate
+                    {
+                        main.txtConsole.Text += logBuilder + Environment.NewLine;
+                    });
+                } catch { } // App probs closed
             }
             else
             {
