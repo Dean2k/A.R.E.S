@@ -67,6 +67,8 @@ namespace ARES
             this.metroLabel2 = new MetroFramework.Controls.MetroLabel();
             this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
             this.mTabSettings = new MetroFramework.Controls.MetroTabPage();
+            this.txtApiKey = new MetroFramework.Controls.MetroTextBox();
+            this.metroLabel15 = new MetroFramework.Controls.MetroLabel();
             this.chkNoImages = new MetroFramework.Controls.MetroCheckBox();
             this.btnCleanLog = new MetroFramework.Controls.MetroButton();
             this.btnClearPluginLogs = new MetroFramework.Controls.MetroButton();
@@ -436,6 +438,7 @@ namespace ARES
             this.cbLimit.ItemHeight = 29;
             this.cbLimit.Items.AddRange(new object[] {
             "Max",
+            "5000",
             "1000",
             "500",
             "250",
@@ -695,6 +698,8 @@ namespace ARES
             // 
             // mTabSettings
             // 
+            this.mTabSettings.Controls.Add(this.txtApiKey);
+            this.mTabSettings.Controls.Add(this.metroLabel15);
             this.mTabSettings.Controls.Add(this.chkNoImages);
             this.mTabSettings.Controls.Add(this.btnCleanLog);
             this.mTabSettings.Controls.Add(this.btnClearPluginLogs);
@@ -725,6 +730,54 @@ namespace ARES
             this.mTabSettings.VerticalScrollbarHighlightOnWheel = false;
             this.mTabSettings.VerticalScrollbarSize = 10;
             this.mTabSettings.Click += new System.EventHandler(this.mTabSettings_Click);
+            // 
+            // txtApiKey
+            // 
+            // 
+            // 
+            // 
+            this.txtApiKey.CustomButton.Image = null;
+            this.txtApiKey.CustomButton.Location = new System.Drawing.Point(228, 2);
+            this.txtApiKey.CustomButton.Name = "";
+            this.txtApiKey.CustomButton.Size = new System.Drawing.Size(27, 27);
+            this.txtApiKey.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
+            this.txtApiKey.CustomButton.TabIndex = 1;
+            this.txtApiKey.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.txtApiKey.CustomButton.UseSelectable = true;
+            this.txtApiKey.CustomButton.Visible = false;
+            this.txtApiKey.FontSize = MetroFramework.MetroTextBoxSize.Medium;
+            this.txtApiKey.FontWeight = MetroFramework.MetroTextBoxWeight.Bold;
+            this.txtApiKey.Lines = new string[0];
+            this.txtApiKey.Location = new System.Drawing.Point(14, 381);
+            this.txtApiKey.MaxLength = 1000;
+            this.txtApiKey.Name = "txtApiKey";
+            this.txtApiKey.PasswordChar = '\0';
+            this.txtApiKey.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.txtApiKey.SelectedText = "";
+            this.txtApiKey.SelectionLength = 0;
+            this.txtApiKey.SelectionStart = 0;
+            this.txtApiKey.ShortcutsEnabled = true;
+            this.txtApiKey.Size = new System.Drawing.Size(258, 32);
+            this.txtApiKey.TabIndex = 52;
+            this.metroToolTip1.SetToolTip(this.txtApiKey, "adding a key will remove the 1k search limit");
+            this.txtApiKey.UseSelectable = true;
+            this.txtApiKey.UseStyleColors = true;
+            this.txtApiKey.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
+            this.txtApiKey.WaterMarkFont = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtApiKey.Click += new System.EventHandler(this.txtApiKey_Click);
+            this.txtApiKey.Leave += new System.EventHandler(this.txtApiKey_Leave);
+            // 
+            // metroLabel15
+            // 
+            this.metroLabel15.AutoSize = true;
+            this.metroLabel15.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.metroLabel15.FontWeight = MetroFramework.MetroLabelWeight.Bold;
+            this.metroLabel15.Location = new System.Drawing.Point(9, 353);
+            this.metroLabel15.Name = "metroLabel15";
+            this.metroLabel15.Size = new System.Drawing.Size(79, 25);
+            this.metroLabel15.TabIndex = 76;
+            this.metroLabel15.Text = "API Key";
+            this.metroLabel15.UseStyleColors = true;
             // 
             // chkNoImages
             // 
@@ -799,7 +852,7 @@ namespace ARES
             "Purple",
             "Red",
             "Yellow"});
-            this.cbThemeColour.Location = new System.Drawing.Point(9, 549);
+            this.cbThemeColour.Location = new System.Drawing.Point(9, 677);
             this.cbThemeColour.Name = "cbThemeColour";
             this.cbThemeColour.Size = new System.Drawing.Size(189, 29);
             this.cbThemeColour.TabIndex = 71;
@@ -811,7 +864,7 @@ namespace ARES
             this.metroLabel12.AutoSize = true;
             this.metroLabel12.FontSize = MetroFramework.MetroLabelSize.Tall;
             this.metroLabel12.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.metroLabel12.Location = new System.Drawing.Point(4, 521);
+            this.metroLabel12.Location = new System.Drawing.Point(4, 649);
             this.metroLabel12.Name = "metroLabel12";
             this.metroLabel12.Size = new System.Drawing.Size(131, 25);
             this.metroLabel12.TabIndex = 70;
@@ -821,7 +874,7 @@ namespace ARES
             // btnDark
             // 
             this.btnDark.FontSize = MetroFramework.MetroButtonSize.Tall;
-            this.btnDark.Location = new System.Drawing.Point(9, 483);
+            this.btnDark.Location = new System.Drawing.Point(9, 611);
             this.btnDark.Name = "btnDark";
             this.btnDark.Size = new System.Drawing.Size(189, 35);
             this.btnDark.TabIndex = 69;
@@ -835,7 +888,7 @@ namespace ARES
             this.metroLabel11.AutoSize = true;
             this.metroLabel11.FontSize = MetroFramework.MetroLabelSize.Tall;
             this.metroLabel11.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.metroLabel11.Location = new System.Drawing.Point(9, 414);
+            this.metroLabel11.Location = new System.Drawing.Point(9, 542);
             this.metroLabel11.Name = "metroLabel11";
             this.metroLabel11.Size = new System.Drawing.Size(144, 25);
             this.metroLabel11.TabIndex = 68;
@@ -845,7 +898,7 @@ namespace ARES
             // btnLight
             // 
             this.btnLight.FontSize = MetroFramework.MetroButtonSize.Tall;
-            this.btnLight.Location = new System.Drawing.Point(9, 442);
+            this.btnLight.Location = new System.Drawing.Point(9, 570);
             this.btnLight.Name = "btnLight";
             this.btnLight.Size = new System.Drawing.Size(189, 35);
             this.btnLight.TabIndex = 67;
@@ -1683,6 +1736,8 @@ namespace ARES
         private MetroFramework.Controls.MetroButton btnCleanLog;
         private MetroFramework.Controls.MetroCheckBox chkNoImages;
         private MetroFramework.Controls.MetroCheckBox cbAutoUpdate;
+        public MetroFramework.Controls.MetroTextBox txtApiKey;
+        private MetroFramework.Controls.MetroLabel metroLabel15;
     }
 }
 

@@ -12,48 +12,61 @@ namespace ARES.Modules
 {
     public class Api
     {
+        public string ApiKey { get; set; }
+
         public List<Records> getAvatars(string query, string type, string limit)
         {
             string url = "";
             string amount;
+            string apiStart = "api";
 
             if (limit == "Max")
             {
-                amount = "5000";
+                amount = "10000";
             }
             else
             {
                 amount = limit;
             }
 
+            if(ApiKey != null)
+            {
+                apiStart = "unlocked";
+            }
+
             if (!string.IsNullOrEmpty(query))
             {
                 if (type == "Avatar Name")
                 {
-                    url = string.Format("https://api.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags&size={1}&order=TimeDetected,desc&filter=AvatarName,cs,{0}", query, amount);
+                    url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags&size={amount}&order=TimeDetected,desc&filter=AvatarName,cs,{query}";
                 }
                 if (type == "Avatar ID")
                 {
-                    url = string.Format("https://api.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags&size=1&order=TimeDetected,desc&filter=AvatarID,eq,{0}", query, amount);
+                    url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags&size=1&order=TimeDetected,desc&filter=AvatarID,eq,{query}";
                 }
                 if (type == "Author Name")
                 {
-                    url = string.Format("https://api.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags&size={1}&order=TimeDetected,desc&filter=AuthorName,cs,{0}", query, amount);
+                    url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags&size={amount}&order=TimeDetected,desc&filter=AuthorName,cs,{query}";
                 }
                 if (type == "Author ID")
                 {
-                    url = string.Format("https://api.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags&size={1}&order=TimeDetected,desc&filter=AuthorID,eq,{0}", query, amount);
+                    url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags&size={amount}&order=TimeDetected,desc&filter=AuthorID,eq,{query}";
                 }
             }
             else
             {
-                url = string.Format("https://api.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags&size={0}&order=TimeDetected,desc", amount);
+                url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags&size={amount}&order=TimeDetected,desc";
             }
             HttpWebRequest WebReq = (HttpWebRequest)WebRequest.Create(url);
 
             WebReq.Method = "GET";
 
-            HttpWebResponse WebResp = (HttpWebResponse)WebReq.GetResponse();
+            if (ApiKey != null)
+            {
+                WebReq.Headers.Add("X-API-Key: " + ApiKey);
+            }
+
+            HttpWebResponse WebResp = (HttpWebResponse)WebReq.GetResponse();        
 
             string jsonString;
             using (Stream stream = WebResp.GetResponseStream())   //modified from your code since the using statement disposes the stream automatically when done

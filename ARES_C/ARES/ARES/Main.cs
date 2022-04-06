@@ -189,6 +189,13 @@ namespace ARES
             cbSearchTerm.SelectedIndex = 0;
             cbVersionUnity.SelectedIndex = 0;
 
+            if (iniFile.KeyExists("apiKey"))
+            {
+                txtApiKey.Text = iniFile.Read("apiKey");
+                ApiGrab.ApiKey = iniFile.Read("apiKey");
+
+            }
+
             if (!iniFile.KeyExists("unity"))
             {
                 unitySetup();
@@ -2253,5 +2260,22 @@ namespace ARES
             return null;
         }
 
+        private void txtApiKey_Leave(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(txtApiKey.Text))
+            {
+                iniFile.Write("apiKey", txtApiKey.Text);
+                ApiGrab.ApiKey = txtApiKey.Text;
+            } else
+            {
+                ApiGrab.ApiKey = null;
+                iniFile.DeleteKey("apiKey");
+            }
+        }
+
+        private void txtApiKey_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
