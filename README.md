@@ -24,15 +24,13 @@ Thx to [cassell1337](https://github.com/cassell1337) for development assisted de
 
 Features:
 
-    -Unlimted avatar favorites (Can be disabled)
-
     -Stealth mode to ensure all in-game buttons are hidden!
 
     -Copy instance IDs and join by them by clipboard
 
     -Repair avatar VRCAs retreived from the cache
 
-	-Logs ALL avatars seen in game regardless of them being private or public(Including Quest Versions)
+	-Logs ALL avatars seen in game regardless of them being private or public(Not Including Quest Versions [it broke])
 	
 	-An easy to navigate and in my opinion extremely sexy GUI
 	
