@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -14,7 +15,7 @@ namespace ARES.Modules
     {
         public string ApiKey { get; set; }
 
-        public List<Records> getAvatars(string query, string type, string limit)
+        public List<Records> getAvatars(string query, string type, string limit, string version)
         {
             string url = "";
             string amount;
@@ -57,7 +58,8 @@ namespace ARES.Modules
             {
                 url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags&size={amount}&order=TimeDetected,desc";
             }
-            HttpWebRequest WebReq = (HttpWebRequest)WebRequest.Create(url);
+            HttpWebRequest WebReq = (HttpWebRequest)WebRequest.Create(url);     
+            WebReq.UserAgent = $"ARES V" + version;
 
             WebReq.Method = "GET";
 
@@ -166,7 +168,6 @@ namespace ARES.Modules
         public List<Records> getRipped(List<string> ripped)
         {
             string url = "";
-            string amount;
 
             Avatar avatarList = new Avatar { records = new List<Records>() };
 

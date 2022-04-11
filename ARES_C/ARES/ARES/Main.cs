@@ -51,6 +51,8 @@ namespace ARES
         public bool apiEnabled;
         public bool loadImages;
         public List<string> rippedList;
+        public List<string> favoriteList;
+        public string version = "";
 
         public Main()
         {
@@ -73,7 +75,7 @@ namespace ARES
             CoreFunctions = new CoreFunctions();
             iniFile = new IniFile();
             generateHtml = new GenerateHtml();
-            string version = "";
+            
 
             //just incase i forgot
             mTab.SelectedIndex = 0;
@@ -114,6 +116,7 @@ namespace ARES
 
             if (!File.Exists(filePath + @"\Ripped.txt"))
             {
+                rippedList = new List<string>();
                 var myFile = File.Create(filePath + @"\Ripped.txt");
                 myFile.Close();
             }
@@ -123,6 +126,21 @@ namespace ARES
                 foreach (string line in System.IO.File.ReadLines(filePath + @"\Ripped.txt"))
                 {
                     rippedList.Add(line);
+                }
+            }
+
+            if (!File.Exists(filePath + @"\Favorite.txt"))
+            {
+                favoriteList = new List<string>();
+                var myFile = File.Create(filePath + @"\Favorite.txt");
+                myFile.Close();
+            }
+            else
+            {
+                favoriteList = new List<string>();
+                foreach (string line in System.IO.File.ReadLines(filePath + @"\Favorite.txt"))
+                {
+                    favoriteList.Add(line);
                 }
             }
 
@@ -379,7 +397,7 @@ namespace ARES
 
                 if (!cbSearchTerm.Text.Contains("World"))
                 {
-                    List<Records> avatars = ApiGrab.getAvatars(txtSearchTerm.Text, cbSearchTerm.Text, cbLimit.Text);
+                    List<Records> avatars = ApiGrab.getAvatars(txtSearchTerm.Text, cbSearchTerm.Text, cbLimit.Text, version);
                     AvatarList = avatars;
                     if (chkPC.Checked)
                     {
@@ -1144,9 +1162,9 @@ namespace ARES
                 }
             }
 
-            if (matchModelOld.UnityVersion.Contains("2017."))
+            if (matchModelOld.UnityVersion.Contains("2017.") || matchModelOld.UnityVersion.Contains("2018."))
             {
-                DialogResult dialogResult = MessageBox.Show("Replace 2017 unity version, replacing this can cause issues but not replacing it can also increase a ban chance (Press OK to replace and cancel to skip replacements)", "Possible 2017 unity issue", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                DialogResult dialogResult = MessageBox.Show("Replace 2017-2018 unity version, replacing this can cause issues but not replacing it can also increase a ban chance (Press OK to replace and cancel to skip replacements)", "Possible 2017-2018 unity issue", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                 if (dialogResult == DialogResult.Cancel)
                 {
                     matchModelOld.UnityVersion = null;
@@ -2276,6 +2294,65 @@ namespace ARES
         private void txtApiKey_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void btnToggleFavorite_Click(object sender, EventArgs e)
+        {
+            if(selectedAvatar != null)
+            {
+                string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                string fileContents = File.ReadAllText(filePath + @"\Favorite.txt");
+                if (fileContents.Contains(selectedAvatar.AvatarID))
+                {
+                    fileContents = fileContents.Replace(selectedAvatar.AvatarID, "");
+                    File.WriteAllText(filePath + @"\Favorite.txt", fileContents);
+                    favoriteList.Remove(selectedAvatar.AvatarID);
+                    MessageBox.Show("Removed From Favorites");
+                } else
+                {
+                    File.AppendAllText(filePath + @"\Favorite.txt", selectedAvatar.AvatarID + Environment.NewLine);
+                    favoriteList.Add(selectedAvatar.AvatarID);
+                    MessageBox.Show("Added To Favorites");
+                }
+            }
+        }
+
+        private void btnSearchFavorites_Click(object sender, EventArgs e)
+        {
+            if (!locked)
+            {
+                maxThreads = Convert.ToInt32(nmThread.Value);
+                loadImages = chkLoadImages.Checked;
+                flowAvatars.Controls.Clear();
+                List<Records> avatars = ApiGrab.getRipped(favoriteList);
+                AvatarList = avatars;
+                if (chkPC.Checked)
+                {
+                    AvatarList = AvatarList.Where(x => x.PCAssetURL.Trim().ToLower() != "none").ToList();
+                }
+                if (chkQuest.Checked)
+                {
+                    AvatarList = AvatarList.Where(x => x.QUESTAssetURL.Trim().ToLower() != "none").ToList();
+                }
+                if (chkPublic.Checked == true && chkPrivate.Checked == false)
+                {
+                    AvatarList = AvatarList.Where(x => x.Releasestatus.ToLower().Trim() == "public").ToList();
+                }
+                if (chkPublic.Checked == false && chkPrivate.Checked == true)
+                {
+                    AvatarList = AvatarList.Where(x => x.Releasestatus.ToLower().Trim() == "private").ToList();
+                }
+                avatarCount = AvatarList.Count();
+                lblAvatarCount.Text = avatarCount.ToString();
+                locked = true;
+                isAvatar = true;
+                imageThread = new Thread(new ThreadStart(GetImages));
+                imageThread.Start();
+            }
+            else
+            {
+                MessageBox.Show("Still loading last search");
+            }
         }
     }
 }

@@ -45,6 +45,8 @@ namespace ARES
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.mTab = new MetroFramework.Controls.MetroTabControl();
             this.mTabMain = new MetroFramework.Controls.MetroTabPage();
+            this.btnToggleFavorite = new MetroFramework.Controls.MetroButton();
+            this.btnSearchFavorites = new MetroFramework.Controls.MetroButton();
             this.btnBrowserView = new MetroFramework.Controls.MetroButton();
             this.metroLabel7 = new MetroFramework.Controls.MetroLabel();
             this.metroLabel6 = new MetroFramework.Controls.MetroLabel();
@@ -148,7 +150,7 @@ namespace ARES
             this.flowAvatars.Location = new System.Drawing.Point(9, 172);
             this.flowAvatars.Name = "flowAvatars";
             this.flowAvatars.Padding = new System.Windows.Forms.Padding(10);
-            this.flowAvatars.Size = new System.Drawing.Size(843, 468);
+            this.flowAvatars.Size = new System.Drawing.Size(843, 358);
             this.flowAvatars.TabIndex = 7;
             // 
             // groupBox1
@@ -163,7 +165,7 @@ namespace ARES
             this.groupBox1.ForeColor = System.Drawing.Color.White;
             this.groupBox1.Location = new System.Drawing.Point(908, 96);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(270, 720);
+            this.groupBox1.Size = new System.Drawing.Size(270, 610);
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Avatar/World Info";
@@ -173,7 +175,7 @@ namespace ARES
             this.btnDownload.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnDownload.FontSize = MetroFramework.MetroButtonSize.Tall;
-            this.btnDownload.Location = new System.Drawing.Point(6, 671);
+            this.btnDownload.Location = new System.Drawing.Point(6, 561);
             this.btnDownload.Name = "btnDownload";
             this.btnDownload.Size = new System.Drawing.Size(258, 35);
             this.btnDownload.TabIndex = 51;
@@ -191,9 +193,9 @@ namespace ARES
             // 
             // 
             this.txtAvatarInfo.CustomButton.Image = null;
-            this.txtAvatarInfo.CustomButton.Location = new System.Drawing.Point(-168, 1);
+            this.txtAvatarInfo.CustomButton.Location = new System.Drawing.Point(-58, 1);
             this.txtAvatarInfo.CustomButton.Name = "";
-            this.txtAvatarInfo.CustomButton.Size = new System.Drawing.Size(425, 425);
+            this.txtAvatarInfo.CustomButton.Size = new System.Drawing.Size(315, 315);
             this.txtAvatarInfo.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
             this.txtAvatarInfo.CustomButton.TabIndex = 1;
             this.txtAvatarInfo.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
@@ -213,7 +215,7 @@ namespace ARES
             this.txtAvatarInfo.SelectionLength = 0;
             this.txtAvatarInfo.SelectionStart = 0;
             this.txtAvatarInfo.ShortcutsEnabled = true;
-            this.txtAvatarInfo.Size = new System.Drawing.Size(258, 427);
+            this.txtAvatarInfo.Size = new System.Drawing.Size(258, 317);
             this.txtAvatarInfo.TabIndex = 49;
             this.txtAvatarInfo.UseSelectable = true;
             this.txtAvatarInfo.UseStyleColors = true;
@@ -244,7 +246,7 @@ namespace ARES
             "Tags",
             "World ID",
             "World Name"});
-            this.cbCopy.Location = new System.Drawing.Point(6, 630);
+            this.cbCopy.Location = new System.Drawing.Point(6, 520);
             this.cbCopy.Name = "cbCopy";
             this.cbCopy.Size = new System.Drawing.Size(167, 35);
             this.cbCopy.Style = MetroFramework.MetroColorStyle.Blue;
@@ -257,7 +259,7 @@ namespace ARES
             this.btnCopy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCopy.FontSize = MetroFramework.MetroButtonSize.Tall;
-            this.btnCopy.Location = new System.Drawing.Point(179, 630);
+            this.btnCopy.Location = new System.Drawing.Point(179, 520);
             this.btnCopy.Name = "btnCopy";
             this.btnCopy.Size = new System.Drawing.Size(85, 35);
             this.btnCopy.TabIndex = 48;
@@ -307,7 +309,7 @@ namespace ARES
             // 
             this.nmQuestVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.nmQuestVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nmQuestVersion.Location = new System.Drawing.Point(193, 672);
+            this.nmQuestVersion.Location = new System.Drawing.Point(193, 562);
             this.nmQuestVersion.Maximum = new decimal(new int[] {
             100000000,
             0,
@@ -321,7 +323,7 @@ namespace ARES
             // 
             this.nmPcVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.nmPcVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nmPcVersion.Location = new System.Drawing.Point(12, 672);
+            this.nmPcVersion.Location = new System.Drawing.Point(12, 562);
             this.nmPcVersion.Maximum = new decimal(new int[] {
             100000000,
             0,
@@ -344,8 +346,8 @@ namespace ARES
             this.mTab.ItemSize = new System.Drawing.Size(54, 35);
             this.mTab.Location = new System.Drawing.Point(10, 65);
             this.mTab.Name = "mTab";
-            this.mTab.SelectedIndex = 1;
-            this.mTab.Size = new System.Drawing.Size(896, 755);
+            this.mTab.SelectedIndex = 0;
+            this.mTab.Size = new System.Drawing.Size(896, 645);
             this.mTab.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             this.mTab.TabIndex = 14;
             this.mTab.UseSelectable = true;
@@ -354,6 +356,8 @@ namespace ARES
             // 
             // mTabMain
             // 
+            this.mTabMain.Controls.Add(this.btnToggleFavorite);
+            this.mTabMain.Controls.Add(this.btnSearchFavorites);
             this.mTabMain.Controls.Add(this.btnBrowserView);
             this.mTabMain.Controls.Add(this.metroLabel7);
             this.mTabMain.Controls.Add(this.metroLabel6);
@@ -383,7 +387,7 @@ namespace ARES
             this.mTabMain.HorizontalScrollbarSize = 10;
             this.mTabMain.Location = new System.Drawing.Point(4, 39);
             this.mTabMain.Name = "mTabMain";
-            this.mTabMain.Size = new System.Drawing.Size(888, 712);
+            this.mTabMain.Size = new System.Drawing.Size(888, 602);
             this.mTabMain.TabIndex = 0;
             this.mTabMain.Text = "Main";
             this.mTabMain.VerticalScrollbar = true;
@@ -391,11 +395,35 @@ namespace ARES
             this.mTabMain.VerticalScrollbarHighlightOnWheel = true;
             this.mTabMain.VerticalScrollbarSize = 10;
             // 
+            // btnToggleFavorite
+            // 
+            this.btnToggleFavorite.FontSize = MetroFramework.MetroButtonSize.Medium;
+            this.btnToggleFavorite.Location = new System.Drawing.Point(729, 103);
+            this.btnToggleFavorite.Name = "btnToggleFavorite";
+            this.btnToggleFavorite.Size = new System.Drawing.Size(120, 35);
+            this.btnToggleFavorite.TabIndex = 52;
+            this.btnToggleFavorite.Text = "Toggle Favorite";
+            this.btnToggleFavorite.UseSelectable = true;
+            this.btnToggleFavorite.UseStyleColors = true;
+            this.btnToggleFavorite.Click += new System.EventHandler(this.btnToggleFavorite_Click);
+            // 
+            // btnSearchFavorites
+            // 
+            this.btnSearchFavorites.FontSize = MetroFramework.MetroButtonSize.Medium;
+            this.btnSearchFavorites.Location = new System.Drawing.Point(605, 103);
+            this.btnSearchFavorites.Name = "btnSearchFavorites";
+            this.btnSearchFavorites.Size = new System.Drawing.Size(120, 35);
+            this.btnSearchFavorites.TabIndex = 51;
+            this.btnSearchFavorites.Text = "Load Favorites";
+            this.btnSearchFavorites.UseSelectable = true;
+            this.btnSearchFavorites.UseStyleColors = true;
+            this.btnSearchFavorites.Click += new System.EventHandler(this.btnSearchFavorites_Click);
+            // 
             // btnBrowserView
             // 
             this.btnBrowserView.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnBrowserView.FontSize = MetroFramework.MetroButtonSize.Tall;
-            this.btnBrowserView.Location = new System.Drawing.Point(732, 663);
+            this.btnBrowserView.Location = new System.Drawing.Point(732, 553);
             this.btnBrowserView.Name = "btnBrowserView";
             this.btnBrowserView.Size = new System.Drawing.Size(120, 35);
             this.btnBrowserView.TabIndex = 50;
@@ -410,7 +438,7 @@ namespace ARES
             this.metroLabel7.AutoSize = true;
             this.metroLabel7.FontSize = MetroFramework.MetroLabelSize.Tall;
             this.metroLabel7.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.metroLabel7.Location = new System.Drawing.Point(193, 644);
+            this.metroLabel7.Location = new System.Drawing.Point(193, 534);
             this.metroLabel7.Name = "metroLabel7";
             this.metroLabel7.Size = new System.Drawing.Size(130, 25);
             this.metroLabel7.TabIndex = 49;
@@ -423,7 +451,7 @@ namespace ARES
             this.metroLabel6.AutoSize = true;
             this.metroLabel6.FontSize = MetroFramework.MetroLabelSize.Tall;
             this.metroLabel6.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.metroLabel6.Location = new System.Drawing.Point(10, 644);
+            this.metroLabel6.Location = new System.Drawing.Point(10, 534);
             this.metroLabel6.Name = "metroLabel6";
             this.metroLabel6.Size = new System.Drawing.Size(102, 25);
             this.metroLabel6.TabIndex = 48;
@@ -489,7 +517,7 @@ namespace ARES
             // btnHotswap
             // 
             this.btnHotswap.FontSize = MetroFramework.MetroButtonSize.Tall;
-            this.btnHotswap.Location = new System.Drawing.Point(730, 103);
+            this.btnHotswap.Location = new System.Drawing.Point(605, 553);
             this.btnHotswap.Name = "btnHotswap";
             this.btnHotswap.Size = new System.Drawing.Size(120, 35);
             this.btnHotswap.TabIndex = 45;
@@ -501,7 +529,7 @@ namespace ARES
             // btnUnity
             // 
             this.btnUnity.FontSize = MetroFramework.MetroButtonSize.Tall;
-            this.btnUnity.Location = new System.Drawing.Point(605, 103);
+            this.btnUnity.Location = new System.Drawing.Point(479, 553);
             this.btnUnity.Name = "btnUnity";
             this.btnUnity.Size = new System.Drawing.Size(120, 35);
             this.btnUnity.TabIndex = 44;
@@ -723,7 +751,7 @@ namespace ARES
             this.mTabSettings.HorizontalScrollbarSize = 10;
             this.mTabSettings.Location = new System.Drawing.Point(4, 39);
             this.mTabSettings.Name = "mTabSettings";
-            this.mTabSettings.Size = new System.Drawing.Size(888, 712);
+            this.mTabSettings.Size = new System.Drawing.Size(888, 602);
             this.mTabSettings.TabIndex = 1;
             this.mTabSettings.Text = "Settings  ";
             this.mTabSettings.VerticalScrollbarBarColor = true;
@@ -834,6 +862,7 @@ namespace ARES
             // 
             // cbThemeColour
             // 
+            this.cbThemeColour.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cbThemeColour.FormattingEnabled = true;
             this.cbThemeColour.ItemHeight = 23;
             this.cbThemeColour.Items.AddRange(new object[] {
@@ -852,7 +881,7 @@ namespace ARES
             "Purple",
             "Red",
             "Yellow"});
-            this.cbThemeColour.Location = new System.Drawing.Point(9, 677);
+            this.cbThemeColour.Location = new System.Drawing.Point(9, 567);
             this.cbThemeColour.Name = "cbThemeColour";
             this.cbThemeColour.Size = new System.Drawing.Size(189, 29);
             this.cbThemeColour.TabIndex = 71;
@@ -861,10 +890,11 @@ namespace ARES
             // 
             // metroLabel12
             // 
+            this.metroLabel12.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.metroLabel12.AutoSize = true;
             this.metroLabel12.FontSize = MetroFramework.MetroLabelSize.Tall;
             this.metroLabel12.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.metroLabel12.Location = new System.Drawing.Point(4, 649);
+            this.metroLabel12.Location = new System.Drawing.Point(4, 539);
             this.metroLabel12.Name = "metroLabel12";
             this.metroLabel12.Size = new System.Drawing.Size(131, 25);
             this.metroLabel12.TabIndex = 70;
@@ -873,8 +903,9 @@ namespace ARES
             // 
             // btnDark
             // 
+            this.btnDark.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnDark.FontSize = MetroFramework.MetroButtonSize.Tall;
-            this.btnDark.Location = new System.Drawing.Point(9, 611);
+            this.btnDark.Location = new System.Drawing.Point(9, 501);
             this.btnDark.Name = "btnDark";
             this.btnDark.Size = new System.Drawing.Size(189, 35);
             this.btnDark.TabIndex = 69;
@@ -885,10 +916,11 @@ namespace ARES
             // 
             // metroLabel11
             // 
+            this.metroLabel11.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.metroLabel11.AutoSize = true;
             this.metroLabel11.FontSize = MetroFramework.MetroLabelSize.Tall;
             this.metroLabel11.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.metroLabel11.Location = new System.Drawing.Point(9, 542);
+            this.metroLabel11.Location = new System.Drawing.Point(9, 432);
             this.metroLabel11.Name = "metroLabel11";
             this.metroLabel11.Size = new System.Drawing.Size(144, 25);
             this.metroLabel11.TabIndex = 68;
@@ -897,8 +929,9 @@ namespace ARES
             // 
             // btnLight
             // 
+            this.btnLight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnLight.FontSize = MetroFramework.MetroButtonSize.Tall;
-            this.btnLight.Location = new System.Drawing.Point(9, 570);
+            this.btnLight.Location = new System.Drawing.Point(9, 460);
             this.btnLight.Name = "btnLight";
             this.btnLight.Size = new System.Drawing.Size(189, 35);
             this.btnLight.TabIndex = 67;
@@ -937,7 +970,7 @@ namespace ARES
             this.ConfigBox.Controls.Add(this.cbLogPublicAvatars);
             this.ConfigBox.Controls.Add(this.cbLogOwnAvatars);
             this.ConfigBox.ForeColor = System.Drawing.Color.White;
-            this.ConfigBox.Location = new System.Drawing.Point(289, 583);
+            this.ConfigBox.Location = new System.Drawing.Point(289, 473);
             this.ConfigBox.Name = "ConfigBox";
             this.ConfigBox.Size = new System.Drawing.Size(596, 129);
             this.ConfigBox.TabIndex = 65;
@@ -1206,9 +1239,9 @@ namespace ARES
             // 
             // 
             this.txtConsole.CustomButton.Image = null;
-            this.txtConsole.CustomButton.Location = new System.Drawing.Point(66, 2);
+            this.txtConsole.CustomButton.Location = new System.Drawing.Point(176, 2);
             this.txtConsole.CustomButton.Name = "";
-            this.txtConsole.CustomButton.Size = new System.Drawing.Size(527, 527);
+            this.txtConsole.CustomButton.Size = new System.Drawing.Size(417, 417);
             this.txtConsole.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
             this.txtConsole.CustomButton.TabIndex = 1;
             this.txtConsole.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
@@ -1228,7 +1261,7 @@ namespace ARES
             this.txtConsole.SelectionLength = 0;
             this.txtConsole.SelectionStart = 0;
             this.txtConsole.ShortcutsEnabled = true;
-            this.txtConsole.Size = new System.Drawing.Size(596, 532);
+            this.txtConsole.Size = new System.Drawing.Size(596, 422);
             this.txtConsole.TabIndex = 2;
             this.txtConsole.UseSelectable = true;
             this.txtConsole.UseStyleColors = true;
@@ -1258,7 +1291,7 @@ namespace ARES
             this.metroTabPage3.HorizontalScrollbarSize = 10;
             this.metroTabPage3.Location = new System.Drawing.Point(4, 39);
             this.metroTabPage3.Name = "metroTabPage3";
-            this.metroTabPage3.Size = new System.Drawing.Size(888, 712);
+            this.metroTabPage3.Size = new System.Drawing.Size(888, 602);
             this.metroTabPage3.TabIndex = 3;
             this.metroTabPage3.Text = "Utility";
             this.metroTabPage3.VerticalScrollbarBarColor = true;
@@ -1511,7 +1544,7 @@ namespace ARES
             this.metroTabPage2.HorizontalScrollbarSize = 10;
             this.metroTabPage2.Location = new System.Drawing.Point(4, 39);
             this.metroTabPage2.Name = "metroTabPage2";
-            this.metroTabPage2.Size = new System.Drawing.Size(888, 712);
+            this.metroTabPage2.Size = new System.Drawing.Size(888, 602);
             this.metroTabPage2.TabIndex = 2;
             this.metroTabPage2.Text = "About";
             this.metroTabPage2.VerticalScrollbarBarColor = true;
@@ -1527,9 +1560,9 @@ namespace ARES
             // 
             // 
             this.txtAbout.CustomButton.Image = null;
-            this.txtAbout.CustomButton.Location = new System.Drawing.Point(208, 2);
+            this.txtAbout.CustomButton.Location = new System.Drawing.Point(318, 2);
             this.txtAbout.CustomButton.Name = "";
-            this.txtAbout.CustomButton.Size = new System.Drawing.Size(665, 665);
+            this.txtAbout.CustomButton.Size = new System.Drawing.Size(555, 555);
             this.txtAbout.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
             this.txtAbout.CustomButton.TabIndex = 1;
             this.txtAbout.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
@@ -1549,7 +1582,7 @@ namespace ARES
             this.txtAbout.SelectionLength = 0;
             this.txtAbout.SelectionStart = 0;
             this.txtAbout.ShortcutsEnabled = true;
-            this.txtAbout.Size = new System.Drawing.Size(876, 670);
+            this.txtAbout.Size = new System.Drawing.Size(876, 560);
             this.txtAbout.TabIndex = 50;
             this.txtAbout.UseSelectable = true;
             this.txtAbout.UseStyleColors = true;
@@ -1611,12 +1644,12 @@ namespace ARES
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(1190, 834);
+            this.ClientSize = new System.Drawing.Size(1190, 724);
             this.Controls.Add(this.mTab);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.pbRipped);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(1160, 500);
+            this.MinimumSize = new System.Drawing.Size(1190, 724);
             this.Name = "Main";
             this.Style = MetroFramework.MetroColorStyle.Default;
             this.Text = "A.R.E.S";
@@ -1738,6 +1771,8 @@ namespace ARES
         private MetroFramework.Controls.MetroCheckBox cbAutoUpdate;
         public MetroFramework.Controls.MetroTextBox txtApiKey;
         private MetroFramework.Controls.MetroLabel metroLabel15;
+        private MetroFramework.Controls.MetroButton btnToggleFavorite;
+        private MetroFramework.Controls.MetroButton btnSearchFavorites;
     }
 }
 
