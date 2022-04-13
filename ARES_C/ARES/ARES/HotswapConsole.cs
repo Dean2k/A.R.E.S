@@ -21,5 +21,10 @@ namespace ARES
         {
 
         }
+
+        private void txtStatusText_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

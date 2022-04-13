@@ -44,6 +44,7 @@ namespace ARES
             this.txtStatusText.ReadOnly = true;
             this.txtStatusText.Size = new System.Drawing.Size(776, 395);
             this.txtStatusText.TabIndex = 0;
+            this.txtStatusText.TextChanged += new System.EventHandler(this.txtStatusText_TextChanged);
             // 
             // contextMenuStrip1
             // 

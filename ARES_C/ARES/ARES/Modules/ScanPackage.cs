@@ -18,17 +18,17 @@ namespace ARES.Modules
     {
         public static string FileLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         public static string MainFolder = FileLocation + @"\Safe Import";
-        public static string SafeImport_Safe = MainFolder + @"\Safe Files";
-        public static string SafeImport_Bad = MainFolder + @"\Unsafe Files";
+        public static string SafeImportSafe = MainFolder + @"\Safe Files";
+        public static string SafeImportBad = MainFolder + @"\Unsafe Files";
         public static string UnityTemp = MainFolder + @"\UnityExtract";
 
-        public static string[] safeFiles;
-        public static string[] badFiles;
+        public static string[] SafeFiles;
+        public static string[] BadFiles;
 
 
         public static void WriteLog(string logText, Main main)
         {
-            string logBuilder = string.Format("{0:yy/MM/dd H:mm:ss} | {1} \n", DateTime.Now, logText);
+            string logBuilder = $"{DateTime.Now:yy/MM/dd H:mm:ss} | {logText} \n";
             if (main.txtConsole.InvokeRequired)
             {
                 try
@@ -48,17 +48,17 @@ namespace ARES.Modules
 
         public static void ReloadDatabase(Main main)
         {
-            if (!Directory.Exists(SafeImport_Safe))
-                Directory.CreateDirectory(SafeImport_Safe);
+            if (!Directory.Exists(SafeImportSafe))
+                Directory.CreateDirectory(SafeImportSafe);
 
-            if (!Directory.Exists(SafeImport_Bad))
-                Directory.CreateDirectory(SafeImport_Bad);
+            if (!Directory.Exists(SafeImportBad))
+                Directory.CreateDirectory(SafeImportBad);
 
-            string[] SafePaths = Directory.GetFiles(SafeImport_Safe, "*.txt", SearchOption.AllDirectories);
-            string[] UnsafePaths = Directory.GetFiles(SafeImport_Bad, "*.txt", SearchOption.AllDirectories);
+            string[] safePaths = Directory.GetFiles(SafeImportSafe, "*.txt", SearchOption.AllDirectories);
+            string[] unsafePaths = Directory.GetFiles(SafeImportBad, "*.txt", SearchOption.AllDirectories);
 
-            List<string> safepathslist = new List<string>();
-            foreach (string f in SafePaths)
+            List<string> safePathsList = new List<string>();
+            foreach (string f in safePaths)
             {
                 string file = f.Replace("\\", "/");
                 var lines = File.ReadLines(file);
@@ -66,13 +66,13 @@ namespace ARES.Modules
                 {
                     if (line.StartsWith("#") || String.IsNullOrWhiteSpace(line)) continue;
                     string line2 = line.Trim();
-                    if (!safepathslist.Contains(line2)) safepathslist.Add(line2);
+                    if (!safePathsList.Contains(line2)) safePathsList.Add(line2);
                 }
             }
-            safeFiles = safepathslist.ToArray();
+            SafeFiles = safePathsList.ToArray();
 
-            List<string> unsafepathslist = new List<string>();
-            foreach (string f in UnsafePaths)
+            List<string> unsafePathsList = new List<string>();
+            foreach (string f in unsafePaths)
             {
                 string file = f.Replace("\\", "/");
                 var lines = File.ReadLines(file);
@@ -80,12 +80,12 @@ namespace ARES.Modules
                 {
                     if (line.StartsWith("#") || String.IsNullOrWhiteSpace(line)) continue;
                     string line2 = line.Trim();
-                    if (!unsafepathslist.Contains(line2)) unsafepathslist.Add(line2);
+                    if (!unsafePathsList.Contains(line2)) unsafePathsList.Add(line2);
                 }
             }
-            badFiles = unsafepathslist.ToArray();
+            BadFiles = unsafePathsList.ToArray();
 
-            WriteLog($"Database loaded with {safeFiles.Length} allowed hashes and {badFiles.Length} not allowed hashes.\n", main);
+            WriteLog($"Database loaded with {SafeFiles.Length} allowed hashes and {BadFiles.Length} not allowed hashes.\n", main);
         }
 
         public static void DownloadOnlineSourcesOnStartup(Main main)
@@ -101,14 +101,14 @@ namespace ARES.Modules
 
         public static (int, int, int) CheckFiles(Main main)
         {
-            string[] CSPaths = Directory.GetFiles(UnityTemp, "*.cs", SearchOption.AllDirectories);
-            string[] DLLPaths = Directory.GetFiles(UnityTemp, "*.dll", SearchOption.AllDirectories);
+            string[] csPaths = Directory.GetFiles(UnityTemp, "*.cs", SearchOption.AllDirectories);
+            string[] dllPaths = Directory.GetFiles(UnityTemp, "*.dll", SearchOption.AllDirectories);
 
-            string[] CombinedStrings = CSPaths.Concat(DLLPaths).ToArray();
+            string[] combinedStrings = csPaths.Concat(dllPaths).ToArray();
 
             List<string> arrayToList = new List<string>();
 
-            foreach (var item in CombinedStrings)
+            foreach (var item in combinedStrings)
             {
                 arrayToList.Add(item);
             }
@@ -116,7 +116,7 @@ namespace ARES.Modules
             return CheckSafeUnsafeFiles(arrayToList, main);
         }
 
-        public static string SHA256CheckSum(string filePath)
+        public static string Sha256CheckSum(string filePath)
         {
             using (SHA256 SHA256 = SHA256.Create())
             {
@@ -125,21 +125,21 @@ namespace ARES.Modules
             }
         }
 
-        public static (int,int,int) CheckSafeUnsafeFiles(List<string> importeds, Main main)
+        public static (int,int,int) CheckSafeUnsafeFiles(List<string> imported, Main main)
         {
-            importeds.Sort();
+            imported.Sort();
             List<(string, string)> safeFiles = new List<(string, string)>();
             List<(string, string)> badFilesShouldDelete = new List<(string, string)>();
             List<(string, string)> unknownFiles = new List<(string, string)>();
 
-            foreach (string file in importeds)
+            foreach (string file in imported)
             {
-                string fileHash = SHA256CheckSum(file);
-                if (ScanPackage.badFiles.Contains(fileHash))
+                string fileHash = Sha256CheckSum(file);
+                if (ScanPackage.BadFiles.Contains(fileHash))
                 {
                     badFilesShouldDelete.Add((file, fileHash));
                 }
-                else if (ScanPackage.safeFiles.Contains(fileHash))
+                else if (ScanPackage.SafeFiles.Contains(fileHash))
                 {
                     safeFiles.Add((file, fileHash));
                 }
@@ -248,18 +248,18 @@ namespace ARES.Modules
             }
 
             int downloadCount = safes.Count + unsafes.Count;
-            string safefolder = SafeImport_Safe + "/" + gitname.Replace("/", " ");
-            string unsafefolder = SafeImport_Bad + "/" + gitname.Replace("/", " ");
-            if (Directory.Exists(safefolder)) Directory.Delete(safefolder, true);
-            if (Directory.Exists(unsafefolder)) Directory.Delete(unsafefolder, true);
+            string safeFolder = SafeImportSafe + "/" + gitname.Replace("/", " ");
+            string unsafeFolder = SafeImportBad + "/" + gitname.Replace("/", " ");
+            if (Directory.Exists(safeFolder)) Directory.Delete(safeFolder, true);
+            if (Directory.Exists(unsafeFolder)) Directory.Delete(unsafeFolder, true);
             if (!(downloadCount > 0))
             {
                 WriteLog($"There were no Safe or Unsafe entries to download from the Github page {gitname}.\n", main);
                 return;
             }
 
-            Directory.CreateDirectory(safefolder);
-            Directory.CreateDirectory(unsafefolder);
+            Directory.CreateDirectory(safeFolder);
+            Directory.CreateDirectory(unsafeFolder);
             float index = 0;
             foreach (var dd in safes)
             {
@@ -267,7 +267,7 @@ namespace ARES.Modules
                 {
                     using (MyWebClient wc = new MyWebClient())
                     {
-                        wc.DownloadFile(dd.Item2, safefolder + "/" + dd.Item1);
+                        wc.DownloadFile(dd.Item2, safeFolder + "/" + dd.Item1);
                     }
                 }
                 catch
@@ -282,7 +282,7 @@ namespace ARES.Modules
                 {
                     using (MyWebClient wc = new MyWebClient())
                     {
-                        wc.DownloadFile(dd.Item2, unsafefolder + "/" + dd.Item1);
+                        wc.DownloadFile(dd.Item2, unsafeFolder + "/" + dd.Item1);
                     }
                 }
                 catch

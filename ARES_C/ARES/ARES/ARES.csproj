@@ -122,7 +122,6 @@
     <Compile Include="Models\Stats.cs" />
     <Compile Include="Modules\Api.cs" />
     <Compile Include="Models\AresConfig.cs" />
-    <Compile Include="Modules\byteModule.cs" />
     <Compile Include="Modules\CoreFunctions.cs" />
     <Compile Include="Modules\GenerateHtml.cs" />
     <Compile Include="Modules\HotSwap.cs" />

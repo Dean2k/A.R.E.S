@@ -19,21 +19,22 @@ namespace ARES.Modules
 {
     public class CoreFunctions
     {
-        public string ErrorImage = "https://image.freepik.com/free-vector/glitch-error-404-page_23-2148105404.jpg";
 
         public string SetAvatarInfo(Records avatar)
         {
-            string avatarString = string.Format("Time Detected: {0} {13}Avatar ID: {1} {13}Avatar Name: {2} {13}Avatar Description {3} {13}Author ID: {4} {13}Author Name: {5} {13}PC Asset URL: {6} {13}Quest Asset URL: {7} {13}Image URL: {8} {13}Thumbnail URL: {9} {13}Unity Version: {10} {13}Release Status: {11} {13}Tags: {12}", GetDate(avatar.TimeDetected), avatar.AvatarID, avatar.AvatarName, avatar.AvatarDescription, avatar.AuthorID, avatar.AuthorName, avatar.PCAssetURL, avatar.QUESTAssetURL, avatar.ImageURL, avatar.ThumbnailURL, avatar.UnityVersion, avatar.Releasestatus, avatar.Tags, Environment.NewLine);
+            string avatarString =
+                $"Time Detected: {GetDate(avatar.TimeDetected)} {Environment.NewLine}Avatar ID: {avatar.AvatarID} {Environment.NewLine}Avatar Name: {avatar.AvatarName} {Environment.NewLine}Avatar Description {avatar.AvatarDescription} {Environment.NewLine}Author ID: {avatar.AuthorID} {Environment.NewLine}Author Name: {avatar.AuthorName} {Environment.NewLine}PC Asset URL: {avatar.PCAssetURL} {Environment.NewLine}Quest Asset URL: {avatar.QUESTAssetURL} {Environment.NewLine}Image URL: {avatar.ImageURL} {Environment.NewLine}Thumbnail URL: {avatar.ThumbnailURL} {Environment.NewLine}Unity Version: {avatar.UnityVersion} {Environment.NewLine}Release Status: {avatar.Releasestatus} {Environment.NewLine}Tags: {avatar.Tags}";
             return avatarString;
         }
 
         public string SetWorldInfo(WorldClass avatar)
         {
-            string avatarString = string.Format("Time Detected: {0} {12}World ID: {1} {12}World Name: {2} {12}World Description {3} {12}Author ID: {4} {12}Author Name: {5} {12}PC Asset URL: {6} {12}Image URL: {7} {12}Thumbnail URL: {8} {12}Unity Version: {9} {12}Release Status: {10} {12}Tags: {11}", GetDate(avatar.TimeDetected), avatar.WorldID, avatar.WorldName, avatar.WorldDescription, avatar.AuthorID, avatar.AuthorName, avatar.PCAssetURL, avatar.ImageURL, avatar.ThumbnailURL, avatar.UnityVersion, avatar.Releasestatus, avatar.Tags, Environment.NewLine);
+            string avatarString =
+                $"Time Detected: {GetDate(avatar.TimeDetected)} {Environment.NewLine}World ID: {avatar.WorldID} {Environment.NewLine}World Name: {avatar.WorldName} {Environment.NewLine}World Description {avatar.WorldDescription} {Environment.NewLine}Author ID: {avatar.AuthorID} {Environment.NewLine}Author Name: {avatar.AuthorName} {Environment.NewLine}PC Asset URL: {avatar.PCAssetURL} {Environment.NewLine}Image URL: {avatar.ImageURL} {Environment.NewLine}Thumbnail URL: {avatar.ThumbnailURL} {Environment.NewLine}Unity Version: {avatar.UnityVersion} {Environment.NewLine}Release Status: {avatar.Releasestatus} {Environment.NewLine}Tags: {avatar.Tags}";
             return avatarString;
         }
 
-        public Bitmap loadImage(string url, bool loadBroken)
+        public Bitmap LoadImage(string url, bool loadBroken)
         {
             using (WebClient webClient = new WebClient())
             {
@@ -45,25 +46,14 @@ namespace ARES.Modules
                     Bitmap bitmap; bitmap = new Bitmap(stream);
                     stream.Close();
                     stream.Dispose();
-                    if (bitmap != null)
-                    {
-                        return bitmap;
-                    }
+                    return bitmap;
                 }
-                catch(Exception ex)
+                catch
                 {
-                    if (loadBroken)
-                    {
-                        return Resources.No_Image;
-                    }
-                    else
-                    {
-                        return null;
-                    }
+                    return loadBroken ? Resources.No_Image : null;
                     //skip as its likely avatar is been yeeted from VRC servers
                     //avatarImage.Load(CoreFunctions.ErrorImage);
                 }
-                return null;
 
             }
         }
@@ -83,20 +73,17 @@ namespace ARES.Modules
             }
         }
 
-        public List<Records> getLocalAvatars(Main main)
+        public List<Records> GetLocalAvatars(Main main)
         {
             if (File.Exists("Log.txt"))
             {
-                List<Records> list = new List<Records>();
                 string contents = File.ReadAllText(@"Log.txt");
                 string pattern = "Time Detected:(.*)\r\nAvatar ID:(.*)\r\nAvatar Name:(.*)\r\nAvatar Description:(.*)\r\nAuthor ID:(.*)\r\nAuthor Name:(.*)\r\nPC Asset URL:(.*)\r\nQuest Asset URL:(.*)\r\nImage URL:(.*)\r\nThumbnail URL:(.*)\r\nUnity Version:(.*)\r\nRelease Status:(.*)\r\nTags:(.*)";
                 string[] logRecords = Regex.Matches(contents, pattern).Cast<Match>().Select(m => m.Value).ToArray();
 
 
-                foreach (var item in logRecords)
-                {
-                    string[] lineItem = item.Split('\n');
-                    Records records = new Records
+                List<Records> list = logRecords.Select(item => item.Split('\n'))
+                    .Select(lineItem => new Records
                     {
                         TimeDetected = lineItem[0].Split(':')[1].Replace("\r", ""),
                         AvatarID = lineItem[1].Split(':')[1].Replace("\r", ""),
@@ -111,16 +98,15 @@ namespace ARES.Modules
                         UnityVersion = lineItem[10].Split(':')[1].Replace("\r", ""),
                         Releasestatus = lineItem[11].Split(':')[1].Replace("\r", ""),
                         Tags = lineItem[12].Split(':')[1].Replace("\r", "")
-                    };
-                    list.Add(records);
-                }
-                WriteLog(string.Format("Loaded Local Avatars"), main);
+                    })
+                    .ToList();
+                WriteLog("Loaded Local Avatars", main);
                 return list;
             }
             return new List<Records>();
         }
 
-        public List<WorldClass> getLocalWorlds(Main main)
+        public List<WorldClass> GetLocalWorlds(Main main)
         {
             if (File.Exists("LogWorld.txt"))
             {
@@ -156,7 +142,7 @@ namespace ARES.Modules
             return new List<WorldClass>();
         }
 
-        public (bool, bool) setupHSB(Main main)
+        public (bool, bool) SetupHsb(Main main)
         {
             if (File.Exists("HSBC.rar"))
             {
@@ -210,8 +196,8 @@ namespace ARES.Modules
             }
             catch { return false; }
 
-            killProcess("Unity Hub.exe", main);
-            killProcess("Unity.exe", main);
+            KillProcess("Unity Hub.exe", main);
+            KillProcess("Unity.exe", main);
 
             try
             {
@@ -250,8 +236,8 @@ namespace ARES.Modules
         {
             try
             {
-                killProcess("Unity Hub.exe", main);
-                killProcess("Unity.exe", main);
+                KillProcess("Unity Hub.exe", main);
+                KillProcess("Unity.exe", main);
                 if (Directory.Exists("HSB"))
                 {
                     Directory.Delete("HSB", true);
@@ -261,7 +247,7 @@ namespace ARES.Modules
             catch { }
         }
 
-        public bool openUnityPreSetup(string unityPath, Main main)
+        public bool OpenUnityPreSetup(string unityPath, Main main)
         {
 
             tryDelete(main);
@@ -303,7 +289,7 @@ namespace ARES.Modules
             catch { return false; }
         }
 
-        private void killProcess(string processName, Main main)
+        private void KillProcess(string processName, Main main)
         {
             try
             {
@@ -314,7 +300,7 @@ namespace ARES.Modules
             catch { }
         }
 
-        public void uploadToApi(List<Records> avatars, Main main)
+        public void UploadToApi(List<Records> avatars, Main main)
         {
             string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             string uploadedFile = filePath + @"\AvatarUploaded.txt";           
@@ -344,14 +330,14 @@ namespace ARES.Modules
                             var result = streamReader.ReadToEnd();
                         }
                         File.AppendAllText(uploadedFile, item.AvatarID + Environment.NewLine);
-                        WriteLog(string.Format("Avatar: {0} uploaded to API", item.AvatarID), main);
+                        WriteLog($"Avatar: {item.AvatarID} uploaded to API", main);
                     }
                     catch (Exception ex)
                     {
                         if (ex.Message.Contains("(409) Conflict"))
                         {
                             File.AppendAllText(uploadedFile, item.AvatarID + Environment.NewLine);
-                            WriteLog(string.Format("Avatar: {0} already on API", item.AvatarID), main);
+                            WriteLog($"Avatar: {item.AvatarID} already on API", main);
                         }
                     }
                     Console.WriteLine(item.AvatarID);

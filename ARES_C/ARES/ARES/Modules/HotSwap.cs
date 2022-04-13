@@ -15,43 +15,43 @@ namespace ARES.Modules
         public static void DecompressToFile(BundleFileInstance bundleInst, string savePath, HotswapConsole hotSwap)
         {
             AssetBundleFile bundle = bundleInst.file;
-            safeWrite(hotSwap.txtStatusText, $"22.2% Bundle file assigned!" + Environment.NewLine);
-            safeProgress(hotSwap.pbProgress, 22);
+            SafeWrite(hotSwap.txtStatusText, $"22.2% Bundle file assigned!" + Environment.NewLine);
+            SafeProgress(hotSwap.pbProgress, 22);
             FileStream bundleStream = File.Open(savePath, FileMode.Create);
-            safeWrite(hotSwap.txtStatusText, $"33.3% Loaded file to bundle stream!" + Environment.NewLine);
-            safeProgress(hotSwap.pbProgress, 33);
+            SafeWrite(hotSwap.txtStatusText, $"33.3% Loaded file to bundle stream!" + Environment.NewLine);
+            SafeProgress(hotSwap.pbProgress, 33);
             var progressBar = new SZProgress(hotSwap);
             bundle.Unpack(bundle.reader, new AssetsFileWriter(bundleStream), progressBar);
-            safeWrite(hotSwap.txtStatusText, $"44.4% Unpack stream complete!" + Environment.NewLine);
-            safeProgress(hotSwap.pbProgress, 44);
+            SafeWrite(hotSwap.txtStatusText, $"44.4% Unpack stream complete!" + Environment.NewLine);
+            SafeProgress(hotSwap.pbProgress, 44);
             bundleStream.Position = 0;
-            safeWrite(hotSwap.txtStatusText, $"55.5% Bundle stream position assigned!" + Environment.NewLine);
-            safeProgress(hotSwap.pbProgress, 55);
+            SafeWrite(hotSwap.txtStatusText, $"55.5% Bundle stream position assigned!" + Environment.NewLine);
+            SafeProgress(hotSwap.pbProgress, 55);
             AssetBundleFile newBundle = new AssetBundleFile();
-            safeWrite(hotSwap.txtStatusText, $"66.6% Created new asset bundle file!" + Environment.NewLine);
-            safeProgress(hotSwap.pbProgress, 66);
+            SafeWrite(hotSwap.txtStatusText, $"66.6% Created new asset bundle file!" + Environment.NewLine);
+            SafeProgress(hotSwap.pbProgress, 66);
             newBundle.Read(new AssetsFileReader(bundleStream), false);
-            safeWrite(hotSwap.txtStatusText, $"77.7% Bundle written to file!" + Environment.NewLine);
-            safeProgress(hotSwap.pbProgress, 77);
+            SafeWrite(hotSwap.txtStatusText, $"77.7% Bundle written to file!" + Environment.NewLine);
+            SafeProgress(hotSwap.pbProgress, 77);
             bundle.reader.Close();
-            safeWrite(hotSwap.txtStatusText, $"88.8% Bundle closed!" + Environment.NewLine);
-            safeProgress(hotSwap.pbProgress, 88);
+            SafeWrite(hotSwap.txtStatusText, $"88.8% Bundle closed!" + Environment.NewLine);
+            SafeProgress(hotSwap.pbProgress, 88);
             bundleInst.file = newBundle;
             bundleStream.Flush();
             bundleStream.Close();
-            safeWrite(hotSwap.txtStatusText, $"100% Bundle instance cleaned!" + Environment.NewLine);
-            safeProgress(hotSwap.pbProgress, 100);
+            SafeWrite(hotSwap.txtStatusText, $"100% Bundle instance cleaned!" + Environment.NewLine);
+            SafeProgress(hotSwap.pbProgress, 100);
         }
         //Creates function allowing it to be used with string imputs
         public static void DecompressToFileStr(string bundlePath, string unpackedBundlePath, HotswapConsole hotSwap)
         {
             var am = new AssetsManager();
-            safeWrite(hotSwap.txtStatusText, "11.1% Declared new asset manager!" + Environment.NewLine);
-            safeProgress(hotSwap.pbProgress, 11);
+            SafeWrite(hotSwap.txtStatusText, "11.1% Declared new asset manager!" + Environment.NewLine);
+            SafeProgress(hotSwap.pbProgress, 11);
             DecompressToFile(am.LoadBundleFile(bundlePath), unpackedBundlePath, hotSwap);
         }
 
-        private static void safeWrite(TextBox text, string textWrite)
+        private static void SafeWrite(TextBox text, string textWrite)
         {
             if (text.InvokeRequired)
             {
@@ -62,7 +62,7 @@ namespace ARES.Modules
             }
         }
 
-        private static void safeProgress(ProgressBar progress, int value)
+        private static void SafeProgress(ProgressBar progress, int value)
         {
             if (progress.InvokeRequired)
             {
@@ -81,12 +81,12 @@ namespace ARES.Modules
             using (var stream = new AssetsFileWriter(compFile))
             {
                 var am = new AssetsManager();
-                safeWrite(hotSwap.txtStatusText, $"25% Declared new asset manager!" + Environment.NewLine);
+                SafeWrite(hotSwap.txtStatusText, $"25% Declared new asset manager!" + Environment.NewLine);
                 var bun = am.LoadBundleFile(file, false);
-                safeWrite(hotSwap.txtStatusText, $"50% Bundle file initialized!" + Environment.NewLine);
+                SafeWrite(hotSwap.txtStatusText, $"50% Bundle file initialized!" + Environment.NewLine);
                 var progressBar = new SZProgress(hotSwap);
                 bun.file.Pack(bun.file.reader, stream, AssetBundleCompressionType.LZMA, progressBar);
-                safeWrite(hotSwap.txtStatusText, $"100% Compressed file packing complete!" + Environment.NewLine);
+                SafeWrite(hotSwap.txtStatusText, $"100% Compressed file packing complete!" + Environment.NewLine);
                 am.UnloadAll();
                 bun = null;
             }

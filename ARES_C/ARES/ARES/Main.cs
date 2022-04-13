@@ -26,33 +26,32 @@ namespace ARES
     {
         public Api ApiGrab;
         public CoreFunctions CoreFunctions;
-        public IniFile iniFile;
-        public GenerateHtml generateHtml;
-        private List<Records> AvatarList;
-        private List<WorldClass> worldList;
-        private List<Records> localAvatars;
-        private List<WorldClass> localWorlds;
-        public bool locked;
-        public Thread imageThread;
-        public Thread vrcaThread;
-        public Thread uploadThread;
-        public Thread scanThread;
-        public Thread browserThread;
-        public int threadCount;
-        public int maxThreads = 12;
-        public volatile int currentThreads = 0;
-        public volatile int avatarCount;
-        public int worldCount;
-        public Records selectedAvatar;
-        public WorldClass selectedWorld;
-        public string unityPath;
-        public HotswapConsole hotswapConsole;
-        public bool isAvatar;
-        public bool apiEnabled;
-        public bool loadImages;
-        public List<string> rippedList;
-        public List<string> favoriteList;
-        public string version = "";
+        public IniFile IniFile;
+        public GenerateHtml GenerateHtml;
+        public bool Locked;
+        public int MaxThreads = 12;
+        public WorldClass SelectedWorld;
+        public string UnityPath;
+        public HotswapConsole HotSwapConsole;
+        public bool IsAvatar;
+        private bool _apiEnabled;
+        public bool LoadImages;
+        public string Version = "";
+
+        private List<string> _rippedList;
+        private List<string> _favoriteList;
+        private volatile int _currentThreads = 0;
+        private volatile int _avatarCount;
+        private int _worldCount;
+        private Records _selectedAvatar;
+        private Thread _imageThread;
+        private Thread _vrcaThread;
+        private Thread _uploadThread;
+        private Thread _scanThread;
+        private List<Records> _avatarList;
+        private List<WorldClass> _worldList;
+        private List<Records> _localAvatars;
+        private List<WorldClass> _localWorlds;
 
         public Main()
         {
@@ -60,24 +59,108 @@ namespace ARES
             this.StyleManager = metroStyleManager;
         }
 
-        private void CleanHSB()
+        private void CleanHsb()
         {
             string programLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            killProcess("Unity Hub.exe");
-            killProcess("Unity.exe");
+            KillProcess("Unity Hub.exe");
+            KillProcess("Unity.exe");
             tryDelete(programLocation + "/HSBC.rar");
             tryDeleteDirectory(programLocation + "/HSB");
+        }
+
+        private void CheckIniKeys()
+        {
+
+            if (!IniFile.KeyExists("AresVersion"))
+            {
+                MessageBox.Show("ARES Version not detected in INI file HSB cleaning will now begin");
+                CleanHsb();
+                IniFile.Write("AresVersion", Version);
+            }
+
+            if (IniFile.KeyExists("avatarOutput"))
+            {
+                txtAvatarOutput.Text = IniFile.Read("avatarOutput");
+            }
+
+            if (IniFile.KeyExists("worldOutput"))
+            {
+                txtWorldOutput.Text = IniFile.Read("worldOutput");
+            }
+
+            if (IniFile.KeyExists("avatarOutputAuto"))
+            {
+                toggleAvatar.Checked = Convert.ToBoolean(IniFile.Read("avatarOutputAuto"));
+            }
+
+            if (IniFile.KeyExists("worldOutputAuto"))
+            {
+                toggleWorld.Checked = Convert.ToBoolean(IniFile.Read("worldOutputAuto"));
+            }
+
+            if (!IniFile.KeyExists("apiEnabled"))
+            {
+                DialogResult dlgResult = MessageBox.Show("Enable API support?", "API", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+
+                if (dlgResult == DialogResult.No)
+                {
+                    _apiEnabled = false;
+                    IniFile.Write("apiEnabled", "false");
+                }
+                else if (dlgResult == DialogResult.Yes)
+                {
+                    _apiEnabled = true;
+                    IniFile.Write("apiEnabled", "true");
+                }
+                else
+                {
+                    _apiEnabled = true;
+                    IniFile.Write("apiEnabled", "true");
+                }
+            }
+            else
+            {
+                _apiEnabled = Convert.ToBoolean(IniFile.Read("apiEnabled"));
+            }
+
+            if (IniFile.KeyExists("apiKey"))
+            {
+                txtApiKey.Text = IniFile.Read("apiKey");
+                ApiGrab.ApiKey = IniFile.Read("apiKey");
+
+            }
+
+            if (!IniFile.KeyExists("unity"))
+            {
+                unitySetup();
+
+            }
+            else
+            {
+                UnityPath = IniFile.Read("unity");
+                if (!File.Exists(UnityPath))
+                {
+                    unitySetup();
+                }
+            }
+
+            if (IniFile.KeyExists("theme"))
+            {
+                metroStyleManager.Theme = IniFile.Read("theme") == "light" ? MetroThemeStyle.Light : MetroThemeStyle.Dark;
+            }
+
+            if (IniFile.KeyExists("style"))
+            {
+                LoadStyle(IniFile.Read("style"));
+            }
         }
 
         private void Main_Load(object sender, EventArgs e)
         {
             ApiGrab = new Api();
             CoreFunctions = new CoreFunctions();
-            iniFile = new IniFile();
-            generateHtml = new GenerateHtml();
-            
-
-            //just incase i forgot
+            IniFile = new IniFile();
+            GenerateHtml = new GenerateHtml();
             mTab.SelectedIndex = 0;
             mTabMain.Show();
             txtAbout.Text = Resources.txtAbout;
@@ -90,8 +173,8 @@ namespace ARES
             {
                 Assembly assembly = Assembly.GetExecutingAssembly();
                 FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-                version = fileVersionInfo.ProductVersion;
-                this.Text = "ARES V" + version;
+                Version = fileVersionInfo.ProductVersion;
+                this.Text = "ARES V" + Version;
             }
             catch { }
             cbLimit.SelectedIndex = 0;
@@ -103,7 +186,8 @@ namespace ARES
 
             if (File.Exists(filePath + @"\LatestLog.txt"))
             {
-                File.Move(filePath + @"\LatestLog.txt", string.Format(filePath + "\\Logs\\{0}.txt", string.Format("{0:yyyy-MM-dd_HH-mm-ss-fff}", DateTime.Now)));
+                File.Move(filePath + @"\LatestLog.txt", string.Format(filePath + "\\Logs\\{0}.txt",
+                    $"{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}"));
                 Thread.Sleep(500);
                 var myFile = File.Create(filePath + @"\LatestLog.txt");
                 myFile.Close();
@@ -116,89 +200,39 @@ namespace ARES
 
             if (!File.Exists(filePath + @"\Ripped.txt"))
             {
-                rippedList = new List<string>();
+                _rippedList = new List<string>();
                 var myFile = File.Create(filePath + @"\Ripped.txt");
                 myFile.Close();
             }
             else
             {
-                rippedList = new List<string>();
+                _rippedList = new List<string>();
                 foreach (string line in System.IO.File.ReadLines(filePath + @"\Ripped.txt"))
                 {
-                    rippedList.Add(line);
+                    _rippedList.Add(line);
                 }
             }
 
             if (!File.Exists(filePath + @"\Favorite.txt"))
             {
-                favoriteList = new List<string>();
+                _favoriteList = new List<string>();
                 var myFile = File.Create(filePath + @"\Favorite.txt");
                 myFile.Close();
             }
             else
             {
-                favoriteList = new List<string>();
+                _favoriteList = new List<string>();
                 foreach (string line in System.IO.File.ReadLines(filePath + @"\Favorite.txt"))
                 {
-                    favoriteList.Add(line);
+                    _favoriteList.Add(line);
                 }
             }
 
-            if (!iniFile.KeyExists("AresVersion"))
-            {
-                MessageBox.Show("ARES Version not detected in INI file HSB cleaning will now begin");
-                CleanHSB();
-                iniFile.Write("AresVersion", version);
-            }
-
-            if (iniFile.KeyExists("avatarOutput"))
-            {
-                txtAvatarOutput.Text = iniFile.Read("avatarOutput");
-            }
-
-            if (iniFile.KeyExists("worldOutput"))
-            {
-                txtWorldOutput.Text = iniFile.Read("worldOutput");
-            }
-
-            if (iniFile.KeyExists("avatarOutputAuto"))
-            {
-                toggleAvatar.Checked = Convert.ToBoolean(iniFile.Read("avatarOutputAuto"));
-            }
-
-            if (iniFile.KeyExists("worldOutputAuto"))
-            {
-                toggleWorld.Checked = Convert.ToBoolean(iniFile.Read("worldOutputAuto"));
-            }
-
-            if (!iniFile.KeyExists("apiEnabled"))
-            {
-                DialogResult dlgResult = MessageBox.Show("Enable API support?", "API", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-
-                if (dlgResult == DialogResult.No)
-                {
-                    apiEnabled = false;
-                    iniFile.Write("apiEnabled", "false");
-                }
-                else if (dlgResult == DialogResult.Yes)
-                {
-                    apiEnabled = true;
-                    iniFile.Write("apiEnabled", "true");
-                }
-                else
-                {
-                    apiEnabled = true;
-                    iniFile.Write("apiEnabled", "true");
-                }
-            }
-            else
-            {
-                apiEnabled = Convert.ToBoolean(iniFile.Read("apiEnabled"));
-            }
+            CheckIniKeys();
 
             try
             {
-                lblSize.Text = ApiGrab.getStats().Total_database_size;
+                lblSize.Text = ApiGrab.GetStats().Total_database_size;
             }
             catch
             {
@@ -207,46 +241,12 @@ namespace ARES
             cbSearchTerm.SelectedIndex = 0;
             cbVersionUnity.SelectedIndex = 0;
 
-            if (iniFile.KeyExists("apiKey"))
-            {
-                txtApiKey.Text = iniFile.Read("apiKey");
-                ApiGrab.ApiKey = iniFile.Read("apiKey");
 
-            }
 
-            if (!iniFile.KeyExists("unity"))
-            {
-                unitySetup();
 
-            }
-            else
-            {
-                unityPath = iniFile.Read("unity");
-                if (!File.Exists(unityPath))
-                {
-                    unitySetup();
-                }
-            }
-
-            if (iniFile.KeyExists("theme"))
-            {
-                if (iniFile.Read("theme") == "light")
-                {
-                    metroStyleManager.Theme = MetroThemeStyle.Light;
-                }
-                else
-                {
-                    metroStyleManager.Theme = MetroThemeStyle.Dark;
-                }
-            }
-
-            if (iniFile.KeyExists("style"))
-            {
-                LoadStyle(iniFile.Read("style"));
-            }
 
             string pluginCheck = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).Replace("GUI", "");
-            if (!File.Exists(pluginCheck + @"\Plugins\ARESPlugin.dll") && apiEnabled)
+            if (!File.Exists(pluginCheck + @"\Plugins\ARESPlugin.dll") && _apiEnabled)
             {
                 btnSearch.Enabled = false;
 #if DEBUG
@@ -255,12 +255,12 @@ namespace ARES
 #endif
             }
 
-            if (!string.IsNullOrEmpty(unityPath))
+            if (!string.IsNullOrEmpty(UnityPath))
             {
-                var unitySetup = CoreFunctions.setupHSB(this);
+                var unitySetup = CoreFunctions.SetupHsb(this);
                 if (unitySetup == (true, false))
                 {
-                    CoreFunctions.setupUnity(unityPath, this);
+                    CoreFunctions.setupUnity(UnityPath, this);
                 }
             }
 
@@ -269,60 +269,60 @@ namespace ARES
             MessageBoxManager.No = "Quest";
             MessageBoxManager.Register();
 
-            localAvatars = CoreFunctions.getLocalAvatars(this);
-            if (localAvatars.Count > 0 && apiEnabled)
+            _localAvatars = CoreFunctions.GetLocalAvatars(this);
+            if (_localAvatars.Count > 0 && _apiEnabled)
             {
-                uploadThread = new Thread(() => CoreFunctions.uploadToApi(localAvatars, this));
-                uploadThread.Start();
+                _uploadThread = new Thread(() => CoreFunctions.UploadToApi(_localAvatars, this));
+                _uploadThread.Start();
             }
 
-            localWorlds = CoreFunctions.getLocalWorlds(this);
-            if (localWorlds.Count > 0 && apiEnabled)
+            _localWorlds = CoreFunctions.GetLocalWorlds(this);
+            if (_localWorlds.Count > 0 && _apiEnabled)
             {
-                CoreFunctions.uploadToApiWorld(localWorlds, this);
+                CoreFunctions.uploadToApiWorld(_localWorlds, this);
             }
             try
             {
                 CoreFunctions.WriteLog("Fetching unity sources", this);
-                scanThread = new Thread(() => ScanPackage.DownloadOnlineSourcesOnStartup(this));
-                scanThread.Start();
+                _scanThread = new Thread(() => ScanPackage.DownloadOnlineSourcesOnStartup(this));
+                _scanThread.Start();
             }
             catch { }
         }
 
         private void unitySetup()
         {
-            string unityPath = unityRegistry();
+            string unityPath = UnityRegistry();
             if (unityPath != null)
             {
-                DialogResult dlgResult = MessageBox.Show(string.Format("Possible unity path found, Location: '{0}' is this correct?", unityPath + @"\Editor\Unity.exe"), "Unity", MessageBoxButtons.YesNo);
+                DialogResult dlgResult = MessageBox.Show($"Possible unity path found, Location: '{unityPath + @"\Editor\Unity.exe"}' is this correct?", "Unity", MessageBoxButtons.YesNo);
                 if (dlgResult == DialogResult.Yes)
                 {
                     if (File.Exists(unityPath + @"\Editor\Unity.exe"))
                     {
-                        iniFile.Write("unity", unityPath + @"\Editor\Unity.exe");
+                        IniFile.Write("unity", unityPath + @"\Editor\Unity.exe");
                         MessageBox.Show("Leave the command window open it will close by itself after the unity setup is complete");
                     }
                     else
                     {
                         MessageBox.Show("Someone didn't check because that file doesn't exist!");
-                        selectFile();
+                        SelectFile();
                     }
                 }
                 else
                 {
                     MessageBox.Show("Please select unity.exe, after doing this leave the command window open it will close by itself after setup is complete");
-                    selectFile();
+                    SelectFile();
                 }
             }
             else
             {
                 MessageBox.Show("Please select unity.exe, after doing this leave the command window open it will close by itself after setup is complete");
-                selectFile();
+                SelectFile();
             }
         }
 
-        private void selectFile()
+        private void SelectFile()
         {
             var fileContent = string.Empty;
             var filePath = string.Empty;
@@ -340,11 +340,11 @@ namespace ARES
                     filePath = openFileDialog.FileName;
                 }
             }
-            unityPath = filePath;
-            iniFile.Write("unity", filePath);
+            UnityPath = filePath;
+            IniFile.Write("unity", filePath);
         }
 
-        private string unityRegistry()
+        private static string UnityRegistry()
         {
             try
             {
@@ -367,7 +367,7 @@ namespace ARES
             }
         }
 
-        private string selectFileVrca()
+        private string SelectFileVrca()
         {
             var fileContent = string.Empty;
             var filePath = string.Empty;
@@ -389,49 +389,49 @@ namespace ARES
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            if (!locked)
+            if (!Locked)
             {
-                maxThreads = Convert.ToInt32(nmThread.Value);
-                loadImages = chkLoadImages.Checked;
+                MaxThreads = Convert.ToInt32(nmThread.Value);
+                LoadImages = chkLoadImages.Checked;
                 flowAvatars.Controls.Clear();
 
                 if (!cbSearchTerm.Text.Contains("World"))
                 {
-                    List<Records> avatars = ApiGrab.getAvatars(txtSearchTerm.Text, cbSearchTerm.Text, cbLimit.Text, version);
-                    AvatarList = avatars;
+                    List<Records> avatars = ApiGrab.GetAvatars(txtSearchTerm.Text, cbSearchTerm.Text, cbLimit.Text, Version);
+                    _avatarList = avatars;
                     if (chkPC.Checked)
                     {
-                        AvatarList = AvatarList.Where(x => x.PCAssetURL.Trim().ToLower() != "none").ToList();
+                        _avatarList = _avatarList.Where(x => x.PCAssetURL.Trim().ToLower() != "none").ToList();
                     }
                     if (chkQuest.Checked)
                     {
-                        AvatarList = AvatarList.Where(x => x.QUESTAssetURL.Trim().ToLower() != "none").ToList();
+                        _avatarList = _avatarList.Where(x => x.QUESTAssetURL.Trim().ToLower() != "none").ToList();
                     }
                     if (chkPublic.Checked == true && chkPrivate.Checked == false)
                     {
-                        AvatarList = AvatarList.Where(x => x.Releasestatus.ToLower().Trim() == "public").ToList();
+                        _avatarList = _avatarList.Where(x => x.Releasestatus.ToLower().Trim() == "public").ToList();
                     }
                     if (chkPublic.Checked == false && chkPrivate.Checked == true)
                     {
-                        AvatarList = AvatarList.Where(x => x.Releasestatus.ToLower().Trim() == "private").ToList();
+                        _avatarList = _avatarList.Where(x => x.Releasestatus.ToLower().Trim() == "private").ToList();
                     }
-                    avatarCount = AvatarList.Count();
-                    lblAvatarCount.Text = avatarCount.ToString();
-                    locked = true;
-                    isAvatar = true;
-                    imageThread = new Thread(new ThreadStart(GetImages));
-                    imageThread.Start();
+                    _avatarCount = _avatarList.Count();
+                    lblAvatarCount.Text = _avatarCount.ToString();
+                    Locked = true;
+                    IsAvatar = true;
+                    _imageThread = new Thread(new ThreadStart(GetImages));
+                    _imageThread.Start();
                 }
                 else
                 {
-                    List<WorldClass> worlds = ApiGrab.getWorlds(txtSearchTerm.Text, cbSearchTerm.Text);
-                    worldList = worlds;
-                    worldCount = worlds.Count();
-                    lblAvatarCount.Text = worldCount.ToString();
-                    locked = true;
-                    isAvatar = false;
-                    imageThread = new Thread(new ThreadStart(GetImagesWorld));
-                    imageThread.Start();
+                    List<WorldClass> worlds = ApiGrab.GetWorlds(txtSearchTerm.Text, cbSearchTerm.Text);
+                    _worldList = worlds;
+                    _worldCount = worlds.Count();
+                    lblAvatarCount.Text = _worldCount.ToString();
+                    Locked = true;
+                    IsAvatar = false;
+                    _imageThread = new Thread(new ThreadStart(GetImagesWorld));
+                    _imageThread.Start();
                 }
             }
             else
@@ -444,13 +444,13 @@ namespace ARES
         {
             try
             {
-                foreach (var item in AvatarList)
+                foreach (var item in _avatarList)
                 {
-                    while (currentThreads >= maxThreads)
+                    while (_currentThreads >= MaxThreads)
                     {
                         Thread.Sleep(50);
                     }
-                    currentThreads++;
+                    _currentThreads++;
                     var t = new Thread(() => MultiGetImages(item));
                     t.Start();
                 }
@@ -459,7 +459,7 @@ namespace ARES
             {
                 Console.WriteLine(ex.Message);
             }
-            locked = false;
+            Locked = false;
         }
 
         private void labelAvatar_MouseDown(object sender, MouseEventArgs e)
@@ -492,18 +492,18 @@ namespace ARES
                 }
                 Label label = new Label { Text = "Avatar Name: " + item.AvatarName + " [" + questPc + "]", BackColor = Color.Transparent, ForeColor = Color.Red, Size = new Size(148, 146) };
                 Bitmap bitmap = null;
-                if (loadImages)
+                if (LoadImages)
                 {
-                    bitmap = CoreFunctions.loadImage(item.ThumbnailURL, chkNoImages.Checked);
+                    bitmap = CoreFunctions.LoadImage(item.ThumbnailURL, chkNoImages.Checked);
                 }
 
-                if (bitmap != null || !loadImages)
+                if (bitmap != null || !LoadImages)
                 {
                     avatarImage.Image = bitmap;
                     label.Name = item.AvatarID;
                     label.Click += LoadInfo;
                     groupBox.Controls.Add(avatarImage);
-                    if (rippedList.Contains(item.AvatarID))
+                    if (_rippedList.Contains(item.AvatarID))
                     {
                         ripped.Image = pbRipped.Image;
 
@@ -534,20 +534,20 @@ namespace ARES
                 }
                 else
                 {
-                    avatarCount--;
+                    _avatarCount--;
                     if (lblAvatarCount.InvokeRequired)
                     {
                         lblAvatarCount.Invoke((MethodInvoker)delegate
                         {
-                            lblAvatarCount.Text = avatarCount.ToString();
+                            lblAvatarCount.Text = _avatarCount.ToString();
                         });
                     }
                 }
-                currentThreads--;
+                _currentThreads--;
             }
             catch
             {
-                currentThreads--;
+                _currentThreads--;
             }
         }
 
@@ -555,18 +555,18 @@ namespace ARES
         {
             try
             {
-                foreach (var item in worldList)
+                foreach (var item in _worldList)
                 {
                     Panel groupBox = new Panel { Size = new Size(150, 150), BackColor = Color.Transparent };
                     PictureBox avatarImage = new PictureBox { SizeMode = PictureBoxSizeMode.StretchImage, Size = new Size(148, 146) };
                     Label label = new Label { Text = "World Name: " + item.WorldName, BackColor = Color.Transparent, ForeColor = Color.Red, Size = new Size(148, 146) };
                     Bitmap bitmap = null;
-                    if (loadImages)
+                    if (LoadImages)
                     {
-                        bitmap = CoreFunctions.loadImage(item.ThumbnailURL, chkNoImages.Checked);
+                        bitmap = CoreFunctions.LoadImage(item.ThumbnailURL, chkNoImages.Checked);
                     }
 
-                    if (bitmap != null || !loadImages)
+                    if (bitmap != null || !LoadImages)
                     {
                         avatarImage.Image = bitmap;
                         label.Name = item.WorldID;
@@ -585,12 +585,12 @@ namespace ARES
                     }
                     else
                     {
-                        worldCount--;
+                        _worldCount--;
                         if (lblAvatarCount.InvokeRequired)
                         {
                             lblAvatarCount.Invoke((MethodInvoker)delegate
                             {
-                                lblAvatarCount.Text = worldCount.ToString();
+                                lblAvatarCount.Text = _worldCount.ToString();
                             });
                         }
                     }
@@ -600,28 +600,28 @@ namespace ARES
             {
                 Console.WriteLine(ex.Message);
             }
-            locked = false;
+            Locked = false;
         }
 
         private void LoadInfo(object sender, EventArgs e)
         {
             var img = (Label)sender;
-            selectedAvatar = AvatarList.Find(x => x.AvatarID == img.Name);
-            txtAvatarInfo.Text = CoreFunctions.SetAvatarInfo(selectedAvatar);
+            _selectedAvatar = _avatarList.Find(x => x.AvatarID == img.Name);
+            txtAvatarInfo.Text = CoreFunctions.SetAvatarInfo(_selectedAvatar);
 
-            Bitmap bitmap; bitmap = CoreFunctions.loadImage(selectedAvatar.ImageURL, chkNoImages.Checked);
+            Bitmap bitmap = CoreFunctions.LoadImage(_selectedAvatar.ImageURL, chkNoImages.Checked);
 
             if (bitmap != null)
             {
                 selectedImage.Image = bitmap;
             }
-            if (selectedAvatar.PCAssetURL != "None")
+            if (_selectedAvatar.PCAssetURL != "None")
             {
                 try
                 {
-                    string[] version = selectedAvatar.PCAssetURL.Split('/');
-                    string urlCheck = selectedAvatar.PCAssetURL.Replace(version[6] + "/" + version[7] + "/file", version[6]);
-                    RootClass versionList = ApiGrab.getVersions(urlCheck);
+                    string[] version = _selectedAvatar.PCAssetURL.Split('/');
+                    string urlCheck = _selectedAvatar.PCAssetURL.Replace(version[6] + "/" + version[7] + "/file", version[6]);
+                    RootClass versionList = ApiGrab.GetVersions(urlCheck);
                     nmPcVersion.Value = Convert.ToInt32(versionList.versions.LastOrDefault().version);
                 }
                 catch { nmPcVersion.Value = 1; }
@@ -630,13 +630,13 @@ namespace ARES
             {
                 nmPcVersion.Value = 0;
             }
-            if (selectedAvatar.QUESTAssetURL != "None")
+            if (_selectedAvatar.QUESTAssetURL != "None")
             {
                 try
                 {
-                    string[] version = selectedAvatar.QUESTAssetURL.Split('/');
-                    string urlCheck = selectedAvatar.QUESTAssetURL.Replace(version[6] + "/" + version[7] + "/file", version[6]);
-                    RootClass versionList = ApiGrab.getVersions(urlCheck);
+                    string[] version = _selectedAvatar.QUESTAssetURL.Split('/');
+                    string urlCheck = _selectedAvatar.QUESTAssetURL.Replace(version[6] + "/" + version[7] + "/file", version[6]);
+                    RootClass versionList = ApiGrab.GetVersions(urlCheck);
                     nmQuestVersion.Value = Convert.ToInt32(versionList.versions.LastOrDefault().version);
                 }
                 catch { nmQuestVersion.Value = 1; }
@@ -650,18 +650,18 @@ namespace ARES
         private void LoadInfoWorld(object sender, EventArgs e)
         {
             var img = (Label)sender;
-            selectedWorld = worldList.Find(x => x.WorldID == img.Name);
-            txtAvatarInfo.Text = CoreFunctions.SetWorldInfo(selectedWorld);
+            SelectedWorld = _worldList.Find(x => x.WorldID == img.Name);
+            txtAvatarInfo.Text = CoreFunctions.SetWorldInfo(SelectedWorld);
 
-            Bitmap bitmap; bitmap = CoreFunctions.loadImage(selectedWorld.ImageURL, chkNoImages.Checked);
+            Bitmap bitmap; bitmap = CoreFunctions.LoadImage(SelectedWorld.ImageURL, chkNoImages.Checked);
 
             if (bitmap != null)
             {
                 selectedImage.Image = bitmap;
             }
-            if (selectedWorld.PCAssetURL != "None")
+            if (SelectedWorld.PCAssetURL != "None")
             {
-                string[] version = selectedWorld.PCAssetURL.Split('/');
+                string[] version = SelectedWorld.PCAssetURL.Split('/');
                 nmPcVersion.Value = Convert.ToInt32(version[7]);
             }
             else
@@ -675,40 +675,40 @@ namespace ARES
         {
             if (!string.IsNullOrEmpty(txtAvatarInfo.Text))
             {
-                if (selectedAvatar != null)
+                if (_selectedAvatar != null)
                 {
-                    if (txtAvatarInfo.Text.Contains("avtr_") && selectedAvatar.AvatarID.Contains("avtr_"))
+                    if (txtAvatarInfo.Text.Contains("avtr_") && _selectedAvatar.AvatarID.Contains("avtr_"))
                     {
-                        System.Windows.Forms.SaveFileDialog savefile = new System.Windows.Forms.SaveFileDialog();
+                        System.Windows.Forms.SaveFileDialog saveFile = new System.Windows.Forms.SaveFileDialog();
                         string fileName = "custom.vrca";
-                        savefile.Filter = "VRCA files (*.vrca)|*.vrca";
-                        savefile.FileName = fileName;
+                        saveFile.Filter = "VRCA files (*.vrca)|*.vrca";
+                        saveFile.FileName = fileName;
 
-                        if (savefile.ShowDialog() == DialogResult.OK)
+                        if (saveFile.ShowDialog() == DialogResult.OK)
                         {
-                            fileName = savefile.FileName;
+                            fileName = saveFile.FileName;
                         }
-                        if (!downloadVRCA(fileName))
+                        if (!DownloadVrca(fileName))
                         {
                             return;
                         }
                     }
                 }
 
-                if (selectedWorld != null)
+                if (SelectedWorld != null)
                 {
-                    if (txtAvatarInfo.Text.Contains("wrld_") && selectedWorld.WorldID.Contains("wrld_"))
+                    if (txtAvatarInfo.Text.Contains("wrld_") && SelectedWorld.WorldID.Contains("wrld_"))
                     {
-                        System.Windows.Forms.SaveFileDialog savefile = new System.Windows.Forms.SaveFileDialog();
+                        System.Windows.Forms.SaveFileDialog saveFile = new System.Windows.Forms.SaveFileDialog();
                         string fileName = "custom.VRCW";
-                        savefile.Filter = "VRCW files (*.VRCW)|*.VRCW";
-                        savefile.FileName = fileName;
+                        saveFile.Filter = "VRCW files (*.VRCW)|*.VRCW";
+                        saveFile.FileName = fileName;
 
-                        if (savefile.ShowDialog() == DialogResult.OK)
+                        if (saveFile.ShowDialog() == DialogResult.OK)
                         {
-                            fileName = savefile.FileName;
+                            fileName = saveFile.FileName;
                         }
-                        if (!downloadVRCW(fileName))
+                        if (!DownloadVrcw(fileName))
                         {
                             return;
                         }
@@ -721,7 +721,7 @@ namespace ARES
             }
         }
 
-        private bool downloadVRCW(string fileName = "custom.vrcw")
+        private bool DownloadVrcw(string fileName = "custom.vrcw")
         {
             string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             if (fileName == "custom.vrcw")
@@ -729,33 +729,33 @@ namespace ARES
                 fileName = filePath + @"\custom.vrcw";
             }
 
-            string[] version = selectedWorld.PCAssetURL.Split('/');
+            string[] version = SelectedWorld.PCAssetURL.Split('/');
             version[7] = nmPcVersion.Value.ToString();
 
-            downloadFile(string.Join("/", version), fileName);
+            DownloadFile(string.Join("/", version), fileName);
             return true;
         }
 
-        private bool downloadVRCA(string fileName = "custom.vrca")
+        private bool DownloadVrca(string fileName = "custom.vrca")
         {
             string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             if (fileName == "custom.vrca")
             {
                 fileName = filePath + @"\custom.vrca";
             }
-            if (selectedAvatar.AuthorName != "VRCA")
+            if (_selectedAvatar.AuthorName != "VRCA")
             {
-                if (selectedAvatar.PCAssetURL != "None" && selectedAvatar.QUESTAssetURL != "None")
+                if (_selectedAvatar.PCAssetURL != "None" && _selectedAvatar.QUESTAssetURL != "None")
                 {
                     DialogResult dlgResult = MessageBox.Show("Select which version to download", "VRCA Select", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
                     if (dlgResult == DialogResult.No)
                     {
-                        if (selectedAvatar.QUESTAssetURL != "None")
+                        if (_selectedAvatar.QUESTAssetURL != "None")
                         {
-                            string[] version = selectedAvatar.QUESTAssetURL.Split('/');
+                            string[] version = _selectedAvatar.QUESTAssetURL.Split('/');
                             version[7] = nmQuestVersion.Value.ToString();
-                            downloadFile(string.Join("/", version), fileName);
+                            DownloadFile(string.Join("/", version), fileName);
                         }
                         else
                         {
@@ -765,11 +765,11 @@ namespace ARES
                     }
                     else if (dlgResult == DialogResult.Yes)
                     {
-                        if (selectedAvatar.PCAssetURL != "None")
+                        if (_selectedAvatar.PCAssetURL != "None")
                         {
-                            string[] version = selectedAvatar.PCAssetURL.Split('/');
+                            string[] version = _selectedAvatar.PCAssetURL.Split('/');
                             version[7] = nmPcVersion.Value.ToString();
-                            downloadFile(string.Join("/", version), fileName);
+                            DownloadFile(string.Join("/", version), fileName);
                         }
                         else
                         {
@@ -782,23 +782,23 @@ namespace ARES
                         return false;
                     }
                 }
-                else if (selectedAvatar.PCAssetURL != "None")
+                else if (_selectedAvatar.PCAssetURL != "None")
                 {
-                    string[] version = selectedAvatar.PCAssetURL.Split('/');
+                    string[] version = _selectedAvatar.PCAssetURL.Split('/');
                     version[7] = nmPcVersion.Value.ToString();
-                    downloadFile(string.Join("/", version), fileName);
+                    DownloadFile(string.Join("/", version), fileName);
                 }
-                else if (selectedAvatar.QUESTAssetURL != "None")
+                else if (_selectedAvatar.QUESTAssetURL != "None")
                 {
-                    string[] version = selectedAvatar.QUESTAssetURL.Split('/');
+                    string[] version = _selectedAvatar.QUESTAssetURL.Split('/');
                     version[7] = nmQuestVersion.Value.ToString();
-                    downloadFile(string.Join("/", version), fileName);
+                    DownloadFile(string.Join("/", version), fileName);
                 }
                 else { return false; }
             }
             else
             {
-                downloadFile(selectedAvatar.PCAssetURL, fileName);
+                DownloadFile(_selectedAvatar.PCAssetURL, fileName);
             }
 
             return true;
@@ -806,9 +806,9 @@ namespace ARES
 
         private void btnExtractVRCA_Click(object sender, EventArgs e)
         {
-            if (selectedAvatar != null && isAvatar)
+            if (_selectedAvatar != null && IsAvatar)
             {
-                if (!downloadVRCA())
+                if (!DownloadVrca())
                 {
                     return;
                 }
@@ -839,7 +839,7 @@ namespace ARES
                             new EncoderReplacementFallback(string.Empty),
                             new DecoderExceptionFallback()
                             ),
-                        Encoding.UTF8.GetBytes(selectedAvatar.AvatarName)
+                        Encoding.UTF8.GetBytes(_selectedAvatar.AvatarName)
                         )
                     );
                     avatarName += "-ARES";
@@ -869,16 +869,16 @@ namespace ARES
                         Directory.Move(folderExtractLocation + @"\Assets\Shader", folderExtractLocation + @"\Assets\.Shader");
                     }
                     catch { }
-                    if (selectedAvatar.AvatarID != "VRCA")
+                    if (_selectedAvatar.AvatarID != "VRCA")
                     {
-                        File.AppendAllText(filePath + @"\Ripped.txt", selectedAvatar.AvatarID + "\n");
-                        rippedList.Add(selectedAvatar.AvatarID);
+                        File.AppendAllText(filePath + @"\Ripped.txt", _selectedAvatar.AvatarID + "\n");
+                        _rippedList.Add(_selectedAvatar.AvatarID);
                     }
                 }
             }
-            else if (selectedWorld != null && !isAvatar)
+            else if (SelectedWorld != null && !IsAvatar)
             {
-                if (!downloadVRCW())
+                if (!DownloadVrcw())
                 {
                     return;
                 }
@@ -909,7 +909,7 @@ namespace ARES
                             new EncoderReplacementFallback(string.Empty),
                             new DecoderExceptionFallback()
                             ),
-                        Encoding.UTF8.GetBytes(selectedWorld.WorldName)
+                        Encoding.UTF8.GetBytes(SelectedWorld.WorldName)
                         )
                     );
                     worldName += "-ARES";
@@ -947,7 +947,7 @@ namespace ARES
             }
         }
 
-        private void downloadFile(string url, string saveName)
+        private void DownloadFile(string url, string saveName)
         {
             using (var client = new WebClient())
             {
@@ -968,19 +968,19 @@ namespace ARES
 
         private void btnStopSearch_Click(object sender, EventArgs e)
         {
-            if (imageThread != null)
+            if (_imageThread != null)
             {
-                imageThread.Abort();
-                locked = false;
+                _imageThread.Abort();
+                Locked = false;
             }
         }
 
         private void btnSearchLocal_Click(object sender, EventArgs e)
         {
-            List<Records> localRecords = localAvatars;
-            if (!locked)
+            List<Records> localRecords = _localAvatars;
+            if (!Locked)
             {
-                loadImages = chkLoadImages.Checked;
+                LoadImages = chkLoadImages.Checked;
                 flowAvatars.Controls.Clear();
                 List<Records> avatars = null;
 
@@ -1025,13 +1025,13 @@ namespace ARES
                     avatars = avatars.Take(Convert.ToInt32(cbLimit.Text)).ToList();
                 }
 
-                AvatarList = avatars;
-                avatarCount = avatars.Count();
-                lblAvatarCount.Text = avatarCount.ToString();
-                locked = true;
-                isAvatar = true;
-                imageThread = new Thread(new ThreadStart(GetImages));
-                imageThread.Start();
+                _avatarList = avatars;
+                _avatarCount = avatars.Count();
+                lblAvatarCount.Text = _avatarCount.ToString();
+                Locked = true;
+                IsAvatar = true;
+                _imageThread = new Thread(new ThreadStart(GetImages));
+                _imageThread.Start();
             }
             else
             {
@@ -1041,24 +1041,24 @@ namespace ARES
 
         private void btnHotswap_Click(object sender, EventArgs e)
         {
-            if (vrcaThread != null)
+            if (_vrcaThread != null)
             {
-                if (vrcaThread.IsAlive)
+                if (_vrcaThread.IsAlive)
                 {
                     MetroMessageBox.Show(this, "Hotswap is still busy with previous request", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
             }
-            if (selectedAvatar != null)
+            if (_selectedAvatar != null)
             {
-                if (!downloadVRCA())
+                if (!DownloadVrca())
                 {
                     return;
                 }
-                hotswapConsole = new HotswapConsole();
-                hotswapConsole.Show();
-                vrcaThread = new Thread(new ThreadStart(hotswap));
-                vrcaThread.Start();
+                HotSwapConsole = new HotswapConsole();
+                HotSwapConsole.Show();
+                _vrcaThread = new Thread(new ThreadStart(Hotswap));
+                _vrcaThread.Start();
             }
             else
             {
@@ -1066,7 +1066,7 @@ namespace ARES
             }
         }
 
-        private void hotswap()
+        private void Hotswap()
         {
             string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             string fileDecompressed = filePath + @"\decompressed.vrca";
@@ -1075,15 +1075,15 @@ namespace ARES
             string fileDummy = filePath + @"\dummy.vrca";
             string fileTarget = filePath + @"\target.vrca";
             string tempFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData).Replace("\\Roaming", "");
-            string unityVRCA = tempFolder + "\\Local\\Temp\\DefaultCompany\\HSB\\custom.vrca";
+            string unityVrca = tempFolder + "\\Local\\Temp\\DefaultCompany\\HSB\\custom.vrca";
             string regexId = @"avtr_[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}";
             string regexPrefabId = @"prefab-id-v1_avtr_[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}_[\d]{10}\.prefab";
             string regexCab = @"CAB-[\w]{32}";
             string regexUnity = @"20[\d]{2}\.[\d]\.[\d]{2}f[\d]";
-            Regex AvatarIdRegex = new Regex(regexId);
-            Regex AvatarPrefabIdRegex = new Regex(regexPrefabId);
-            Regex AvatarCabRegex = new Regex(regexCab);
-            Regex UnityRegex = new Regex(regexUnity);
+            Regex avatarIdRegex = new Regex(regexId);
+            Regex avatarPrefabIdRegex = new Regex(regexPrefabId);
+            Regex avatarCabRegex = new Regex(regexCab);
+            Regex unityRegex = new Regex(regexUnity);
 
             tryDelete(fileDecompressed);
             tryDelete(fileDecompressed2);
@@ -1093,16 +1093,16 @@ namespace ARES
 
             try
             {
-                File.Copy(unityVRCA, fileDummy);
+                File.Copy(unityVrca, fileDummy);
             }
             catch
             {
                 MessageBox.Show("Make sure you've started the build and publish on unity", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                if (hotswapConsole.InvokeRequired)
+                if (HotSwapConsole.InvokeRequired)
                 {
-                    hotswapConsole.Invoke((MethodInvoker)delegate
+                    HotSwapConsole.Invoke((MethodInvoker)delegate
                     {
-                        hotswapConsole.Close();
+                        HotSwapConsole.Close();
                     });
                 }
                 return;
@@ -1110,52 +1110,52 @@ namespace ARES
 
             try
             {
-                HotSwap.DecompressToFileStr(fileDummy, fileDecompressed, hotswapConsole);
+                HotSwap.DecompressToFileStr(fileDummy, fileDecompressed, HotSwapConsole);
             }
             catch (Exception ex)
             {
                 CoreFunctions.WriteLog(string.Format("{0}", ex.Message), this);
                 MessageBox.Show("Error decompressing VRCA file", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                if (hotswapConsole.InvokeRequired)
+                if (HotSwapConsole.InvokeRequired)
                 {
-                    hotswapConsole.Invoke((MethodInvoker)delegate
+                    HotSwapConsole.Invoke((MethodInvoker)delegate
                     {
-                        hotswapConsole.Close();
+                        HotSwapConsole.Close();
                     });
                 }
                 return;
             }
-            MatchModel matchModelNew = getMatches(fileDecompressed, AvatarIdRegex, AvatarCabRegex, UnityRegex, AvatarPrefabIdRegex);
+            MatchModel matchModelNew = getMatches(fileDecompressed, avatarIdRegex, avatarCabRegex, unityRegex, avatarPrefabIdRegex);
 
             try
             {
-                HotSwap.DecompressToFileStr(filePath + @"\custom.vrca", fileDecompressed2, hotswapConsole);
+                HotSwap.DecompressToFileStr(filePath + @"\custom.vrca", fileDecompressed2, HotSwapConsole);
             }
             catch (Exception ex)
             {
                 CoreFunctions.WriteLog(string.Format("{0}", ex.Message), this);
                 MessageBox.Show("Error decompressing VRCA file", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                if (hotswapConsole.InvokeRequired)
+                if (HotSwapConsole.InvokeRequired)
                 {
-                    hotswapConsole.Invoke((MethodInvoker)delegate
+                    HotSwapConsole.Invoke((MethodInvoker)delegate
                     {
-                        hotswapConsole.Close();
+                        HotSwapConsole.Close();
                     });
                 }
                 return;
             }
 
-            MatchModel matchModelOld = getMatches(fileDecompressed2, AvatarIdRegex, AvatarCabRegex, UnityRegex, AvatarPrefabIdRegex);
+            MatchModel matchModelOld = getMatches(fileDecompressed2, avatarIdRegex, avatarCabRegex, unityRegex, avatarPrefabIdRegex);
             if (matchModelOld.UnityVersion == null)
             {
                 DialogResult dialogResult = MessageBox.Show("Possible risky hotswap detected", "Risky Upload", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                 if (dialogResult == DialogResult.Cancel)
                 {
-                    if (hotswapConsole.InvokeRequired)
+                    if (HotSwapConsole.InvokeRequired)
                     {
-                        hotswapConsole.Invoke((MethodInvoker)delegate
+                        HotSwapConsole.Invoke((MethodInvoker)delegate
                         {
-                            hotswapConsole.Close();
+                            HotSwapConsole.Close();
                         });
                     }
                     return;
@@ -1173,28 +1173,28 @@ namespace ARES
                 }
             }
 
-            getReadyForCompress(fileDecompressed2, fileDecompressedFinal, matchModelOld, matchModelNew);
+            GetReadyForCompress(fileDecompressed2, fileDecompressedFinal, matchModelOld, matchModelNew);
 
             try
             {
-                HotSwap.CompressBundle(fileDecompressedFinal, fileTarget, hotswapConsole);
+                HotSwap.CompressBundle(fileDecompressedFinal, fileTarget, HotSwapConsole);
             }
             catch (Exception ex)
             {
                 CoreFunctions.WriteLog(string.Format("{0}", ex.Message), this);
                 MessageBox.Show("Error compressing VRCA file");
-                if (hotswapConsole.InvokeRequired)
+                if (HotSwapConsole.InvokeRequired)
                 {
-                    hotswapConsole.Invoke((MethodInvoker)delegate
+                    HotSwapConsole.Invoke((MethodInvoker)delegate
                     {
-                        hotswapConsole.Close();
+                        HotSwapConsole.Close();
                     });
                 }
                 return;
             }
             try
             {
-                File.Copy(fileTarget, unityVRCA, true);
+                File.Copy(fileTarget, unityVrca, true);
             }
             catch { }
 
@@ -1207,7 +1207,7 @@ namespace ARES
                 len = len / 1024;
             }
 
-            string compressedSize = string.Format("{0:0.##} {1}", len, sizes[order]);
+            string compressedSize = $"{len:0.##} {sizes[order]}";
 
             len = new FileInfo(fileDecompressed2).Length;
             order = 0;
@@ -1217,19 +1217,19 @@ namespace ARES
                 len = len / 1024;
             }
 
-            string uncompressedSize = string.Format("{0:0.##} {1}", len, sizes[order]);
+            string uncompressedSize = $"{len:0.##} {sizes[order]}";
             CoreFunctions.WriteLog(string.Format("Successfully hotswapped avatar"), this);
-            if (selectedAvatar != null)
+            if (_selectedAvatar != null)
             {
-                if (selectedAvatar.AvatarID == "VRCA")
+                if (_selectedAvatar.AvatarID == "VRCA")
                 {
                     imageSave();
                 }
                 else { selectedImage.Image.Save(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\HSB\HSB\Assets\ARES SMART\Resources\ARESLogoTex.png", ImageFormat.Png); }
             }
-            if (selectedWorld != null)
+            if (SelectedWorld != null)
             {
-                if (selectedWorld.WorldID == "VRCA")
+                if (SelectedWorld.WorldID == "VRCA")
                 {
                     imageSave();
                 }
@@ -1243,17 +1243,17 @@ namespace ARES
             tryDelete(fileDummy);
             tryDelete(fileTarget);
 
-            if (hotswapConsole.InvokeRequired)
+            if (HotSwapConsole.InvokeRequired)
             {
-                hotswapConsole.Invoke((MethodInvoker)delegate
+                HotSwapConsole.Invoke((MethodInvoker)delegate
                 {
-                    hotswapConsole.Close();
+                    HotSwapConsole.Close();
                 });
             }
 
-            MessageBox.Show(string.Format("Got file sizes, comp:{0}, decomp:{1}", compressedSize, uncompressedSize), "Info", MessageBoxButtons.OK, MessageBoxIcon.Information); ;
+            MessageBox.Show($"Got file sizes, comp:{compressedSize}, decomp:{uncompressedSize}", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information); ;
             File.AppendAllText(filePath + @"\Ripped.txt", matchModelOld.AvatarId + "\n");
-            rippedList.Add(matchModelOld.AvatarId);
+            _rippedList.Add(matchModelOld.AvatarId);
         }
 
         private void imageSave()
@@ -1323,7 +1323,7 @@ namespace ARES
             return matchModel;
         }
 
-        private void getReadyForCompress(string oldFile, string newFile, MatchModel old, MatchModel newModel)
+        private void GetReadyForCompress(string oldFile, string newFile, MatchModel old, MatchModel newModel)
         {
             var enc = Encoding.GetEncoding(28591);
             using (StreamReaderOver vReader = new StreamReaderOver(oldFile, enc))
@@ -1333,14 +1333,14 @@ namespace ARES
                     while (!vReader.EndOfStream)
                     {
                         string vLine = vReader.ReadLine();
-                        string replace = checkAndReplaceLine(vLine, old, newModel);
+                        string replace = CheckAndReplaceLine(vLine, old, newModel);
                         vWriter.Write(replace);
                     }
                 }
             }
         }
 
-        private string checkAndReplaceLine(string line, MatchModel old, MatchModel newModel)
+        private string CheckAndReplaceLine(string line, MatchModel old, MatchModel newModel)
         {
             string edited = line;
             if (edited.Contains(old.AvatarAssetId))
@@ -1365,7 +1365,7 @@ namespace ARES
             return edited;
         }
 
-        private void hotswapRepair()
+        private void HotswapRepair()
         {
             string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             string fileDecompressed2 = filePath + @"\decompressed1.vrca";
@@ -1374,11 +1374,11 @@ namespace ARES
 
             try
             {
-                HotSwap.DecompressToFileStr(filePath + @"\custom.vrca", fileDecompressed2, hotswapConsole);
+                HotSwap.DecompressToFileStr(filePath + @"\custom.vrca", fileDecompressed2, HotSwapConsole);
             }
             catch (Exception ex)
             {
-                CoreFunctions.WriteLog(string.Format("{0}", ex.Message), this);
+                CoreFunctions.WriteLog($"{ex.Message}", this);
                 MetroMessageBox.Show(this, "Error decompressing VRCA file", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -1386,14 +1386,14 @@ namespace ARES
             string oldId = getFileString(fileDecompressed2, @"(avtr_[\w\d]{8}-[\w\d]{4}-[\w\d]{4}-[\w\d]{4}-[\w\d]{12})");
             string oldCab = getFileString(fileDecompressed2, @"(CAB-[\w\d]{32})");
 
-            hotswapConsole.Close();
+            HotSwapConsole.Close();
 
             txtSearchTerm.Text = oldId;
             cbSearchTerm.SelectedIndex = 2;
             btnSearch.PerformClick();
 
             txtAvatarInfo.Text += Environment.NewLine + "Avatar Id from VRCA: " + oldId + Environment.NewLine + "CAB Id from VRCA: " + oldCab;
-            CoreFunctions.WriteLog(string.Format("Repaired VRCA file"), this);
+            CoreFunctions.WriteLog("Repaired VRCA file", this);
         }
 
         private string getFileString(string file, string searchRegexString)
@@ -1425,12 +1425,12 @@ namespace ARES
                 if (File.Exists(location))
                 {
                     File.Delete(location);
-                    CoreFunctions.WriteLog(string.Format("Deleted file {0}", location), this);
+                    CoreFunctions.WriteLog($"Deleted file {location}", this);
                 }
             }
             catch (Exception ex)
             {
-                CoreFunctions.WriteLog(string.Format("{0}", ex.Message), this);
+                CoreFunctions.WriteLog($"{ex.Message}", this);
             }
         }
 
@@ -1439,13 +1439,13 @@ namespace ARES
             try
             {
                 Directory.Delete(location, true);
-                CoreFunctions.WriteLog(string.Format("Deleted file {0}", location), this);
+                CoreFunctions.WriteLog($"Deleted file {location}", this);
             }
             catch (Exception ex)
             {
                 if (showExceptions)
                 {
-                    CoreFunctions.WriteLog(string.Format("{0}", ex.Message), this);
+                    CoreFunctions.WriteLog($"{ex.Message}", this);
                 }
             }
         }
@@ -1459,15 +1459,15 @@ namespace ARES
             tryDeleteDirectory(tempFolder + unityTemp, false);
             tryDeleteDirectory(tempFolder + unityTemp2, false);
 
-            var unitySetup = CoreFunctions.setupHSB(this);
+            var unitySetup = CoreFunctions.SetupHsb(this);
             if (unitySetup == (true, false))
             {
-                CoreFunctions.setupUnity(unityPath, this);
-                CoreFunctions.openUnityPreSetup(unityPath, this);
+                CoreFunctions.setupUnity(UnityPath, this);
+                CoreFunctions.OpenUnityPreSetup(UnityPath, this);
             }
             else if (unitySetup == (true, true))
             {
-                CoreFunctions.openUnityPreSetup(unityPath, this);
+                CoreFunctions.OpenUnityPreSetup(UnityPath, this);
             }
             btnHotswap.Enabled = true;
         }
@@ -1475,11 +1475,11 @@ namespace ARES
         private void btnLoadVRCA_Click(object sender, EventArgs e)
         {
             selectedImage.ImageLocation = "https://github.com/Dean2k/A.R.E.S/releases/latest/download/ARESLogo.png";
-            string file = selectFileVrca();
+            string file = SelectFileVrca();
             if (Path.GetExtension(file).ToLower() == ".vrca")
             {
-                isAvatar = true;
-                selectedAvatar = new Records
+                IsAvatar = true;
+                _selectedAvatar = new Records
                 {
                     AuthorID = "VRCA",
                     AuthorName = "VRCA",
@@ -1495,12 +1495,12 @@ namespace ARES
                     AvatarName = "VRCA",
                     Releasestatus = "VRCA"
                 };
-                txtAvatarInfo.Text = CoreFunctions.SetAvatarInfo(selectedAvatar);
+                txtAvatarInfo.Text = CoreFunctions.SetAvatarInfo(_selectedAvatar);
             }
             else
             {
-                isAvatar = false;
-                selectedWorld = new WorldClass
+                IsAvatar = false;
+                SelectedWorld = new WorldClass
                 {
                     AuthorID = "VRCW",
                     AuthorName = "VRCW",
@@ -1515,32 +1515,32 @@ namespace ARES
                     WorldName = "VRCW",
                     Releasestatus = "VRCW"
                 };
-                txtAvatarInfo.Text = CoreFunctions.SetWorldInfo(selectedWorld);
+                txtAvatarInfo.Text = CoreFunctions.SetWorldInfo(SelectedWorld);
             }
         }
 
         private void btnRepair_Click(object sender, EventArgs e)
         {
-            if (vrcaThread != null)
+            if (_vrcaThread != null)
             {
-                if (vrcaThread.IsAlive)
+                if (_vrcaThread.IsAlive)
                 {
                     MetroMessageBox.Show(this, "Hotswap is still busy with previous request", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
             }
-            if (selectedAvatar != null)
+            if (_selectedAvatar != null)
             {
-                if (selectedAvatar.AuthorName == "VRCA")
+                if (_selectedAvatar.AuthorName == "VRCA")
                 {
-                    if (!downloadVRCA())
+                    if (!DownloadVrca())
                     {
                         return;
                     }
-                    hotswapConsole = new HotswapConsole();
-                    hotswapConsole.Show();
-                    vrcaThread = new Thread(new ThreadStart(hotswapRepair));
-                    vrcaThread.Start();
+                    HotSwapConsole = new HotswapConsole();
+                    HotSwapConsole.Show();
+                    _vrcaThread = new Thread(new ThreadStart(HotswapRepair));
+                    _vrcaThread.Start();
                 }
                 else
                 {
@@ -1555,27 +1555,27 @@ namespace ARES
 
         private void btnVrcaSearch_Click(object sender, EventArgs e)
         {
-            if (vrcaThread != null)
+            if (_vrcaThread != null)
             {
-                if (vrcaThread.IsAlive)
+                if (_vrcaThread.IsAlive)
                 {
                     MetroMessageBox.Show(this, "VRCA search (Hotswap) is still busy with previous request", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
             }
-            if (selectedAvatar != null)
+            if (_selectedAvatar != null)
             {
-                if (selectedAvatar.AuthorName == "VRCA")
+                if (_selectedAvatar.AuthorName == "VRCA")
                 {
-                    if (!downloadVRCA())
+                    if (!DownloadVrca())
                     {
                         return;
                     }
                     mTabMain.Show();
                     mTab.SelectedIndex = 0;
-                    hotswapConsole = new HotswapConsole();
-                    hotswapConsole.Show();
-                    hotswapRepair();
+                    HotSwapConsole = new HotswapConsole();
+                    HotSwapConsole.Show();
+                    HotswapRepair();
                 }
                 else
                 {
@@ -1590,80 +1590,80 @@ namespace ARES
 
         private void btnBrowserView_Click(object sender, EventArgs e)
         {
-            if (AvatarList != null)
+            if (_avatarList != null)
             {
-                generateHtml.GenerateHtmlPage(AvatarList);
+                GenerateHtml.GenerateHtmlPage(_avatarList);
                 Process.Start("avatars.html");
             }
         }
 
         private void btnCopy_Click(object sender, EventArgs e)
         {
-            if (isAvatar)
+            if (IsAvatar)
             {
-                if (cbCopy.Text == "Time Dectected")
+                if (cbCopy.Text == "Time Detected")
                 {
-                    Clipboard.SetText(selectedAvatar.TimeDetected);
+                    Clipboard.SetText(_selectedAvatar.TimeDetected);
                     MetroMessageBox.Show(this, "information copied to clipboard.", "Copied", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 if (cbCopy.Text == "Avatar ID")
                 {
-                    Clipboard.SetText(selectedAvatar.AvatarID);
+                    Clipboard.SetText(_selectedAvatar.AvatarID);
                     MetroMessageBox.Show(this, "information copied to clipboard.", "Copied", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 if (cbCopy.Text == "Avatar Name")
                 {
-                    Clipboard.SetText(selectedAvatar.AvatarName);
+                    Clipboard.SetText(_selectedAvatar.AvatarName);
                     MetroMessageBox.Show(this, "information copied to clipboard.", "Copied", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 if (cbCopy.Text == "Avatar Description")
                 {
-                    Clipboard.SetText(selectedAvatar.AvatarDescription);
+                    Clipboard.SetText(_selectedAvatar.AvatarDescription);
                     MetroMessageBox.Show(this, "information copied to clipboard.", "Copied", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 if (cbCopy.Text == "Author ID")
                 {
-                    Clipboard.SetText(selectedAvatar.AuthorID);
+                    Clipboard.SetText(_selectedAvatar.AuthorID);
                     MetroMessageBox.Show(this, "information copied to clipboard.", "Copied", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 if (cbCopy.Text == "Author Name")
                 {
-                    Clipboard.SetText(selectedAvatar.AuthorName);
+                    Clipboard.SetText(_selectedAvatar.AuthorName);
                     MetroMessageBox.Show(this, "information copied to clipboard.", "Copied", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 if (cbCopy.Text == "PC Asset URL")
                 {
-                    Clipboard.SetText(selectedAvatar.PCAssetURL);
+                    Clipboard.SetText(_selectedAvatar.PCAssetURL);
                     MetroMessageBox.Show(this, "information copied to clipboard.", "Copied", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 if (cbCopy.Text == "Quest Asset URL")
                 {
-                    Clipboard.SetText(selectedAvatar.QUESTAssetURL);
+                    Clipboard.SetText(_selectedAvatar.QUESTAssetURL);
                     MetroMessageBox.Show(this, "information copied to clipboard.", "Copied", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 if (cbCopy.Text == "Image URL")
                 {
-                    Clipboard.SetText(selectedAvatar.ImageURL);
+                    Clipboard.SetText(_selectedAvatar.ImageURL);
                     MetroMessageBox.Show(this, "information copied to clipboard.", "Copied", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 if (cbCopy.Text == "Thumbnail URL")
                 {
-                    Clipboard.SetText(selectedAvatar.ThumbnailURL);
+                    Clipboard.SetText(_selectedAvatar.ThumbnailURL);
                     MetroMessageBox.Show(this, "information copied to clipboard.", "Copied", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 if (cbCopy.Text == "Unity Version")
                 {
-                    Clipboard.SetText(selectedAvatar.UnityVersion);
+                    Clipboard.SetText(_selectedAvatar.UnityVersion);
                     MetroMessageBox.Show(this, "information copied to clipboard.", "Copied", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 if (cbCopy.Text == "Release Status")
                 {
-                    Clipboard.SetText(selectedAvatar.Releasestatus);
+                    Clipboard.SetText(_selectedAvatar.Releasestatus);
                     MetroMessageBox.Show(this, "information copied to clipboard.", "Copied", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 if (cbCopy.Text == "Tags")
                 {
-                    Clipboard.SetText(selectedAvatar.Tags);
+                    Clipboard.SetText(_selectedAvatar.Tags);
                     MetroMessageBox.Show(this, "information copied to clipboard.", "Copied", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
@@ -1675,42 +1675,33 @@ namespace ARES
 
         private void btnApi_Click(object sender, EventArgs e)
         {
-            if (apiEnabled)
+            if (_apiEnabled)
             {
                 btnSearch.Enabled = false;
-                apiEnabled = false;
+                _apiEnabled = false;
                 btnApi.Text = "Enable API";
-                iniFile.Write("apiEnabled", "false");
+                IniFile.Write("apiEnabled", "false");
             }
-            else if (!apiEnabled)
+            else if (!_apiEnabled)
             {
                 btnSearch.Enabled = true;
-                apiEnabled = true;
+                _apiEnabled = true;
                 btnApi.Text = "Disable API";
-                iniFile.Write("apiEnabled", "true");
+                IniFile.Write("apiEnabled", "true");
             }
         }
 
         private void Ares_Close(object sender, FormClosedEventArgs e)
         {
-            if (imageThread != null)
-            {
-                imageThread.Abort();
-            }
-            if (vrcaThread != null)
-            {
-                vrcaThread.Abort();
-            }
-            if (uploadThread != null)
-            {
-                uploadThread.Abort();
-            }
+            _imageThread?.Abort();
+            _vrcaThread?.Abort();
+            _uploadThread?.Abort();
             Thread.Sleep(2000);
         }
 
         private void btnScan_Click(object sender, EventArgs e)
         {
-            if (scanThread.IsAlive)
+            if (_scanThread.IsAlive)
             {
                 MetroMessageBox.Show(this, "Still downloading hashes of files good & bad, please try again later", "Busy", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
@@ -1723,11 +1714,11 @@ namespace ARES
             Directory.CreateDirectory(ScanPackage.UnityTemp);
 
             string packageSelected = selectPackage();
-            string outpath = "";
+            string outPath = "";
 
             if (!string.IsNullOrEmpty(packageSelected))
             {
-                outpath = PackageExtractor.ExtractPackage(packageSelected, ScanPackage.UnityTemp);
+                outPath = PackageExtractor.ExtractPackage(packageSelected, ScanPackage.UnityTemp);
             }
 
             (int, int, int) scanCount = ScanPackage.CheckFiles(this);
@@ -1738,7 +1729,7 @@ namespace ARES
                 string fileLocation = createPackage();
                 var blank = new string[0];
                 var rootDir = "Assets/";
-                var pack = Package.FromDirectory(outpath, fileLocation, true, blank, blank);
+                var pack = Package.FromDirectory(outPath, fileLocation, true, blank, blank);
                 pack.GeneratePackage(rootDir);
             }
             else
@@ -1746,7 +1737,8 @@ namespace ARES
                 MessageBox.Show("No Bad files were detected");
             }
 
-            MessageBox.Show(string.Format("Bad files detected {0}, Safe files detected {1}, Unknown files detected {2}", scanCount.Item3, scanCount.Item1, scanCount.Item2));
+            MessageBox.Show(
+                $"Bad files detected {scanCount.Item3}, Safe files detected {scanCount.Item1}, Unknown files detected {scanCount.Item2}");
 
 
         }
@@ -1796,10 +1788,10 @@ namespace ARES
 
         private void btnHsbClean_Click(object sender, EventArgs e)
         {
-            CleanHSB();
+            CleanHsb();
         }
 
-        private void killProcess(string processName)
+        private void KillProcess(string processName)
         {
             try
             {
@@ -1810,44 +1802,39 @@ namespace ARES
             catch { }
         }
 
-        private void panel3_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
         private void btnRipped_Click(object sender, EventArgs e)
         {
 
 
-            if (!locked)
+            if (!Locked)
             {
-                maxThreads = Convert.ToInt32(nmThread.Value);
-                loadImages = chkLoadImages.Checked;
+                MaxThreads = Convert.ToInt32(nmThread.Value);
+                LoadImages = chkLoadImages.Checked;
                 flowAvatars.Controls.Clear();
-                List<Records> avatars = ApiGrab.getRipped(rippedList);
-                AvatarList = avatars;
+                List<Records> avatars = ApiGrab.GetRipped(_rippedList);
+                _avatarList = avatars;
                 if (chkPC.Checked)
                 {
-                    AvatarList = AvatarList.Where(x => x.PCAssetURL.Trim().ToLower() != "none").ToList();
+                    _avatarList = _avatarList.Where(x => x.PCAssetURL.Trim().ToLower() != "none").ToList();
                 }
                 if (chkQuest.Checked)
                 {
-                    AvatarList = AvatarList.Where(x => x.QUESTAssetURL.Trim().ToLower() != "none").ToList();
+                    _avatarList = _avatarList.Where(x => x.QUESTAssetURL.Trim().ToLower() != "none").ToList();
                 }
                 if (chkPublic.Checked == true && chkPrivate.Checked == false)
                 {
-                    AvatarList = AvatarList.Where(x => x.Releasestatus.ToLower().Trim() == "public").ToList();
+                    _avatarList = _avatarList.Where(x => x.Releasestatus.ToLower().Trim() == "public").ToList();
                 }
                 if (chkPublic.Checked == false && chkPrivate.Checked == true)
                 {
-                    AvatarList = AvatarList.Where(x => x.Releasestatus.ToLower().Trim() == "private").ToList();
+                    _avatarList = _avatarList.Where(x => x.Releasestatus.ToLower().Trim() == "private").ToList();
                 }
-                avatarCount = AvatarList.Count();
-                lblAvatarCount.Text = avatarCount.ToString();
-                locked = true;
-                isAvatar = true;
-                imageThread = new Thread(new ThreadStart(GetImages));
-                imageThread.Start();
+                _avatarCount = _avatarList.Count();
+                lblAvatarCount.Text = _avatarCount.ToString();
+                Locked = true;
+                IsAvatar = true;
+                _imageThread = new Thread(new ThreadStart(GetImages));
+                _imageThread.Start();
             }
             else
             {
@@ -1857,7 +1844,7 @@ namespace ARES
 
         private void btnUnityLoc_Click(object sender, EventArgs e)
         {
-            selectFile();
+            SelectFile();
         }
 
         private void mTabSettings_Click(object sender, EventArgs e)
@@ -1866,8 +1853,8 @@ namespace ARES
         }
 
         private AresConfig config;
-        private string fileLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).Replace(@"\GUI", @"\UserData") + @"\ARESConfig.json";
-        private bool loading = true;
+        private readonly string _fileLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).Replace(@"\GUI", @"\UserData") + @"\ARESConfig.json";
+        private bool _loading = true;
 
         private void mTab_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1882,7 +1869,7 @@ namespace ARES
                 {
                     ConfigBox.Visible = false;
                 }
-                loading = false;
+                _loading = false;
             }
         }
 
@@ -1890,7 +1877,7 @@ namespace ARES
         {
             try
             {
-                string json = File.ReadAllText(fileLocation);
+                string json = File.ReadAllText(_fileLocation);
                 config = JsonConvert.DeserializeObject<AresConfig>(json);
             }
             catch { }
@@ -1914,10 +1901,10 @@ namespace ARES
 
         private void WriteConfig()
         {
-            if (!loading)
+            if (!_loading)
             {
                 string json = JsonConvert.SerializeObject(config);
-                File.WriteAllText(fileLocation, json);
+                File.WriteAllText(_fileLocation, json);
             }
         }
 
@@ -1990,13 +1977,13 @@ namespace ARES
         private void btnLight_Click(object sender, EventArgs e)
         {
             metroStyleManager.Theme = MetroThemeStyle.Light;
-            iniFile.Write("theme", "light");
+            IniFile.Write("theme", "light");
         }
 
         private void btnDark_Click(object sender, EventArgs e)
         {
             metroStyleManager.Theme = MetroThemeStyle.Dark;
-            iniFile.Write("theme", "dark");
+            IniFile.Write("theme", "dark");
         }
 
         private void cbThemeColour_SelectedIndexChanged(object sender, EventArgs e)
@@ -2010,77 +1997,77 @@ namespace ARES
             {
                 case "Black":
                     metroStyleManager.Style = MetroColorStyle.Black;
-                    iniFile.Write("style", style);
+                    IniFile.Write("style", style);
                     break;
 
                 case "White":
                     metroStyleManager.Style = MetroColorStyle.White;
-                    iniFile.Write("style", style);
+                    IniFile.Write("style", style);
                     break;
 
                 case "Silver":
                     metroStyleManager.Style = MetroColorStyle.Silver;
-                    iniFile.Write("style", style);
+                    IniFile.Write("style", style);
                     break;
 
                 case "Green":
                     metroStyleManager.Style = MetroColorStyle.Green;
-                    iniFile.Write("style", style);
+                    IniFile.Write("style", style);
                     break;
 
                 case "Blue":
                     metroStyleManager.Style = MetroColorStyle.Blue;
-                    iniFile.Write("style", style);
+                    IniFile.Write("style", style);
                     break;
 
                 case "Lime":
                     metroStyleManager.Style = MetroColorStyle.Lime;
-                    iniFile.Write("style", style);
+                    IniFile.Write("style", style);
                     break;
 
                 case "Teal":
                     metroStyleManager.Style = MetroColorStyle.Teal;
-                    iniFile.Write("style", style);
+                    IniFile.Write("style", style);
                     break;
 
                 case "Orange":
                     metroStyleManager.Style = MetroColorStyle.Orange;
-                    iniFile.Write("style", style);
+                    IniFile.Write("style", style);
                     break;
 
                 case "Brown":
                     metroStyleManager.Style = MetroColorStyle.Brown;
-                    iniFile.Write("style", style);
+                    IniFile.Write("style", style);
                     break;
 
                 case "Pink":
                     metroStyleManager.Style = MetroColorStyle.Pink;
-                    iniFile.Write("style", style);
+                    IniFile.Write("style", style);
                     break;
 
                 case "Magenta":
                     metroStyleManager.Style = MetroColorStyle.Magenta;
-                    iniFile.Write("style", style);
+                    IniFile.Write("style", style);
                     break;
 
                 case "Purple":
                     metroStyleManager.Style = MetroColorStyle.Purple;
-                    iniFile.Write("style", style);
+                    IniFile.Write("style", style);
                     break;
 
                 case "Red":
                     metroStyleManager.Style = MetroColorStyle.Red;
-                    iniFile.Write("style", style);
+                    IniFile.Write("style", style);
                     break;
 
                 case "Yellow":
                     metroStyleManager.Style = MetroColorStyle.Yellow;
-                    iniFile.Write("style", style);
+                    IniFile.Write("style", style);
                     break;
 
                 default:
                     metroStyleManager.Style = MetroColorStyle.Default;
-                    iniFile.Write("style", "Default");
+                    IniFile.Write("style", "Default");
                     break;
             }
         }
@@ -2109,7 +2096,7 @@ namespace ARES
             if (result == DialogResult.OK)
             {
                 txtAvatarOutput.Text = folderDlg.SelectedPath;
-                iniFile.Write("avatarOutput", folderDlg.SelectedPath);
+                IniFile.Write("avatarOutput", folderDlg.SelectedPath);
             }
         }
 
@@ -2123,25 +2110,25 @@ namespace ARES
             if (result == DialogResult.OK)
             {
                 txtWorldOutput.Text = folderDlg.SelectedPath;
-                iniFile.Write("worldOutput", folderDlg.SelectedPath);
+                IniFile.Write("worldOutput", folderDlg.SelectedPath);
             }
         }
 
         private void toggleAvatar_CheckedChanged(object sender, EventArgs e)
         {
-            iniFile.Write("avatarOutputAuto", toggleAvatar.Checked.ToString());
+            IniFile.Write("avatarOutputAuto", toggleAvatar.Checked.ToString());
         }
 
         private void toggleWorld_CheckedChanged(object sender, EventArgs e)
         {
-            iniFile.Write("worldOutputAuto", toggleWorld.Checked.ToString());
+            IniFile.Write("worldOutputAuto", toggleWorld.Checked.ToString());
         }
 
         public int PluginCount = 0;
         public int ModCount = 0;
         public int PluginCountNumber = 0;
         public int ModCountNumber = 0;
-        public int lineSkip = 0;
+        public int LineSkip = 0;
 
         private void btnCleanLog_Click(object sender, EventArgs e)
         {
@@ -2179,21 +2166,21 @@ namespace ARES
                     while (!vReader.EndOfStream)
                     {
                         string vLine = vReader.ReadLine();
-                        string replace = checkAndReplaceLine(vLine);
-                        if (replace != null && lineSkip == 0)
+                        string replace = CheckAndReplaceLine(vLine);
+                        if (replace != null && LineSkip == 0)
                         {
                             vWriter.WriteLine(replace);
                         }
-                        if (lineSkip > 0)
+                        if (LineSkip > 0)
                         {
-                            lineSkip--;
+                            LineSkip--;
                         }
                     }
                 }
             }
         }
 
-        private string checkAndReplaceLine(string line)
+        private string CheckAndReplaceLine(string line)
         {
             if (line.Contains("Plugin Loaded"))
             {
@@ -2216,19 +2203,19 @@ namespace ARES
             if (line.Contains("ARES Manager"))
             {
                 PluginCount++;
-                lineSkip = 4;
+                LineSkip = 4;
                 return null;
             }
             if (line.Contains("A.R.E.S Logger v"))
             {
                 ModCount++;
-                lineSkip = 4;
+                LineSkip = 4;
                 return null;
             }
-            if (line.Contains("ReModCE_ARES"))
+            if (line.Contains("ReModCE_ARES v"))
             {
                 ModCount++;
-                lineSkip = 4;
+                LineSkip = 4;
                 return null;
             }
             if (line.Contains("A.R.E.S"))
@@ -2244,15 +2231,15 @@ namespace ARES
 
         private string SaveLogLocation()
         {
-            System.Windows.Forms.SaveFileDialog savefile = new System.Windows.Forms.SaveFileDialog();
             string fileName = "MelonLog.log";
-            savefile.Filter = "log files (*.log)|*.log";
-            savefile.FileName = fileName;
-            savefile.Title = "Select new cleaned melonlog location";
+            System.Windows.Forms.SaveFileDialog saveFile = new System.Windows.Forms.SaveFileDialog();
+            saveFile.Filter = "log files (*.log)|*.log";
+            saveFile.Title = "Select new cleaned melonlog location";
+            saveFile.FileName = fileName;
 
-            if (savefile.ShowDialog() == DialogResult.OK)
+            if (saveFile.ShowDialog() == DialogResult.OK)
             {
-                fileName = savefile.FileName;
+                fileName = saveFile.FileName;
                 return fileName;
             }
             return null;
@@ -2284,12 +2271,12 @@ namespace ARES
         {
             if (!string.IsNullOrEmpty(txtApiKey.Text))
             {
-                iniFile.Write("apiKey", txtApiKey.Text);
+                IniFile.Write("apiKey", txtApiKey.Text);
                 ApiGrab.ApiKey = txtApiKey.Text;
             } else
             {
                 ApiGrab.ApiKey = null;
-                iniFile.DeleteKey("apiKey");
+                IniFile.DeleteKey("apiKey");
             }
         }
 
@@ -2300,56 +2287,56 @@ namespace ARES
 
         private void btnToggleFavorite_Click(object sender, EventArgs e)
         {
-            if(selectedAvatar != null)
+            if (_selectedAvatar == null) return;
+            string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string fileContents = File.ReadAllText(filePath + @"\Favorite.txt");
+            if (fileContents.Contains(_selectedAvatar.AvatarID))
             {
-                string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                string fileContents = File.ReadAllText(filePath + @"\Favorite.txt");
-                if (fileContents.Contains(selectedAvatar.AvatarID))
-                {
-                    fileContents = fileContents.Replace(selectedAvatar.AvatarID, "");
-                    File.WriteAllText(filePath + @"\Favorite.txt", fileContents);
-                    favoriteList.Remove(selectedAvatar.AvatarID);
-                    MessageBox.Show("Removed From Favorites");
-                } else
-                {
-                    File.AppendAllText(filePath + @"\Favorite.txt", selectedAvatar.AvatarID + Environment.NewLine);
-                    favoriteList.Add(selectedAvatar.AvatarID);
-                    MessageBox.Show("Added To Favorites");
-                }
+                fileContents = fileContents.Replace(_selectedAvatar.AvatarID, "");
+                File.WriteAllText(filePath + @"\Favorite.txt", fileContents);
+                _favoriteList.Remove(_selectedAvatar.AvatarID);
+                MessageBox.Show("Removed From Favorites");
+            } else
+            {
+                File.AppendAllText(filePath + @"\Favorite.txt", _selectedAvatar.AvatarID + Environment.NewLine);
+                _favoriteList.Add(_selectedAvatar.AvatarID);
+                MessageBox.Show("Added To Favorites");
             }
         }
 
         private void btnSearchFavorites_Click(object sender, EventArgs e)
         {
-            if (!locked)
+            if (!Locked)
             {
-                maxThreads = Convert.ToInt32(nmThread.Value);
-                loadImages = chkLoadImages.Checked;
+                MaxThreads = Convert.ToInt32(nmThread.Value);
+                LoadImages = chkLoadImages.Checked;
                 flowAvatars.Controls.Clear();
-                List<Records> avatars = ApiGrab.getRipped(favoriteList);
-                AvatarList = avatars;
+                List<Records> avatars = ApiGrab.GetRipped(_favoriteList);
+                _avatarList = avatars;
                 if (chkPC.Checked)
                 {
-                    AvatarList = AvatarList.Where(x => x.PCAssetURL.Trim().ToLower() != "none").ToList();
+                    _avatarList = _avatarList.Where(x => x.PCAssetURL.Trim().ToLower() != "none").ToList();
                 }
                 if (chkQuest.Checked)
                 {
-                    AvatarList = AvatarList.Where(x => x.QUESTAssetURL.Trim().ToLower() != "none").ToList();
+                    _avatarList = _avatarList.Where(x => x.QUESTAssetURL.Trim().ToLower() != "none").ToList();
                 }
-                if (chkPublic.Checked == true && chkPrivate.Checked == false)
+                switch (chkPublic.Checked)
                 {
-                    AvatarList = AvatarList.Where(x => x.Releasestatus.ToLower().Trim() == "public").ToList();
+                    case true when !chkPrivate.Checked:
+                        _avatarList = _avatarList.Where(x => x.Releasestatus.ToLower().Trim() == "public").ToList();
+                        break;
+                    case false when chkPrivate.Checked:
+                        _avatarList = _avatarList.Where(x => x.Releasestatus.ToLower().Trim() == "private").ToList();
+                        break;
                 }
-                if (chkPublic.Checked == false && chkPrivate.Checked == true)
-                {
-                    AvatarList = AvatarList.Where(x => x.Releasestatus.ToLower().Trim() == "private").ToList();
-                }
-                avatarCount = AvatarList.Count();
-                lblAvatarCount.Text = avatarCount.ToString();
-                locked = true;
-                isAvatar = true;
-                imageThread = new Thread(new ThreadStart(GetImages));
-                imageThread.Start();
+
+                _avatarCount = _avatarList.Count();
+                lblAvatarCount.Text = _avatarCount.ToString();
+                Locked = true;
+                IsAvatar = true;
+                _imageThread = new Thread(new ThreadStart(GetImages));
+                _imageThread.Start();
             }
             else
             {

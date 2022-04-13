@@ -6,13 +6,13 @@ public class SZProgress : SevenZip.ICodeProgress
 {
     public ulong maxSize;
     public float prog;
-    private HotswapConsole hotswap;
+    private HotswapConsole _hotSwap;
 
-    public SZProgress(HotswapConsole hotswapConsole)
+    public SZProgress(HotswapConsole hotSwapConsole)
     {
         maxSize = 0;
         prog = 0.0f;
-        hotswap = hotswapConsole;
+        _hotSwap = hotSwapConsole;
     }
     public void SetProgress(ulong inSize)
     {
@@ -21,11 +21,11 @@ public class SZProgress : SevenZip.ICodeProgress
         {
             prog = pgs;
             Console.Write($"\rProgress: %{prog * 100}");
-            safeProgress(hotswap.pbProgress, Convert.ToInt32((int)Math.Round(prog *100)));
+            SafeProgress(_hotSwap.pbProgress, Convert.ToInt32((int)Math.Round(prog *100)));
         }
     }
 
-    private static void safeProgress(ProgressBar progress, int value)
+    private static void SafeProgress(ProgressBar progress, int value)
     {
         if (progress.InvokeRequired)
         {
