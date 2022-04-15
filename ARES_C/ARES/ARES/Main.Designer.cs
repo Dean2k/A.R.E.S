@@ -358,7 +358,7 @@ namespace ARES
             this.mTab.ItemSize = new System.Drawing.Size(54, 35);
             this.mTab.Location = new System.Drawing.Point(10, 65);
             this.mTab.Name = "mTab";
-            this.mTab.SelectedIndex = 0;
+            this.mTab.SelectedIndex = 4;
             this.mTab.Size = new System.Drawing.Size(896, 645);
             this.mTab.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             this.mTab.TabIndex = 14;
@@ -1647,6 +1647,7 @@ namespace ARES
             // 
             // btnAddComment
             // 
+            this.btnAddComment.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnAddComment.FontSize = MetroFramework.MetroButtonSize.Tall;
             this.btnAddComment.Location = new System.Drawing.Point(744, 553);
             this.btnAddComment.Name = "btnAddComment";
@@ -1659,6 +1660,8 @@ namespace ARES
             // 
             // txtComment
             // 
+            this.txtComment.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             // 
             // 
             // 
