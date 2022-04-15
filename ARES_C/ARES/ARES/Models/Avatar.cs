@@ -22,6 +22,8 @@ namespace ARES.Models
         public string UnityVersion { get; set; }
         public string Releasestatus { get; set; }
         public string Tags { get; set; }
+        public string Pin { get; set; }
+        public string PinCode { get; set; }
     }
 
     public class Avatar

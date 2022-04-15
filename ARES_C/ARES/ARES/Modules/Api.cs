@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -22,7 +23,7 @@ namespace ARES.Modules
 
             var amount = limit == "Max" ? "10000" : limit;
 
-            if(ApiKey != null)
+            if (ApiKey != null)
             {
                 apiStart = "unlocked";
             }
@@ -32,24 +33,24 @@ namespace ARES.Modules
                 switch (type)
                 {
                     case "Avatar Name":
-                        url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags&size={amount}&order=TimeDetected,desc&filter=AvatarName,cs,{query}";
+                        url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags,Pin,PinCode&size={amount}&order=TimeDetected,desc&filter=AvatarName,cs,{query}";
                         break;
                     case "Avatar ID":
-                        url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags&size=1&order=TimeDetected,desc&filter=AvatarID,eq,{query}";
+                        url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags,Pin,PinCode&size=1&order=TimeDetected,desc&filter=AvatarID,eq,{query}";
                         break;
                     case "Author Name":
-                        url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags&size={amount}&order=TimeDetected,desc&filter=AuthorName,cs,{query}";
+                        url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags,Pin,PinCode&size={amount}&order=TimeDetected,desc&filter=AuthorName,cs,{query}";
                         break;
                     case "Author ID":
-                        url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags&size={amount}&order=TimeDetected,desc&filter=AuthorID,eq,{query}";
+                        url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags,Pin,PinCode&size={amount}&order=TimeDetected,desc&filter=AuthorID,eq,{query}";
                         break;
                 }
             }
             else
             {
-                url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags&size={amount}&order=TimeDetected,desc";
+                url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags,Pin,PinCode&size={amount}&order=TimeDetected,desc";
             }
-            HttpWebRequest webReq = (HttpWebRequest)WebRequest.Create(url);     
+            HttpWebRequest webReq = (HttpWebRequest)WebRequest.Create(url);
             webReq.UserAgent = $"ARES V" + version;
 
             webReq.Method = "GET";
@@ -59,7 +60,7 @@ namespace ARES.Modules
                 webReq.Headers.Add("X-API-Key: " + ApiKey);
             }
 
-            HttpWebResponse webResp = (HttpWebResponse)webReq.GetResponse();        
+            HttpWebResponse webResp = (HttpWebResponse)webReq.GetResponse();
 
             string jsonString;
             using (Stream stream = webResp.GetResponseStream())   //modified from your code since the using statement disposes the stream automatically when done
@@ -69,6 +70,34 @@ namespace ARES.Modules
             }
 
             Avatar items = JsonConvert.DeserializeObject<Avatar>(jsonString);
+
+            return items.records;
+        }
+
+        public List<Comments> GetComments(string avatarId, string version)
+        {
+            string url = $"https://api.ares-mod.com/records/AvatarComments?order=id&filter=AvatarId,cs,{avatarId}";
+
+            HttpWebRequest webReq = (HttpWebRequest)WebRequest.Create(url);
+            webReq.UserAgent = $"ARES V" + version;
+
+            webReq.Method = "GET";
+
+            if (ApiKey != null)
+            {
+                webReq.Headers.Add("X-API-Key: " + ApiKey);
+            }
+
+            HttpWebResponse webResp = (HttpWebResponse)webReq.GetResponse();
+
+            string jsonString;
+            using (Stream stream = webResp.GetResponseStream())   //modified from your code since the using statement disposes the stream automatically when done
+            {
+                StreamReader reader = new StreamReader(stream, System.Text.Encoding.UTF8);
+                jsonString = reader.ReadToEnd();
+            }
+
+            RootComment items = JsonConvert.DeserializeObject<RootComment>(jsonString);
 
             return items.records;
         }
@@ -195,5 +224,40 @@ namespace ARES.Modules
             }
             return null;
         }
+
+        public void AddComment(Comments comment)
+        {
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create("https://api.ares-mod.com/records/AvatarComments");
+            httpWebRequest.ContentType = "application/json";
+            httpWebRequest.Method = "POST";
+            string jsonPost = JsonConvert.SerializeObject(comment);
+            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
+            {
+                streamWriter.Write(jsonPost);
+            }
+            try
+            {
+                var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
+                using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
+                {
+                    var result = streamReader.ReadToEnd();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public DateTime GetNistTime()
+        {
+            var myHttpWebRequest = (HttpWebRequest)WebRequest.Create("http://www.microsoft.com");
+            var response = myHttpWebRequest.GetResponse();
+            string todaysDates = response.Headers["date"];
+            return DateTime.ParseExact(todaysDates,
+                "ddd, dd MMM yyyy HH:mm:ss 'GMT'",
+                CultureInfo.InvariantCulture.DateTimeFormat,
+                DateTimeStyles.AssumeUniversal);
+        }
     }
-}
+}   

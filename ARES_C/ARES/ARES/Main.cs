@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -18,6 +19,7 @@ using MetroFramework;
 using MetroFramework.Forms;
 using Microsoft.Win32;
 using Newtonsoft.Json;
+using YamlDotNet.Core.Events;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 using SaveFileDialog = System.Windows.Forms.SaveFileDialog;
 
@@ -159,6 +161,7 @@ namespace ARES
             mTab.SelectedIndex = 0;
             mTabMain.Show();
             txtAbout.Text = Resources.txtAbout;
+            dgCommentTable.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             try
             {
                 nmThread.Value = Environment.ProcessorCount;
@@ -248,7 +251,7 @@ namespace ARES
             if (!string.IsNullOrEmpty(UnityPath))
             {
                 var unitySetup = CoreFunctions.SetupHsb(this);
-                if (unitySetup == (true, false)) CoreFunctions.setupUnity(UnityPath, this);
+                if (unitySetup == (true, false)) CoreFunctions.SetupUnity(UnityPath, this);
             }
 
 
@@ -341,11 +344,9 @@ namespace ARES
             {
                 using (var key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Unity Technologies\Installer\Unity"))
                 {
-                    if (key != null)
-                    {
-                        var o = key.GetValue("Location x64");
-                        if (o != null) return o.ToString();
-                    }
+                    if (key == null) return null;
+                    var o = key.GetValue("Location x64");
+                    if (o != null) return o.ToString();
                 }
 
                 return null;
@@ -395,6 +396,8 @@ namespace ARES
                         _avatarList = _avatarList.Where(x => x.Releasestatus.ToLower().Trim() == "public").ToList();
                     if (chkPublic.Checked == false && chkPrivate.Checked)
                         _avatarList = _avatarList.Where(x => x.Releasestatus.ToLower().Trim() == "private").ToList();
+                    if (chkPin.Checked == true)
+                        _avatarList = _avatarList.Where(x => x.Pin.ToLower().Trim() == "true").ToList();
                     _avatarCount = _avatarList.Count();
                     lblAvatarCount.Text = _avatarCount.ToString();
                     Locked = true;
@@ -580,9 +583,11 @@ namespace ARES
             txtAvatarInfo.Text = CoreFunctions.SetAvatarInfo(_selectedAvatar);
 
             var bitmap = CoreFunctions.LoadImage(_selectedAvatar.ImageURL, chkNoImages.Checked);
+            LoadComments();
 
             if (bitmap != null) selectedImage.Image = bitmap;
             if (_selectedAvatar.PCAssetURL != "None")
+            {
                 try
                 {
                     var version = _selectedAvatar.PCAssetURL.Split('/');
@@ -595,10 +600,14 @@ namespace ARES
                 {
                     nmPcVersion.Value = 1;
                 }
+            }
             else
+            {
                 nmPcVersion.Value = 0;
+            }
 
             if (_selectedAvatar.QUESTAssetURL != "None")
+            {
                 try
                 {
                     var version = _selectedAvatar.QUESTAssetURL.Split('/');
@@ -611,8 +620,11 @@ namespace ARES
                 {
                     nmQuestVersion.Value = 1;
                 }
+            }
             else
+            {
                 nmQuestVersion.Value = 0;
+            }
         }
 
         private void LoadInfoWorld(object sender, EventArgs e)
@@ -821,6 +833,19 @@ namespace ARES
                     {
                         Directory.Move(folderExtractLocation + @"\Assets\Shader",
                             folderExtractLocation + @"\Assets\.Shader");
+                    }
+                    catch
+                    {
+                    }
+
+                    tryDeleteDirectory(folderExtractLocation + @"\AuxiliaryFiles");
+                    tryDeleteDirectory(folderExtractLocation + @"\ExportedProject\Assets\Scripts");
+                    tryDeleteDirectory(folderExtractLocation + @"\ExportedProject\AssetRipper");
+                    tryDeleteDirectory(folderExtractLocation + @"\ExportedProject\ProjectSettings");
+                    try
+                    {
+                        Directory.Move(folderExtractLocation + @"\ExportedProject\Assets\Shader",
+                            folderExtractLocation + @"\ExportedProject\Assets\.Shader");
                     }
                     catch
                     {
@@ -1357,7 +1382,7 @@ namespace ARES
             var unitySetup = CoreFunctions.SetupHsb(this);
             if (unitySetup == (true, false))
             {
-                CoreFunctions.setupUnity(UnityPath, this);
+                CoreFunctions.SetupUnity(UnityPath, this);
                 CoreFunctions.OpenUnityPreSetup(UnityPath, this);
             }
             else if (unitySetup == (true, true))
@@ -2227,6 +2252,23 @@ namespace ARES
             else
             {
                 MessageBox.Show("Still loading last search");
+            }
+        }
+
+        private void btnAddComment_Click(object sender, EventArgs e)
+        {
+            Comments comment = new Comments {AvatarId = _selectedAvatar.AvatarID, Comment = txtComment.Text, Created = ApiGrab.GetNistTime().ToString()};
+            ApiGrab.AddComment(comment);
+            LoadComments();
+        }
+
+        private void LoadComments()
+        {
+            List<Comments> comments = ApiGrab.GetComments(_selectedAvatar.AvatarID, Version);
+            dgCommentTable.Rows.Clear();
+            foreach (var comment in comments)
+            {
+                dgCommentTable.Rows.Add(comment.id, comment.Created, comment.Comment);
             }
         }
     }

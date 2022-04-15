@@ -23,7 +23,7 @@ namespace ARES.Modules
         public string SetAvatarInfo(Records avatar)
         {
             string avatarString =
-                $"Time Detected: {GetDate(avatar.TimeDetected)} {Environment.NewLine}Avatar ID: {avatar.AvatarID} {Environment.NewLine}Avatar Name: {avatar.AvatarName} {Environment.NewLine}Avatar Description {avatar.AvatarDescription} {Environment.NewLine}Author ID: {avatar.AuthorID} {Environment.NewLine}Author Name: {avatar.AuthorName} {Environment.NewLine}PC Asset URL: {avatar.PCAssetURL} {Environment.NewLine}Quest Asset URL: {avatar.QUESTAssetURL} {Environment.NewLine}Image URL: {avatar.ImageURL} {Environment.NewLine}Thumbnail URL: {avatar.ThumbnailURL} {Environment.NewLine}Unity Version: {avatar.UnityVersion} {Environment.NewLine}Release Status: {avatar.Releasestatus} {Environment.NewLine}Tags: {avatar.Tags}";
+                $"Time Detected: {GetDate(avatar.TimeDetected)} {Environment.NewLine}Avatar Pin: {avatar.PinCode} {Environment.NewLine}Avatar ID: {avatar.AvatarID} {Environment.NewLine}Avatar Name: {avatar.AvatarName} {Environment.NewLine}Avatar Description {avatar.AvatarDescription} {Environment.NewLine}Author ID: {avatar.AuthorID} {Environment.NewLine}Author Name: {avatar.AuthorName} {Environment.NewLine}PC Asset URL: {avatar.PCAssetURL} {Environment.NewLine}Quest Asset URL: {avatar.QUESTAssetURL} {Environment.NewLine}Image URL: {avatar.ImageURL} {Environment.NewLine}Thumbnail URL: {avatar.ThumbnailURL} {Environment.NewLine}Unity Version: {avatar.UnityVersion} {Environment.NewLine}Release Status: {avatar.Releasestatus} {Environment.NewLine}Tags: {avatar.Tags}";
             return avatarString;
         }
 
@@ -97,7 +97,9 @@ namespace ARES.Modules
                         ThumbnailURL = string.Join("", lineItem[9].Split(':').Skip(1)).Replace("\r", "").Replace("https", "https:"),
                         UnityVersion = lineItem[10].Split(':')[1].Replace("\r", ""),
                         Releasestatus = lineItem[11].Split(':')[1].Replace("\r", ""),
-                        Tags = lineItem[12].Split(':')[1].Replace("\r", "")
+                        Tags = lineItem[12].Split(':')[1].Replace("\r", ""),
+                        Pin = "false",
+                        PinCode = "None"
                     })
                     .ToList();
                 WriteLog("Loaded Local Avatars", main);
@@ -150,7 +152,7 @@ namespace ARES.Modules
             }
             try
             {
-                tryDelete(main);
+                TryDelete(main);
                 string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
                 string commands = string.Format("/C UnRAR.exe x HSB.rar HSB -id[c,d,n,p,q] -O+");
 
@@ -174,7 +176,7 @@ namespace ARES.Modules
             }
         }
 
-        public bool setupUnity(string unityPath, Main main)
+        public bool SetupUnity(string unityPath, Main main)
         {
             string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             try
@@ -222,7 +224,7 @@ namespace ARES.Modules
                 p.Start();
                 p.WaitForExit();
 
-                tryDelete(main);
+                TryDelete(main);
             }
             catch (Exception ex)
             {
@@ -232,7 +234,7 @@ namespace ARES.Modules
             return true;
         }
 
-        private void tryDelete(Main main)
+        private void TryDelete(Main main)
         {
             try
             {
@@ -250,7 +252,7 @@ namespace ARES.Modules
         public bool OpenUnityPreSetup(string unityPath, Main main)
         {
 
-            tryDelete(main);
+            TryDelete(main);
             try
             {
                 string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);

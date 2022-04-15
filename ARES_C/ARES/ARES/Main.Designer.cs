@@ -30,6 +30,7 @@ namespace ARES
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.flowAvatars = new System.Windows.Forms.FlowLayoutPanel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -120,10 +121,18 @@ namespace ARES
             this.txtAbout = new MetroFramework.Controls.MetroTextBox();
             this.lblSize = new MetroFramework.Controls.MetroLabel();
             this.metroLabel10 = new MetroFramework.Controls.MetroLabel();
+            this.mtAvatar = new MetroFramework.Controls.MetroTabPage();
+            this.btnAddComment = new MetroFramework.Controls.MetroButton();
+            this.txtComment = new MetroFramework.Controls.MetroTextBox();
+            this.dgCommentTable = new System.Windows.Forms.DataGridView();
             this.metroToolTip1 = new MetroFramework.Components.MetroToolTip();
             this.pbRipped = new System.Windows.Forms.PictureBox();
             this.metroStyleManager = new MetroFramework.Components.MetroStyleManager(this.components);
             this.metroStyleExtender = new MetroFramework.Components.MetroStyleExtender(this.components);
+            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Date = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Comment = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.chkPin = new MetroFramework.Controls.MetroCheckBox();
             this.groupBox1.SuspendLayout();
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.selectedImage)).BeginInit();
@@ -136,6 +145,8 @@ namespace ARES
             this.ConfigBox.SuspendLayout();
             this.metroTabPage3.SuspendLayout();
             this.metroTabPage2.SuspendLayout();
+            this.mtAvatar.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgCommentTable)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbRipped)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager)).BeginInit();
             this.SuspendLayout();
@@ -342,6 +353,7 @@ namespace ARES
             this.mTab.Controls.Add(this.mTabSettings);
             this.mTab.Controls.Add(this.metroTabPage3);
             this.mTab.Controls.Add(this.metroTabPage2);
+            this.mTab.Controls.Add(this.mtAvatar);
             this.mTab.FontWeight = MetroFramework.MetroTabControlWeight.Bold;
             this.mTab.ItemSize = new System.Drawing.Size(54, 35);
             this.mTab.Location = new System.Drawing.Point(10, 65);
@@ -356,6 +368,7 @@ namespace ARES
             // 
             // mTabMain
             // 
+            this.mTabMain.Controls.Add(this.chkPin);
             this.mTabMain.Controls.Add(this.btnToggleFavorite);
             this.mTabMain.Controls.Add(this.btnSearchFavorites);
             this.mTabMain.Controls.Add(this.btnBrowserView);
@@ -516,6 +529,7 @@ namespace ARES
             // 
             // btnHotswap
             // 
+            this.btnHotswap.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnHotswap.FontSize = MetroFramework.MetroButtonSize.Tall;
             this.btnHotswap.Location = new System.Drawing.Point(605, 553);
             this.btnHotswap.Name = "btnHotswap";
@@ -528,6 +542,7 @@ namespace ARES
             // 
             // btnUnity
             // 
+            this.btnUnity.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnUnity.FontSize = MetroFramework.MetroButtonSize.Tall;
             this.btnUnity.Location = new System.Drawing.Point(479, 553);
             this.btnUnity.Name = "btnUnity";
@@ -611,7 +626,7 @@ namespace ARES
             this.chkQuest.AutoSize = true;
             this.chkQuest.FontSize = MetroFramework.MetroCheckBoxSize.Medium;
             this.chkQuest.FontWeight = MetroFramework.MetroCheckBoxWeight.Bold;
-            this.chkQuest.Location = new System.Drawing.Point(358, 109);
+            this.chkQuest.Location = new System.Drawing.Point(358, 100);
             this.chkQuest.Name = "chkQuest";
             this.chkQuest.Size = new System.Drawing.Size(63, 19);
             this.chkQuest.TabIndex = 39;
@@ -626,7 +641,7 @@ namespace ARES
             this.chkPC.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkPC.FontSize = MetroFramework.MetroCheckBoxSize.Medium;
             this.chkPC.FontWeight = MetroFramework.MetroCheckBoxWeight.Bold;
-            this.chkPC.Location = new System.Drawing.Point(309, 109);
+            this.chkPC.Location = new System.Drawing.Point(309, 100);
             this.chkPC.Name = "chkPC";
             this.chkPC.Size = new System.Drawing.Size(43, 19);
             this.chkPC.TabIndex = 38;
@@ -641,7 +656,7 @@ namespace ARES
             this.chkPrivate.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkPrivate.FontSize = MetroFramework.MetroCheckBoxSize.Medium;
             this.chkPrivate.FontWeight = MetroFramework.MetroCheckBoxWeight.Bold;
-            this.chkPrivate.Location = new System.Drawing.Point(230, 109);
+            this.chkPrivate.Location = new System.Drawing.Point(230, 100);
             this.chkPrivate.Name = "chkPrivate";
             this.chkPrivate.Size = new System.Drawing.Size(73, 19);
             this.chkPrivate.TabIndex = 37;
@@ -656,7 +671,7 @@ namespace ARES
             this.chkPublic.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkPublic.FontSize = MetroFramework.MetroCheckBoxSize.Medium;
             this.chkPublic.FontWeight = MetroFramework.MetroCheckBoxWeight.Bold;
-            this.chkPublic.Location = new System.Drawing.Point(158, 109);
+            this.chkPublic.Location = new System.Drawing.Point(158, 100);
             this.chkPublic.Name = "chkPublic";
             this.chkPublic.Size = new System.Drawing.Size(66, 19);
             this.chkPublic.TabIndex = 36;
@@ -1613,6 +1628,86 @@ namespace ARES
             this.metroLabel10.Text = "Datebase Size: ";
             this.metroLabel10.UseStyleColors = true;
             // 
+            // mtAvatar
+            // 
+            this.mtAvatar.Controls.Add(this.btnAddComment);
+            this.mtAvatar.Controls.Add(this.txtComment);
+            this.mtAvatar.Controls.Add(this.dgCommentTable);
+            this.mtAvatar.HorizontalScrollbarBarColor = true;
+            this.mtAvatar.HorizontalScrollbarHighlightOnWheel = false;
+            this.mtAvatar.HorizontalScrollbarSize = 10;
+            this.mtAvatar.Location = new System.Drawing.Point(4, 39);
+            this.mtAvatar.Name = "mtAvatar";
+            this.mtAvatar.Size = new System.Drawing.Size(888, 602);
+            this.mtAvatar.TabIndex = 4;
+            this.mtAvatar.Text = "Avatar Comments";
+            this.mtAvatar.VerticalScrollbarBarColor = true;
+            this.mtAvatar.VerticalScrollbarHighlightOnWheel = false;
+            this.mtAvatar.VerticalScrollbarSize = 10;
+            // 
+            // btnAddComment
+            // 
+            this.btnAddComment.FontSize = MetroFramework.MetroButtonSize.Tall;
+            this.btnAddComment.Location = new System.Drawing.Point(744, 553);
+            this.btnAddComment.Name = "btnAddComment";
+            this.btnAddComment.Size = new System.Drawing.Size(129, 35);
+            this.btnAddComment.TabIndex = 4;
+            this.btnAddComment.Text = "Add Comment";
+            this.btnAddComment.UseSelectable = true;
+            this.btnAddComment.UseStyleColors = true;
+            this.btnAddComment.Click += new System.EventHandler(this.btnAddComment_Click);
+            // 
+            // txtComment
+            // 
+            // 
+            // 
+            // 
+            this.txtComment.CustomButton.Image = null;
+            this.txtComment.CustomButton.Location = new System.Drawing.Point(782, 1);
+            this.txtComment.CustomButton.Name = "";
+            this.txtComment.CustomButton.Size = new System.Drawing.Size(87, 87);
+            this.txtComment.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
+            this.txtComment.CustomButton.TabIndex = 1;
+            this.txtComment.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.txtComment.CustomButton.UseSelectable = true;
+            this.txtComment.CustomButton.Visible = false;
+            this.txtComment.Lines = new string[0];
+            this.txtComment.Location = new System.Drawing.Point(3, 458);
+            this.txtComment.MaxLength = 32767;
+            this.txtComment.Multiline = true;
+            this.txtComment.Name = "txtComment";
+            this.txtComment.PasswordChar = '\0';
+            this.txtComment.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+            this.txtComment.SelectedText = "";
+            this.txtComment.SelectionLength = 0;
+            this.txtComment.SelectionStart = 0;
+            this.txtComment.ShortcutsEnabled = true;
+            this.txtComment.Size = new System.Drawing.Size(870, 89);
+            this.txtComment.TabIndex = 3;
+            this.txtComment.UseSelectable = true;
+            this.txtComment.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
+            this.txtComment.WaterMarkFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Pixel);
+            // 
+            // dgCommentTable
+            // 
+            this.dgCommentTable.AllowUserToAddRows = false;
+            this.dgCommentTable.AllowUserToDeleteRows = false;
+            this.dgCommentTable.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgCommentTable.BackgroundColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.dgCommentTable.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgCommentTable.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ID,
+            this.Date,
+            this.Comment});
+            this.dgCommentTable.GridColor = System.Drawing.Color.Black;
+            this.dgCommentTable.Location = new System.Drawing.Point(9, 11);
+            this.dgCommentTable.Name = "dgCommentTable";
+            this.dgCommentTable.ReadOnly = true;
+            this.dgCommentTable.Size = new System.Drawing.Size(870, 436);
+            this.dgCommentTable.TabIndex = 2;
+            // 
             // metroToolTip1
             // 
             this.metroToolTip1.Style = MetroFramework.MetroColorStyle.Blue;
@@ -1638,6 +1733,41 @@ namespace ARES
             // metroStyleExtender
             // 
             this.metroStyleExtender.Theme = MetroFramework.MetroThemeStyle.Dark;
+            // 
+            // ID
+            // 
+            this.ID.HeaderText = "ID";
+            this.ID.Name = "ID";
+            this.ID.ReadOnly = true;
+            this.ID.Width = 50;
+            // 
+            // Date
+            // 
+            this.Date.HeaderText = "Date";
+            this.Date.Name = "Date";
+            this.Date.ReadOnly = true;
+            // 
+            // Comment
+            // 
+            this.Comment.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.Comment.DefaultCellStyle = dataGridViewCellStyle1;
+            this.Comment.HeaderText = "Comment";
+            this.Comment.Name = "Comment";
+            this.Comment.ReadOnly = true;
+            // 
+            // chkPin
+            // 
+            this.chkPin.AutoSize = true;
+            this.chkPin.FontSize = MetroFramework.MetroCheckBoxSize.Medium;
+            this.chkPin.FontWeight = MetroFramework.MetroCheckBoxWeight.Bold;
+            this.chkPin.Location = new System.Drawing.Point(158, 125);
+            this.chkPin.Name = "chkPin";
+            this.chkPin.Size = new System.Drawing.Size(98, 19);
+            this.chkPin.TabIndex = 53;
+            this.chkPin.Text = "Pin Locked";
+            this.chkPin.UseSelectable = true;
+            this.chkPin.UseStyleColors = true;
             // 
             // Main
             // 
@@ -1673,6 +1803,8 @@ namespace ARES
             this.metroTabPage3.PerformLayout();
             this.metroTabPage2.ResumeLayout(false);
             this.metroTabPage2.PerformLayout();
+            this.mtAvatar.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgCommentTable)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbRipped)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager)).EndInit();
             this.ResumeLayout(false);
@@ -1773,6 +1905,14 @@ namespace ARES
         private MetroFramework.Controls.MetroLabel metroLabel15;
         private MetroFramework.Controls.MetroButton btnToggleFavorite;
         private MetroFramework.Controls.MetroButton btnSearchFavorites;
+        private MetroFramework.Controls.MetroTabPage mtAvatar;
+        private MetroFramework.Controls.MetroButton btnAddComment;
+        private MetroFramework.Controls.MetroTextBox txtComment;
+        private System.Windows.Forms.DataGridView dgCommentTable;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Date;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Comment;
+        private MetroFramework.Controls.MetroCheckBox chkPin;
     }
 }
 

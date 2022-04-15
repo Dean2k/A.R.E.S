@@ -114,6 +114,7 @@
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\Comment.cs" />
     <Compile Include="Models\Git.cs" />
     <Compile Include="Models\MatchModel.cs" />
     <Compile Include="Models\VrcJson.cs" />
