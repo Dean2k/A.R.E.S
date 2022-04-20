@@ -127,11 +127,11 @@ namespace ARES.Modules
                                                     string buildString = "";
                                                     foreach (var item in avatars)
                                                     {
-                if(item.PCAssetURL != "None")
+                if(item.PCAssetURL.Trim() != "None")
                 {
                     assetTypes = "PC";
                 }
-                if(item.QUESTAssetURL != "None")
+                if(item.QUESTAssetURL.Trim() != "None")
                 {
                     if(assetTypes != null)
                     {

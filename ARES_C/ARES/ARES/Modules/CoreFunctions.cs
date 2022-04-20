@@ -302,7 +302,7 @@ namespace ARES.Modules
             catch { }
         }
 
-        public void UploadToApi(List<Records> avatars, Main main)
+        public void UploadToApi(List<Records> avatars, Main main, string version)
         {
             string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             string uploadedFile = filePath + @"\AvatarUploaded.txt";           
@@ -319,6 +319,7 @@ namespace ARES.Modules
                     var httpWebRequest = (HttpWebRequest)WebRequest.Create("https://api.ares-mod.com/records/Avatars");
                     httpWebRequest.ContentType = "application/json";
                     httpWebRequest.Method = "POST";
+                    httpWebRequest.UserAgent = $"ARES V" + version;
                     string jsonPost = JsonConvert.SerializeObject(item);
                     using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
                     {
@@ -347,7 +348,7 @@ namespace ARES.Modules
             }
         }
 
-        public void uploadToApiWorld(List<WorldClass> worlds, Main main)
+        public void uploadToApiWorld(List<WorldClass> worlds, Main main, string version)
         {
 
             string uploadedFile = "WorldUploaded.txt";
@@ -364,6 +365,7 @@ namespace ARES.Modules
                     var httpWebRequest = (HttpWebRequest)WebRequest.Create("https://api.ares-mod.com/records/Worlds");
                     httpWebRequest.ContentType = "application/json";
                     httpWebRequest.Method = "POST";
+                    httpWebRequest.UserAgent = $"ARES V" + version;
                     string jsonPost = JsonConvert.SerializeObject(item);
                     using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
                     {
@@ -413,11 +415,11 @@ namespace ARES.Modules
             {
                 main.txtConsole.Invoke((MethodInvoker)delegate
                 {
-                    main.txtConsole.Text += logBuilder + Environment.NewLine;
+                    main.txtConsole.Text = logBuilder + Environment.NewLine + main.txtConsole.Text;
                 });
             } else
             {
-                main.txtConsole.Text += logBuilder + Environment.NewLine;
+                main.txtConsole.Text = logBuilder + Environment.NewLine + main.txtConsole.Text;
             }
             File.AppendAllText("LatestLog.txt", logBuilder);
         }

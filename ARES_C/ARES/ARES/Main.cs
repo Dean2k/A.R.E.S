@@ -227,7 +227,7 @@ namespace ARES
 
             try
             {
-                lblSize.Text = ApiGrab.GetStats().Total_database_size;
+                lblSize.Text = ApiGrab.GetStats(Version).Total_database_size;
             }
             catch
             {
@@ -262,12 +262,12 @@ namespace ARES
             _localAvatars = CoreFunctions.GetLocalAvatars(this);
             if (_localAvatars.Count > 0 && _apiEnabled)
             {
-                _uploadThread = new Thread(() => CoreFunctions.UploadToApi(_localAvatars, this));
+                _uploadThread = new Thread(() => CoreFunctions.UploadToApi(_localAvatars, this, Version));
                 _uploadThread.Start();
             }
 
             _localWorlds = CoreFunctions.GetLocalWorlds(this);
-            if (_localWorlds.Count > 0 && _apiEnabled) CoreFunctions.uploadToApiWorld(_localWorlds, this);
+            if (_localWorlds.Count > 0 && _apiEnabled) CoreFunctions.uploadToApiWorld(_localWorlds, this, Version);
             try
             {
                 CoreFunctions.WriteLog("Fetching unity sources", this);
@@ -407,7 +407,7 @@ namespace ARES
                 }
                 else
                 {
-                    var worlds = ApiGrab.GetWorlds(txtSearchTerm.Text, cbSearchTerm.Text);
+                    var worlds = ApiGrab.GetWorlds(txtSearchTerm.Text, cbSearchTerm.Text, Version);
                     _worldList = worlds;
                     _worldCount = worlds.Count();
                     lblAvatarCount.Text = _worldCount.ToString();
@@ -465,8 +465,8 @@ namespace ARES
                 { SizeMode = PictureBoxSizeMode.StretchImage, Size = new Size(148, 146) };
                 var ripped = new PictureBox { SizeMode = PictureBoxSizeMode.StretchImage, Size = new Size(148, 146) };
                 var questPc = "";
-                if (item.PCAssetURL.ToLower() != "none") questPc += "{PC}";
-                if (item.QUESTAssetURL.ToLower() != "none") questPc += "{Quest}";
+                if (item.PCAssetURL.Trim().ToLower() != "none") questPc += "{PC}";
+                if (item.QUESTAssetURL.Trim().ToLower() != "none") questPc += "{Quest}";
                 var label = new Label
                 {
                     Text = "Avatar Name: " + item.AvatarName + " [" + questPc + "]",
@@ -586,7 +586,7 @@ namespace ARES
             LoadComments();
 
             if (bitmap != null) selectedImage.Image = bitmap;
-            if (_selectedAvatar.PCAssetURL != "None")
+            if (_selectedAvatar.PCAssetURL.Trim() != "None")
             {
                 try
                 {
@@ -606,7 +606,7 @@ namespace ARES
                 nmPcVersion.Value = 0;
             }
 
-            if (_selectedAvatar.QUESTAssetURL != "None")
+            if (_selectedAvatar.QUESTAssetURL.Trim() != "None")
             {
                 try
                 {
@@ -637,7 +637,7 @@ namespace ARES
             bitmap = CoreFunctions.LoadImage(SelectedWorld.ImageURL, chkNoImages.Checked);
 
             if (bitmap != null) selectedImage.Image = bitmap;
-            if (SelectedWorld.PCAssetURL != "None")
+            if (SelectedWorld.PCAssetURL.Trim() != "None")
             {
                 var version = SelectedWorld.PCAssetURL.Split('/');
                 nmPcVersion.Value = Convert.ToInt32(version[7]);
@@ -718,9 +718,13 @@ namespace ARES
                     {
                         if (_selectedAvatar.QUESTAssetURL != "None")
                         {
-                            var version = _selectedAvatar.QUESTAssetURL.Split('/');
-                            version[7] = nmQuestVersion.Value.ToString();
-                            DownloadFile(string.Join("/", version), fileName);
+                            try
+                            {
+                                var version = _selectedAvatar.QUESTAssetURL.Split('/');
+                                version[7] = nmQuestVersion.Value.ToString();
+                                DownloadFile(string.Join("/", version), fileName);
+                            }
+                            catch { DownloadFile(_selectedAvatar.QUESTAssetURL, fileName); }
                         }
                         else
                         {
@@ -733,9 +737,13 @@ namespace ARES
                     {
                         if (_selectedAvatar.PCAssetURL != "None")
                         {
-                            var version = _selectedAvatar.PCAssetURL.Split('/');
-                            version[7] = nmPcVersion.Value.ToString();
-                            DownloadFile(string.Join("/", version), fileName);
+                            try
+                            {
+                                var version = _selectedAvatar.PCAssetURL.Split('/');
+                                version[7] = nmPcVersion.Value.ToString();
+                                DownloadFile(string.Join("/", version), fileName);
+                            }
+                            catch { DownloadFile(_selectedAvatar.PCAssetURL, fileName); }
                         }
                         else
                         {
@@ -751,15 +759,23 @@ namespace ARES
                 }
                 else if (_selectedAvatar.PCAssetURL != "None")
                 {
-                    var version = _selectedAvatar.PCAssetURL.Split('/');
-                    version[7] = nmPcVersion.Value.ToString();
-                    DownloadFile(string.Join("/", version), fileName);
+                    try
+                    {
+                        var version = _selectedAvatar.PCAssetURL.Split('/');
+                        version[7] = nmPcVersion.Value.ToString();
+                        DownloadFile(string.Join("/", version), fileName);
+                    }
+                    catch { DownloadFile(_selectedAvatar.PCAssetURL, fileName); }
                 }
                 else if (_selectedAvatar.QUESTAssetURL != "None")
                 {
-                    var version = _selectedAvatar.QUESTAssetURL.Split('/');
-                    version[7] = nmQuestVersion.Value.ToString();
-                    DownloadFile(string.Join("/", version), fileName);
+                    try
+                    {
+                        var version = _selectedAvatar.QUESTAssetURL.Split('/');
+                        version[7] = nmQuestVersion.Value.ToString();
+                        DownloadFile(string.Join("/", version), fileName);
+                    }
+                    catch { DownloadFile(_selectedAvatar.QUESTAssetURL, fileName); }
                 }
                 else
                 {
@@ -1169,21 +1185,39 @@ namespace ARES
             if (_selectedAvatar != null)
             {
                 if (_selectedAvatar.AvatarID == "VRCA")
+                {
                     imageSave();
+                }
                 else
-                    selectedImage.Image.Save(
-                        Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) +
-                        @"\HSB\HSB\Assets\ARES SMART\Resources\ARESLogoTex.png", ImageFormat.Png);
+                {
+                    try
+                    {
+                        selectedImage.Image.Save(
+                            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) +
+                            @"\HSB\HSB\Assets\ARES SMART\Resources\ARESLogoTex.png", ImageFormat.Png);
+                    }
+                    catch
+                    {
+                    }
+                }
             }
 
             if (SelectedWorld != null)
             {
                 if (SelectedWorld.WorldID == "VRCA")
+                {
                     imageSave();
+                }
                 else
-                    selectedImage.Image.Save(
-                        Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) +
-                        @"\HSB\HSB\Assets\ARES SMART\Resources\ARESLogoTex.png", ImageFormat.Png);
+                {
+                    try
+                    {
+                        selectedImage.Image.Save(
+                            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) +
+                            @"\HSB\HSB\Assets\ARES SMART\Resources\ARESLogoTex.png", ImageFormat.Png);
+                    }
+                    catch { }
+                }
             }
 
 
@@ -1750,7 +1784,7 @@ namespace ARES
                 MaxThreads = Convert.ToInt32(nmThread.Value);
                 LoadImages = chkLoadImages.Checked;
                 flowAvatars.Controls.Clear();
-                var avatars = ApiGrab.GetRipped(_rippedList);
+                var avatars = ApiGrab.GetRipped(_rippedList, Version);
                 _avatarList = avatars;
                 if (chkPC.Checked)
                     _avatarList = _avatarList.Where(x => x.PCAssetURL.Trim().ToLower() != "none").ToList();
@@ -2226,7 +2260,7 @@ namespace ARES
                 MaxThreads = Convert.ToInt32(nmThread.Value);
                 LoadImages = chkLoadImages.Checked;
                 flowAvatars.Controls.Clear();
-                var avatars = ApiGrab.GetRipped(_favoriteList);
+                var avatars = ApiGrab.GetRipped(_favoriteList, Version);
                 _avatarList = avatars;
                 if (chkPC.Checked)
                     _avatarList = _avatarList.Where(x => x.PCAssetURL.Trim().ToLower() != "none").ToList();
@@ -2257,9 +2291,21 @@ namespace ARES
 
         private void btnAddComment_Click(object sender, EventArgs e)
         {
-            Comments comment = new Comments {AvatarId = _selectedAvatar.AvatarID, Comment = txtComment.Text, Created = ApiGrab.GetNistTime().ToString()};
-            ApiGrab.AddComment(comment);
-            LoadComments();
+            if (txtComment.Text.Length > 3)
+            {
+                Comments comment = new Comments
+                {
+                    AvatarId = _selectedAvatar.AvatarID,
+                    Comment = txtComment.Text,
+                    Created = ApiGrab.GetNistTime().ToString()
+                };
+                ApiGrab.AddComment(comment, Version);
+                LoadComments();
+            }
+            else
+            {
+                MessageBox.Show("Please enter a comment over 3 characters");
+            }
         }
 
         private void LoadComments()

@@ -102,7 +102,7 @@ namespace ARES.Modules
             return items.records;
         }
 
-        public List<WorldClass> GetWorlds(string query, string type)
+        public List<WorldClass> GetWorlds(string query, string type, string version)
         {
             string url = "";
             if (!string.IsNullOrEmpty(query))
@@ -126,6 +126,7 @@ namespace ARES.Modules
             HttpWebRequest webReq = (HttpWebRequest)WebRequest.Create(url);
 
             webReq.Method = "GET";
+            webReq.UserAgent = $"ARES V" + version;
 
             HttpWebResponse webResp = (HttpWebResponse)webReq.GetResponse();
 
@@ -144,11 +145,12 @@ namespace ARES.Modules
             return items.records;
         }
 
-        public Stats GetStats()
+        public Stats GetStats(string version)
         {
             HttpWebRequest webReq = (HttpWebRequest)WebRequest.Create(string.Format("https://api.ares-mod.com/stats.php"));
 
             webReq.Method = "GET";
+            webReq.UserAgent = $"ARES V" + version;
 
             HttpWebResponse webResp = (HttpWebResponse)webReq.GetResponse();
 
@@ -188,7 +190,7 @@ namespace ARES.Modules
 
         }
 
-        public List<Records> GetRipped(List<string> ripped)
+        public List<Records> GetRipped(List<string> ripped, string version)
         {
             Avatar avatarList = new Avatar { records = new List<Records>() };
 
@@ -201,6 +203,7 @@ namespace ARES.Modules
                     HttpWebRequest webReq = (HttpWebRequest)WebRequest.Create(url);
 
                     webReq.Method = "GET";
+                    webReq.UserAgent = $"ARES V" + version;
 
                     HttpWebResponse webResp = (HttpWebResponse)webReq.GetResponse();
 
@@ -225,10 +228,11 @@ namespace ARES.Modules
             return null;
         }
 
-        public void AddComment(Comments comment)
+        public void AddComment(Comments comment, string version)
         {
             var httpWebRequest = (HttpWebRequest)WebRequest.Create("https://api.ares-mod.com/records/AvatarComments");
             httpWebRequest.ContentType = "application/json";
+            httpWebRequest.UserAgent = $"ARES V" + version;
             httpWebRequest.Method = "POST";
             string jsonPost = JsonConvert.SerializeObject(comment);
             using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))

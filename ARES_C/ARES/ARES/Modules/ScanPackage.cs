@@ -35,13 +35,13 @@ namespace ARES.Modules
                 {
                     main.txtConsole.Invoke((MethodInvoker)delegate
                     {
-                        main.txtConsole.Text += logBuilder + Environment.NewLine;
+                        main.txtConsole.Text = logBuilder + Environment.NewLine + main.txtConsole.Text;
                     });
                 } catch { } // App probs closed
             }
             else
             {
-                main.txtConsole.Text += logBuilder + Environment.NewLine;
+                main.txtConsole.Text = logBuilder + Environment.NewLine + main.txtConsole.Text;
             }
             File.AppendAllText("LatestLog.txt", logBuilder);
         }
