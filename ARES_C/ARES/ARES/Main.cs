@@ -80,8 +80,7 @@ namespace ARES
             var programLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             KillProcess("Unity Hub.exe");
             KillProcess("Unity.exe");
-            tryDelete(programLocation + "/HSBC.rar");
-            tryDeleteDirectory(programLocation + "/HSB");
+            tryDeleteDirectory(programLocation + "/ARES");
         }
 
         private void CheckIniKeys()
@@ -247,13 +246,6 @@ namespace ARES
                 btnHotswap.Enabled = true;
 #endif
             }
-
-            if (!string.IsNullOrEmpty(UnityPath))
-            {
-                var unitySetup = CoreFunctions.SetupHsb(this);
-                if (unitySetup == (true, false)) CoreFunctions.SetupUnity(UnityPath, this);
-            }
-
 
             MessageBoxManager.Yes = "PC";
             MessageBoxManager.No = "Quest";
@@ -1057,7 +1049,7 @@ namespace ARES
             var fileTarget = filePath + @"\target.vrca";
             var tempFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
                 .Replace("\\Roaming", "");
-            var unityVrca = tempFolder + "\\Local\\Temp\\DefaultCompany\\HSB\\custom.vrca";
+            var unityVrca = tempFolder + "\\Local\\Temp\\DefaultCompany\\ARES\\custom.vrca";
             var regexId = @"avtr_[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}";
             var regexPrefabId = @"prefab-id-v1_avtr_[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}_[\d]{10}\.prefab";
             var regexCab = @"CAB-[\w]{32}";
@@ -1194,7 +1186,7 @@ namespace ARES
                     {
                         selectedImage.Image.Save(
                             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) +
-                            @"\HSB\HSB\Assets\ARES SMART\Resources\ARESLogoTex.png", ImageFormat.Png);
+                            @"\ARES\Assets\ARES SMART\Resources\ARESLogoTex.png", ImageFormat.Png);
                     }
                     catch
                     {
@@ -1214,7 +1206,7 @@ namespace ARES
                     {
                         selectedImage.Image.Save(
                             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) +
-                            @"\HSB\HSB\Assets\ARES SMART\Resources\ARESLogoTex.png", ImageFormat.Png);
+                            @"\ARES\Assets\ARES SMART\Resources\ARESLogoTex.png", ImageFormat.Png);
                     }
                     catch { }
                 }
@@ -1249,7 +1241,7 @@ namespace ARES
                     {
                         yourImage.Save(
                             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) +
-                            @"\HSB\HSB\Assets\ARES SMART\Resources\ARESLogoTex.png", ImageFormat.Png);
+                            @"\ARES\Assets\ARES SMART\Resources\ARESLogoTex.png", ImageFormat.Png);
                     }
                 }
             }
@@ -1407,8 +1399,8 @@ namespace ARES
         {
             var tempFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)
                 .Replace("\\Roaming", "");
-            var unityTemp = "\\Local\\Temp\\DefaultCompany\\HSB";
-            var unityTemp2 = "\\LocalLow\\Temp\\DefaultCompany\\HSB";
+            var unityTemp = "\\Local\\Temp\\DefaultCompany\\ARES";
+            var unityTemp2 = "\\LocalLow\\Temp\\DefaultCompany\\ARES";
 
             tryDeleteDirectory(tempFolder + unityTemp, false);
             tryDeleteDirectory(tempFolder + unityTemp2, false);

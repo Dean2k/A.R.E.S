@@ -146,15 +146,11 @@ namespace ARES.Modules
 
         public (bool, bool) SetupHsb(Main main)
         {
-            if (File.Exists("HSBC.rar"))
-            {
-                return (true, true);
-            }
             try
             {
                 TryDelete(main);
                 string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                string commands = string.Format("/C UnRAR.exe x HSB.rar HSB -id[c,d,n,p,q] -O+");
+                string commands = string.Format("/C UnRAR.exe x ARES.rar ARES -id[c,d,n,p,q] -O+");
 
                 Process p = new Process();
                 ProcessStartInfo psi = new ProcessStartInfo
@@ -181,7 +177,7 @@ namespace ARES.Modules
             string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             try
             {
-                string commands = string.Format("/C \"{0}\" -ProjectPath HSB", unityPath);
+                string commands = string.Format("/C \"{0}\" -ProjectPath ARES", unityPath);
 
                 Process p = new Process();
                 ProcessStartInfo psi = new ProcessStartInfo
@@ -194,43 +190,10 @@ namespace ARES.Modules
                 };
                 p.StartInfo = psi;
                 p.Start();
-                p.WaitForExit();
             }
             catch { return false; }
-
-            KillProcess("Unity Hub.exe", main);
-            KillProcess("Unity.exe", main);
-
-            try
-            {
-                File.Copy(filePath + @"\HSB\Assets\ARES SMART\Resources\.CurrentLayout-default.dwlt", filePath + @"\HSB\Library\CurrentLayout-default.dwlt", true);
-            }
-            catch { }
-
-            try
-            {
-
-                string commands = string.Format("/C Rar.exe a HSBC.rar HSB");
-                Process p = new Process();
-                ProcessStartInfo psi = new ProcessStartInfo
-                {
-                    FileName = "CMD.EXE",
-                    Arguments = commands,
-                    WorkingDirectory = filePath,
-                    CreateNoWindow = true,
-                    WindowStyle = ProcessWindowStyle.Hidden
-                };
-                p.StartInfo = psi;
-                p.Start();
-                p.WaitForExit();
-
-                TryDelete(main);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return false;
-            }
+            
+            
             return true;
         }
 
@@ -240,11 +203,11 @@ namespace ARES.Modules
             {
                 KillProcess("Unity Hub.exe", main);
                 KillProcess("Unity.exe", main);
-                if (Directory.Exists("HSB"))
+                if (Directory.Exists("ARES"))
                 {
-                    Directory.Delete("HSB", true);
+                    Directory.Delete("ARES", true);
                 }
-                Directory.CreateDirectory("HSB");
+                Directory.CreateDirectory("ARES");
             }
             catch { }
         }
@@ -256,7 +219,7 @@ namespace ARES.Modules
             try
             {
                 string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                string commands = string.Format("/C UnRAR.exe x HSBC.rar HSB -id[c,d,n,p,q] -O+");
+                string commands = string.Format("/C UnRAR.exe x ARES.rar ARES -id[c,d,n,p,q] -O+");
 
                 Process p = new Process();
                 ProcessStartInfo psi = new ProcessStartInfo
@@ -271,9 +234,9 @@ namespace ARES.Modules
                 p.Start();
                 p.WaitForExit();
 
-                if (Directory.Exists("HSB/HSB"))
+                if (Directory.Exists("ARES"))
                 {
-                    commands = string.Format("/C \"{0}\" -ProjectPath HSB/HSB", unityPath);
+                    commands = string.Format("/C \"{0}\" -ProjectPath ARES", unityPath);
 
                     p = new Process();
                     psi = new ProcessStartInfo
