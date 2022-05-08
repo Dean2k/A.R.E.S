@@ -46,6 +46,7 @@ namespace ARES
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.mTab = new MetroFramework.Controls.MetroTabControl();
             this.mTabMain = new MetroFramework.Controls.MetroTabPage();
+            this.chkPin = new MetroFramework.Controls.MetroCheckBox();
             this.btnToggleFavorite = new MetroFramework.Controls.MetroButton();
             this.btnSearchFavorites = new MetroFramework.Controls.MetroButton();
             this.btnBrowserView = new MetroFramework.Controls.MetroButton();
@@ -125,14 +126,14 @@ namespace ARES
             this.btnAddComment = new MetroFramework.Controls.MetroButton();
             this.txtComment = new MetroFramework.Controls.MetroTextBox();
             this.dgCommentTable = new System.Windows.Forms.DataGridView();
+            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Date = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Comment = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.metroToolTip1 = new MetroFramework.Components.MetroToolTip();
             this.pbRipped = new System.Windows.Forms.PictureBox();
             this.metroStyleManager = new MetroFramework.Components.MetroStyleManager(this.components);
             this.metroStyleExtender = new MetroFramework.Components.MetroStyleExtender(this.components);
-            this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Date = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Comment = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.chkPin = new MetroFramework.Controls.MetroCheckBox();
+            this.btnResetScene = new MetroFramework.Controls.MetroButton();
             this.groupBox1.SuspendLayout();
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.selectedImage)).BeginInit();
@@ -320,14 +321,14 @@ namespace ARES
             // 
             this.nmQuestVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.nmQuestVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nmQuestVersion.Location = new System.Drawing.Point(193, 562);
+            this.nmQuestVersion.Location = new System.Drawing.Point(158, 562);
             this.nmQuestVersion.Maximum = new decimal(new int[] {
             100000000,
             0,
             0,
             0});
             this.nmQuestVersion.Name = "nmQuestVersion";
-            this.nmQuestVersion.Size = new System.Drawing.Size(167, 26);
+            this.nmQuestVersion.Size = new System.Drawing.Size(130, 26);
             this.nmQuestVersion.TabIndex = 18;
             // 
             // nmPcVersion
@@ -341,7 +342,7 @@ namespace ARES
             0,
             0});
             this.nmPcVersion.Name = "nmPcVersion";
-            this.nmPcVersion.Size = new System.Drawing.Size(167, 26);
+            this.nmPcVersion.Size = new System.Drawing.Size(129, 26);
             this.nmPcVersion.TabIndex = 0;
             // 
             // mTab
@@ -358,7 +359,7 @@ namespace ARES
             this.mTab.ItemSize = new System.Drawing.Size(54, 35);
             this.mTab.Location = new System.Drawing.Point(10, 65);
             this.mTab.Name = "mTab";
-            this.mTab.SelectedIndex = 4;
+            this.mTab.SelectedIndex = 0;
             this.mTab.Size = new System.Drawing.Size(896, 645);
             this.mTab.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             this.mTab.TabIndex = 14;
@@ -368,6 +369,7 @@ namespace ARES
             // 
             // mTabMain
             // 
+            this.mTabMain.Controls.Add(this.btnResetScene);
             this.mTabMain.Controls.Add(this.chkPin);
             this.mTabMain.Controls.Add(this.btnToggleFavorite);
             this.mTabMain.Controls.Add(this.btnSearchFavorites);
@@ -407,6 +409,19 @@ namespace ARES
             this.mTabMain.VerticalScrollbarBarColor = true;
             this.mTabMain.VerticalScrollbarHighlightOnWheel = true;
             this.mTabMain.VerticalScrollbarSize = 10;
+            // 
+            // chkPin
+            // 
+            this.chkPin.AutoSize = true;
+            this.chkPin.FontSize = MetroFramework.MetroCheckBoxSize.Medium;
+            this.chkPin.FontWeight = MetroFramework.MetroCheckBoxWeight.Bold;
+            this.chkPin.Location = new System.Drawing.Point(158, 125);
+            this.chkPin.Name = "chkPin";
+            this.chkPin.Size = new System.Drawing.Size(98, 19);
+            this.chkPin.TabIndex = 53;
+            this.chkPin.Text = "Pin Locked";
+            this.chkPin.UseSelectable = true;
+            this.chkPin.UseStyleColors = true;
             // 
             // btnToggleFavorite
             // 
@@ -451,7 +466,7 @@ namespace ARES
             this.metroLabel7.AutoSize = true;
             this.metroLabel7.FontSize = MetroFramework.MetroLabelSize.Tall;
             this.metroLabel7.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.metroLabel7.Location = new System.Drawing.Point(193, 534);
+            this.metroLabel7.Location = new System.Drawing.Point(158, 534);
             this.metroLabel7.Name = "metroLabel7";
             this.metroLabel7.Size = new System.Drawing.Size(130, 25);
             this.metroLabel7.TabIndex = 49;
@@ -1711,6 +1726,28 @@ namespace ARES
             this.dgCommentTable.Size = new System.Drawing.Size(870, 436);
             this.dgCommentTable.TabIndex = 2;
             // 
+            // ID
+            // 
+            this.ID.HeaderText = "ID";
+            this.ID.Name = "ID";
+            this.ID.ReadOnly = true;
+            this.ID.Width = 50;
+            // 
+            // Date
+            // 
+            this.Date.HeaderText = "Date";
+            this.Date.Name = "Date";
+            this.Date.ReadOnly = true;
+            // 
+            // Comment
+            // 
+            this.Comment.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.Comment.DefaultCellStyle = dataGridViewCellStyle1;
+            this.Comment.HeaderText = "Comment";
+            this.Comment.Name = "Comment";
+            this.Comment.ReadOnly = true;
+            // 
             // metroToolTip1
             // 
             this.metroToolTip1.Style = MetroFramework.MetroColorStyle.Blue;
@@ -1737,40 +1774,19 @@ namespace ARES
             // 
             this.metroStyleExtender.Theme = MetroFramework.MetroThemeStyle.Dark;
             // 
-            // ID
+            // btnResetScene
             // 
-            this.ID.HeaderText = "ID";
-            this.ID.Name = "ID";
-            this.ID.ReadOnly = true;
-            this.ID.Width = 50;
-            // 
-            // Date
-            // 
-            this.Date.HeaderText = "Date";
-            this.Date.Name = "Date";
-            this.Date.ReadOnly = true;
-            // 
-            // Comment
-            // 
-            this.Comment.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.Comment.DefaultCellStyle = dataGridViewCellStyle1;
-            this.Comment.HeaderText = "Comment";
-            this.Comment.Name = "Comment";
-            this.Comment.ReadOnly = true;
-            // 
-            // chkPin
-            // 
-            this.chkPin.AutoSize = true;
-            this.chkPin.FontSize = MetroFramework.MetroCheckBoxSize.Medium;
-            this.chkPin.FontWeight = MetroFramework.MetroCheckBoxWeight.Bold;
-            this.chkPin.Location = new System.Drawing.Point(158, 125);
-            this.chkPin.Name = "chkPin";
-            this.chkPin.Size = new System.Drawing.Size(98, 19);
-            this.chkPin.TabIndex = 53;
-            this.chkPin.Text = "Pin Locked";
-            this.chkPin.UseSelectable = true;
-            this.chkPin.UseStyleColors = true;
+            this.btnResetScene.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnResetScene.FontSize = MetroFramework.MetroButtonSize.Tall;
+            this.btnResetScene.Location = new System.Drawing.Point(353, 553);
+            this.btnResetScene.Name = "btnResetScene";
+            this.btnResetScene.Size = new System.Drawing.Size(120, 35);
+            this.btnResetScene.TabIndex = 54;
+            this.btnResetScene.Text = "Reset Scene";
+            this.metroToolTip1.SetToolTip(this.btnResetScene, "Use this to reset scene instead of restarting unity");
+            this.btnResetScene.UseSelectable = true;
+            this.btnResetScene.UseStyleColors = true;
+            this.btnResetScene.Click += new System.EventHandler(this.btnResetScene_Click);
             // 
             // Main
             // 
@@ -1916,6 +1932,7 @@ namespace ARES
         private System.Windows.Forms.DataGridViewTextBoxColumn Date;
         private System.Windows.Forms.DataGridViewTextBoxColumn Comment;
         private MetroFramework.Controls.MetroCheckBox chkPin;
+        private MetroFramework.Controls.MetroButton btnResetScene;
     }
 }
 

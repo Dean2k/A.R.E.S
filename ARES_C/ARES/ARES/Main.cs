@@ -1405,16 +1405,9 @@ namespace ARES
             tryDeleteDirectory(tempFolder + unityTemp, false);
             tryDeleteDirectory(tempFolder + unityTemp2, false);
 
-            var unitySetup = CoreFunctions.SetupHsb(this);
-            if (unitySetup == (true, false))
-            {
-                CoreFunctions.SetupUnity(UnityPath, this);
-                CoreFunctions.OpenUnityPreSetup(UnityPath, this);
-            }
-            else if (unitySetup == (true, true))
-            {
-                CoreFunctions.OpenUnityPreSetup(UnityPath, this);
-            }
+            CoreFunctions.ExtractHSB();
+            CopyFiles();
+            CoreFunctions.OpenUnity(UnityPath);
 
             btnHotswap.Enabled = true;
         }
@@ -2308,6 +2301,22 @@ namespace ARES
             {
                 dgCommentTable.Rows.Add(comment.id, comment.Created, comment.Comment);
             }
+        }
+
+        private void btnResetScene_Click(object sender, EventArgs e)
+        {
+            CopyFiles();
+        }
+
+        public void CopyFiles()
+        {
+            try
+            {
+                var programLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                File.Copy(programLocation + @"\Template\SampleScene.unity", programLocation + @"\ARES\Assets\Scenes\SampleScene.unity", true);
+                File.Copy(programLocation + @"\Template\ARESLogoTex.png", programLocation + @"\ARES\Assets\ARES SMART\Resources\ARESLogoTex.png", true);
+            }
+            catch { }
         }
     }
 }

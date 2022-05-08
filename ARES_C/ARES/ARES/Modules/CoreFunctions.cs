@@ -14,6 +14,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO.Compression;
 
 namespace ARES.Modules
 {
@@ -67,7 +68,8 @@ namespace ARES.Modules
                 DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
                 dateTime = dateTime.AddSeconds(time).ToLocalTime();
                 return dateTime.ToString();
-            } catch
+            }
+            catch
             {
                 return DateTime.UtcNow.ToString();
             }
@@ -144,59 +146,6 @@ namespace ARES.Modules
             return new List<WorldClass>();
         }
 
-        public (bool, bool) SetupHsb(Main main)
-        {
-            try
-            {
-                TryDelete(main);
-                string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                string commands = string.Format("/C UnRAR.exe x ARES.rar ARES -id[c,d,n,p,q] -O+");
-
-                Process p = new Process();
-                ProcessStartInfo psi = new ProcessStartInfo
-                {
-                    FileName = "CMD.EXE",
-                    Arguments = commands,
-                    WorkingDirectory = filePath,
-                    CreateNoWindow = true,
-                    WindowStyle = ProcessWindowStyle.Hidden
-            };
-                p.StartInfo = psi;
-                p.Start();
-                p.WaitForExit();
-                return (true, false);
-            }
-            catch
-            {
-                return (false, false);
-            }
-        }
-
-        public bool SetupUnity(string unityPath, Main main)
-        {
-            string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            try
-            {
-                string commands = string.Format("/C \"{0}\" -ProjectPath ARES", unityPath);
-
-                Process p = new Process();
-                ProcessStartInfo psi = new ProcessStartInfo
-                {
-                    FileName = "CMD.EXE",
-                    Arguments = commands,
-                    WorkingDirectory = filePath,
-                    CreateNoWindow = true,
-                    WindowStyle = ProcessWindowStyle.Hidden
-                };
-                p.StartInfo = psi;
-                p.Start();
-            }
-            catch { return false; }
-            
-            
-            return true;
-        }
-
         private void TryDelete(Main main)
         {
             try
@@ -212,46 +161,29 @@ namespace ARES.Modules
             catch { }
         }
 
-        public bool OpenUnityPreSetup(string unityPath, Main main)
+        public void OpenUnity(string unityPath)
         {
+            string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string commands = string.Format("/C \"{0}\" -ProjectPath ARES", unityPath);
 
-            TryDelete(main);
-            try
+            Process process = new Process();
+            ProcessStartInfo processStartInfo = new ProcessStartInfo
             {
-                string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                string commands = string.Format("/C UnRAR.exe x ARES.rar ARES -id[c,d,n,p,q] -O+");
+                FileName = "CMD.EXE",
+                Arguments = commands,
+                WorkingDirectory = filePath,
+            };
+            process.StartInfo = processStartInfo;
+            process.Start();
+        }
 
-                Process p = new Process();
-                ProcessStartInfo psi = new ProcessStartInfo
-                {
-                    FileName = "CMD.EXE",
-                    Arguments = commands,
-                    WorkingDirectory = filePath,
-                    CreateNoWindow = true,
-                    WindowStyle = ProcessWindowStyle.Hidden
-                };
-                p.StartInfo = psi;
-                p.Start();
-                p.WaitForExit();
-
-                if (Directory.Exists("ARES"))
-                {
-                    commands = string.Format("/C \"{0}\" -ProjectPath ARES", unityPath);
-
-                    p = new Process();
-                    psi = new ProcessStartInfo
-                    {
-                        FileName = "CMD.EXE",
-                        Arguments = commands,
-                        WorkingDirectory = filePath,
-                    };
-                    p.StartInfo = psi;
-                    p.Start();
-                    //p.WaitForExit();
-                }
-                return false;
+        public void ExtractHSB()
+        {
+            string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            if (!Directory.Exists(filePath + @"\ARES\"))
+            {
+                ZipFile.ExtractToDirectory(filePath + @"\ARES.zip", filePath + @"\ARES");
             }
-            catch { return false; }
         }
 
         private void KillProcess(string processName, Main main)
@@ -268,7 +200,7 @@ namespace ARES.Modules
         public void UploadToApi(List<Records> avatars, Main main, string version)
         {
             string filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string uploadedFile = filePath + @"\AvatarUploaded.txt";           
+            string uploadedFile = filePath + @"\AvatarUploaded.txt";
             if (!File.Exists(uploadedFile))
             {
                 var myFile = File.Create(uploadedFile);
@@ -380,7 +312,8 @@ namespace ARES.Modules
                 {
                     main.txtConsole.Text = logBuilder + Environment.NewLine + main.txtConsole.Text;
                 });
-            } else
+            }
+            else
             {
                 main.txtConsole.Text = logBuilder + Environment.NewLine + main.txtConsole.Text;
             }

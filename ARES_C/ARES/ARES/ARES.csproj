@@ -84,6 +84,17 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression, Version=4.1.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Compression.4.3.0\lib\net46\System.IO.Compression.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.IO.Compression.ZipFile, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Compression.ZipFile.4.3.0\lib\net46\System.IO.Compression.ZipFile.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xaml" />
@@ -152,6 +163,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="ARES.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="AssetRipperConsole_win64\Licenses\AssetStudio.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -242,9 +256,6 @@
     <None Include="AssetRipperConsole_win64\Licenses\YamlDotNet.md">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="ARES.rar">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -255,6 +266,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Template\SampleScene.unity">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -668,6 +682,8 @@
     <Content Include="AssetRipperConsole_win64\2019DLL\System.Runtime.CompilerServices.Unsafe.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="AssetRipperConsole_win64\2019DLL\System.Threading.Tasks.Extensions.dll" />
+    <Content Include="AssetRipperConsole_win64\2019DLL\Unity.Collections.dll" />
     <Content Include="AssetRipperConsole_win64\2019DLL\UnityEditor.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -698,9 +714,16 @@
     <Content Include="AssetRipperConsole_win64\2019DLL\UnityEngine.UnityWebRequestModule.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="AssetRipperConsole_win64\2019DLL\VRC.Collections.dll" />
+    <Content Include="AssetRipperConsole_win64\2019DLL\VRC.Dynamics.dll" />
+    <Content Include="AssetRipperConsole_win64\2019DLL\VRC.SDK3.Dynamics.Contact.dll" />
+    <Content Include="AssetRipperConsole_win64\2019DLL\VRC.SDK3.Dynamics.Contact.Editor.dll" />
+    <Content Include="AssetRipperConsole_win64\2019DLL\VRC.SDK3.Dynamics.PhysBone.dll" />
+    <Content Include="AssetRipperConsole_win64\2019DLL\VRC.SDK3.Dynamics.PhysBone.Editor.dll" />
     <Content Include="AssetRipperConsole_win64\2019DLL\VRC.Udon.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="AssetRipperConsole_win64\2019DLL\VRC.Utility.dll" />
     <Content Include="AssetRipperConsole_win64\2019DLL\VRCCore-Editor.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -774,13 +797,10 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icon.ico" />
-    <Content Include="Rar.exe">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Resources\rippeds.png" />
     <None Include="Resources\NoImage.bmp" />
     <None Include="Resources\No-Image.png" />
-    <Content Include="UnRAR.exe">
+    <Content Include="Template\ARESLogoTex.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -796,5 +816,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
