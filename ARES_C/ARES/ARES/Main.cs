@@ -226,7 +226,10 @@ namespace ARES
 
             try
             {
-                lblSize.Text = ApiGrab.GetStats(Version).Total_database_size;
+                Stats stats = ApiGrab.GetStats(Version);
+                lblSize.Text = stats.Total_database_size;
+                lblPublic.Text = stats.PublicAvatars;
+                lblPrivate.Text = stats.PrivateAvatars;
             }
             catch
             {
@@ -381,9 +384,9 @@ namespace ARES
                     var avatars = ApiGrab.GetAvatars(txtSearchTerm.Text, cbSearchTerm.Text, cbLimit.Text, Version);
                     _avatarList = avatars;
                     if (chkPC.Checked)
-                        _avatarList = _avatarList.Where(x => x.PCAssetURL.Trim().ToLower() != "none").ToList();
+                        _avatarList = _avatarList.Where(x => x.PCAssetURL?.Trim().ToLower() != "none").ToList();
                     if (chkQuest.Checked)
-                        _avatarList = _avatarList.Where(x => x.QUESTAssetURL.Trim().ToLower() != "none").ToList();
+                        _avatarList = _avatarList.Where(x => x.QUESTAssetURL?.Trim().ToLower() != "none").ToList();
                     if (chkPublic.Checked && chkPrivate.Checked == false)
                         _avatarList = _avatarList.Where(x => x.Releasestatus.ToLower().Trim() == "public").ToList();
                     if (chkPublic.Checked == false && chkPrivate.Checked)
@@ -457,8 +460,8 @@ namespace ARES
                 { SizeMode = PictureBoxSizeMode.StretchImage, Size = new Size(148, 146) };
                 var ripped = new PictureBox { SizeMode = PictureBoxSizeMode.StretchImage, Size = new Size(148, 146) };
                 var questPc = "";
-                if (item.PCAssetURL.Trim().ToLower() != "none") questPc += "{PC}";
-                if (item.QUESTAssetURL.Trim().ToLower() != "none") questPc += "{Quest}";
+                if (item.PCAssetURL?.Trim().ToLower() != "none" && item.PCAssetURL != null) { questPc += "{PC}"; } else { questPc = "No key mode"; }
+                if (item.QUESTAssetURL?.Trim().ToLower() != "none" && item.QUESTAssetURL != null) questPc += "{Quest}";
                 var label = new Label
                 {
                     Text = "Avatar Name: " + item.AvatarName + " [" + questPc + "]",
@@ -578,11 +581,11 @@ namespace ARES
             LoadComments();
 
             if (bitmap != null) selectedImage.Image = bitmap;
-            if (_selectedAvatar.PCAssetURL.Trim() != "None")
+            if (_selectedAvatar.PCAssetURL?.Trim() != "None" && _selectedAvatar.PCAssetURL != null)
             {
                 try
                 {
-                    var version = _selectedAvatar.PCAssetURL.Split('/');
+                    var version = _selectedAvatar.PCAssetURL?.Split('/');
                     var urlCheck =
                         _selectedAvatar.PCAssetURL.Replace(version[6] + "/" + version[7] + "/file", version[6]);
                     var versionList = ApiGrab.GetVersions(urlCheck);
@@ -598,7 +601,7 @@ namespace ARES
                 nmPcVersion.Value = 0;
             }
 
-            if (_selectedAvatar.QUESTAssetURL.Trim() != "None")
+            if (_selectedAvatar.QUESTAssetURL?.Trim() != "None" && _selectedAvatar.QUESTAssetURL != null)
             {
                 try
                 {
@@ -629,7 +632,7 @@ namespace ARES
             bitmap = CoreFunctions.LoadImage(SelectedWorld.ImageURL, chkNoImages.Checked);
 
             if (bitmap != null) selectedImage.Image = bitmap;
-            if (SelectedWorld.PCAssetURL.Trim() != "None")
+            if (SelectedWorld.PCAssetURL?.Trim() != "None")
             {
                 var version = SelectedWorld.PCAssetURL.Split('/');
                 nmPcVersion.Value = Convert.ToInt32(version[7]);
@@ -646,17 +649,23 @@ namespace ARES
         {
             if (!string.IsNullOrEmpty(txtAvatarInfo.Text))
             {
-                if (_selectedAvatar != null)
-                    if (txtAvatarInfo.Text.Contains("avtr_") && _selectedAvatar.AvatarID.Contains("avtr_"))
-                    {
-                        var saveFile = new SaveFileDialog();
-                        var fileName = "custom.vrca";
-                        saveFile.Filter = "VRCA files (*.vrca)|*.vrca";
-                        saveFile.FileName = fileName;
 
-                        if (saveFile.ShowDialog() == DialogResult.OK) fileName = saveFile.FileName;
-                        if (!DownloadVrca(fileName)) return;
+                if (_selectedAvatar != null)
+                    if (_selectedAvatar.PCAssetURL == null)
+                    {
+                        MessageBox.Show("You are operating in no key mode and can't be used to download or hotswap VRCA's");
+                        return;
                     }
+                if (txtAvatarInfo.Text.Contains("avtr_") && _selectedAvatar.AvatarID.Contains("avtr_"))
+                {
+                    var saveFile = new SaveFileDialog();
+                    var fileName = "custom.vrca";
+                    saveFile.Filter = "VRCA files (*.vrca)|*.vrca";
+                    saveFile.FileName = fileName;
+
+                    if (saveFile.ShowDialog() == DialogResult.OK) fileName = saveFile.FileName;
+                    if (!DownloadVrca(fileName)) return;
+                }
 
                 if (SelectedWorld != null)
                     if (txtAvatarInfo.Text.Contains("wrld_") && SelectedWorld.WorldID.Contains("wrld_"))
@@ -701,7 +710,7 @@ namespace ARES
             if (fileName == "custom.vrca") fileName = filePath + @"\custom.vrca";
             if (_selectedAvatar.AuthorName != "VRCA")
             {
-                if (_selectedAvatar.PCAssetURL != "None" && _selectedAvatar.QUESTAssetURL != "None")
+                if (_selectedAvatar.PCAssetURL != "None" && _selectedAvatar.QUESTAssetURL != "None" && _selectedAvatar.PCAssetURL != null && _selectedAvatar.QUESTAssetURL != null)
                 {
                     var dlgResult = MessageBox.Show("Select which version to download", "VRCA Select",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Information);
@@ -749,7 +758,7 @@ namespace ARES
                         return false;
                     }
                 }
-                else if (_selectedAvatar.PCAssetURL != "None")
+                else if (_selectedAvatar.PCAssetURL != "None" && _selectedAvatar.PCAssetURL != null)
                 {
                     try
                     {
@@ -759,7 +768,7 @@ namespace ARES
                     }
                     catch { DownloadFile(_selectedAvatar.PCAssetURL, fileName); }
                 }
-                else if (_selectedAvatar.QUESTAssetURL != "None")
+                else if (_selectedAvatar.QUESTAssetURL != "None" && _selectedAvatar.QUESTAssetURL != null)
                 {
                     try
                     {
@@ -1026,6 +1035,11 @@ namespace ARES
 
             if (_selectedAvatar != null)
             {
+                if (_selectedAvatar.PCAssetURL == null)
+                {
+                    MessageBox.Show("You are operating in no key mode and can't be used to download or hotswap VRCA's");
+                    return;
+                }
                 if (!DownloadVrca()) return;
                 HotSwapConsole = new HotswapConsole();
                 HotSwapConsole.Show();

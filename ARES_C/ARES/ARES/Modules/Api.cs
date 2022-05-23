@@ -147,7 +147,7 @@ namespace ARES.Modules
 
         public Stats GetStats(string version)
         {
-            HttpWebRequest webReq = (HttpWebRequest)WebRequest.Create(string.Format("https://api.ares-mod.com/stats.php"));
+            HttpWebRequest webReq = (HttpWebRequest)WebRequest.Create(string.Format("https://api.ares-mod.com/statsV2.php"));
 
             webReq.Method = "GET";
             webReq.UserAgent = $"ARES V" + version;

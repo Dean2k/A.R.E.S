@@ -46,6 +46,7 @@ namespace ARES
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.mTab = new MetroFramework.Controls.MetroTabControl();
             this.mTabMain = new MetroFramework.Controls.MetroTabPage();
+            this.btnResetScene = new MetroFramework.Controls.MetroButton();
             this.chkPin = new MetroFramework.Controls.MetroCheckBox();
             this.btnToggleFavorite = new MetroFramework.Controls.MetroButton();
             this.btnSearchFavorites = new MetroFramework.Controls.MetroButton();
@@ -119,6 +120,10 @@ namespace ARES
             this.btnExtractVRCA = new MetroFramework.Controls.MetroButton();
             this.btnLoadVRCA = new MetroFramework.Controls.MetroButton();
             this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
+            this.lblPrivate = new MetroFramework.Controls.MetroLabel();
+            this.metroLabel19 = new MetroFramework.Controls.MetroLabel();
+            this.lblPublic = new MetroFramework.Controls.MetroLabel();
+            this.metroLabel17 = new MetroFramework.Controls.MetroLabel();
             this.txtAbout = new MetroFramework.Controls.MetroTextBox();
             this.lblSize = new MetroFramework.Controls.MetroLabel();
             this.metroLabel10 = new MetroFramework.Controls.MetroLabel();
@@ -133,7 +138,6 @@ namespace ARES
             this.pbRipped = new System.Windows.Forms.PictureBox();
             this.metroStyleManager = new MetroFramework.Components.MetroStyleManager(this.components);
             this.metroStyleExtender = new MetroFramework.Components.MetroStyleExtender(this.components);
-            this.btnResetScene = new MetroFramework.Controls.MetroButton();
             this.groupBox1.SuspendLayout();
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.selectedImage)).BeginInit();
@@ -359,7 +363,7 @@ namespace ARES
             this.mTab.ItemSize = new System.Drawing.Size(54, 35);
             this.mTab.Location = new System.Drawing.Point(10, 65);
             this.mTab.Name = "mTab";
-            this.mTab.SelectedIndex = 0;
+            this.mTab.SelectedIndex = 3;
             this.mTab.Size = new System.Drawing.Size(896, 645);
             this.mTab.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             this.mTab.TabIndex = 14;
@@ -409,6 +413,20 @@ namespace ARES
             this.mTabMain.VerticalScrollbarBarColor = true;
             this.mTabMain.VerticalScrollbarHighlightOnWheel = true;
             this.mTabMain.VerticalScrollbarSize = 10;
+            // 
+            // btnResetScene
+            // 
+            this.btnResetScene.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnResetScene.FontSize = MetroFramework.MetroButtonSize.Tall;
+            this.btnResetScene.Location = new System.Drawing.Point(353, 553);
+            this.btnResetScene.Name = "btnResetScene";
+            this.btnResetScene.Size = new System.Drawing.Size(120, 35);
+            this.btnResetScene.TabIndex = 54;
+            this.btnResetScene.Text = "Reset Scene";
+            this.metroToolTip1.SetToolTip(this.btnResetScene, "Use this to reset scene instead of restarting unity");
+            this.btnResetScene.UseSelectable = true;
+            this.btnResetScene.UseStyleColors = true;
+            this.btnResetScene.Click += new System.EventHandler(this.btnResetScene_Click);
             // 
             // chkPin
             // 
@@ -1566,6 +1584,10 @@ namespace ARES
             // 
             // metroTabPage2
             // 
+            this.metroTabPage2.Controls.Add(this.lblPrivate);
+            this.metroTabPage2.Controls.Add(this.metroLabel19);
+            this.metroTabPage2.Controls.Add(this.lblPublic);
+            this.metroTabPage2.Controls.Add(this.metroLabel17);
             this.metroTabPage2.Controls.Add(this.txtAbout);
             this.metroTabPage2.Controls.Add(this.lblSize);
             this.metroTabPage2.Controls.Add(this.metroLabel10);
@@ -1580,6 +1602,54 @@ namespace ARES
             this.metroTabPage2.VerticalScrollbarBarColor = true;
             this.metroTabPage2.VerticalScrollbarHighlightOnWheel = false;
             this.metroTabPage2.VerticalScrollbarSize = 10;
+            // 
+            // lblPrivate
+            // 
+            this.lblPrivate.AutoSize = true;
+            this.lblPrivate.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.lblPrivate.FontWeight = MetroFramework.MetroLabelWeight.Bold;
+            this.lblPrivate.Location = new System.Drawing.Point(724, 11);
+            this.lblPrivate.Name = "lblPrivate";
+            this.lblPrivate.Size = new System.Drawing.Size(22, 25);
+            this.lblPrivate.TabIndex = 54;
+            this.lblPrivate.Text = "0";
+            this.lblPrivate.UseStyleColors = true;
+            // 
+            // metroLabel19
+            // 
+            this.metroLabel19.AutoSize = true;
+            this.metroLabel19.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.metroLabel19.FontWeight = MetroFramework.MetroLabelWeight.Bold;
+            this.metroLabel19.Location = new System.Drawing.Point(578, 11);
+            this.metroLabel19.Name = "metroLabel19";
+            this.metroLabel19.Size = new System.Drawing.Size(152, 25);
+            this.metroLabel19.TabIndex = 53;
+            this.metroLabel19.Text = "Private Avatars: ";
+            this.metroLabel19.UseStyleColors = true;
+            // 
+            // lblPublic
+            // 
+            this.lblPublic.AutoSize = true;
+            this.lblPublic.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.lblPublic.FontWeight = MetroFramework.MetroLabelWeight.Bold;
+            this.lblPublic.Location = new System.Drawing.Point(434, 11);
+            this.lblPublic.Name = "lblPublic";
+            this.lblPublic.Size = new System.Drawing.Size(22, 25);
+            this.lblPublic.TabIndex = 52;
+            this.lblPublic.Text = "0";
+            this.lblPublic.UseStyleColors = true;
+            // 
+            // metroLabel17
+            // 
+            this.metroLabel17.AutoSize = true;
+            this.metroLabel17.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.metroLabel17.FontWeight = MetroFramework.MetroLabelWeight.Bold;
+            this.metroLabel17.Location = new System.Drawing.Point(293, 11);
+            this.metroLabel17.Name = "metroLabel17";
+            this.metroLabel17.Size = new System.Drawing.Size(144, 25);
+            this.metroLabel17.TabIndex = 51;
+            this.metroLabel17.Text = "Public Avatars: ";
+            this.metroLabel17.UseStyleColors = true;
             // 
             // txtAbout
             // 
@@ -1774,20 +1844,6 @@ namespace ARES
             // 
             this.metroStyleExtender.Theme = MetroFramework.MetroThemeStyle.Dark;
             // 
-            // btnResetScene
-            // 
-            this.btnResetScene.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnResetScene.FontSize = MetroFramework.MetroButtonSize.Tall;
-            this.btnResetScene.Location = new System.Drawing.Point(353, 553);
-            this.btnResetScene.Name = "btnResetScene";
-            this.btnResetScene.Size = new System.Drawing.Size(120, 35);
-            this.btnResetScene.TabIndex = 54;
-            this.btnResetScene.Text = "Reset Scene";
-            this.metroToolTip1.SetToolTip(this.btnResetScene, "Use this to reset scene instead of restarting unity");
-            this.btnResetScene.UseSelectable = true;
-            this.btnResetScene.UseStyleColors = true;
-            this.btnResetScene.Click += new System.EventHandler(this.btnResetScene_Click);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1933,6 +1989,10 @@ namespace ARES
         private System.Windows.Forms.DataGridViewTextBoxColumn Comment;
         private MetroFramework.Controls.MetroCheckBox chkPin;
         private MetroFramework.Controls.MetroButton btnResetScene;
+        private MetroFramework.Controls.MetroLabel lblPrivate;
+        private MetroFramework.Controls.MetroLabel metroLabel19;
+        private MetroFramework.Controls.MetroLabel lblPublic;
+        private MetroFramework.Controls.MetroLabel metroLabel17;
     }
 }
 
