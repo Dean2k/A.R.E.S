@@ -58,7 +58,7 @@ Features:
 	
 	-Version detection: IF your copy is out of date your application will now prompt you to upgrade
 
-    -API support! If you are willing to share your logs with us in return you will gain access to a database containing avatars logged by other users
+    -API support! If you are willing to share your logs with us in return you will gain access to a database containing avatars logged by other users (join our discord : discord.gg/vrc-ares for an API key)
 
     -Ability to hotswap from a vaid VRCA file downloaded elsewhere
 
