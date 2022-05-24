@@ -1786,9 +1786,9 @@ namespace ARES
                 var avatars = ApiGrab.GetRipped(_rippedList, Version);
                 _avatarList = avatars;
                 if (chkPC.Checked)
-                    _avatarList = _avatarList.Where(x => x.PCAssetURL.Trim().ToLower() != "none").ToList();
+                    _avatarList = _avatarList.Where(x => x.PCAssetURL?.Trim().ToLower() != "none").ToList();
                 if (chkQuest.Checked)
-                    _avatarList = _avatarList.Where(x => x.QUESTAssetURL.Trim().ToLower() != "none").ToList();
+                    _avatarList = _avatarList.Where(x => x.QUESTAssetURL?.Trim().ToLower() != "none").ToList();
                 if (chkPublic.Checked && chkPrivate.Checked == false)
                     _avatarList = _avatarList.Where(x => x.Releasestatus.ToLower().Trim() == "public").ToList();
                 if (chkPublic.Checked == false && chkPrivate.Checked)
@@ -2262,9 +2262,9 @@ namespace ARES
                 var avatars = ApiGrab.GetRipped(_favoriteList, Version);
                 _avatarList = avatars;
                 if (chkPC.Checked)
-                    _avatarList = _avatarList.Where(x => x.PCAssetURL.Trim().ToLower() != "none").ToList();
+                    _avatarList = _avatarList.Where(x => x.PCAssetURL?.Trim().ToLower() != "none").ToList();
                 if (chkQuest.Checked)
-                    _avatarList = _avatarList.Where(x => x.QUESTAssetURL.Trim().ToLower() != "none").ToList();
+                    _avatarList = _avatarList.Where(x => x.QUESTAssetURL?.Trim().ToLower() != "none").ToList();
                 switch (chkPublic.Checked)
                 {
                     case true when !chkPrivate.Checked:
