@@ -198,9 +198,23 @@ namespace ARES.Modules
             {
                 foreach (var item in ripped.Distinct().ToList())
                 {
-                    var url = string.Format("https://api.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags&size=1&order=TimeDetected,desc&filter=AvatarID,eq,{0}", item);
+
+                    string url = "";
+                    string apiStart = "api";
+
+                    if (ApiKey != null)
+                    {
+                        apiStart = "unlocked";
+                    }
+
+                    url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags&size=1&order=TimeDetected,desc&filter=AvatarID,eq,{item}";
 
                     HttpWebRequest webReq = (HttpWebRequest)WebRequest.Create(url);
+
+                    if (ApiKey != null)
+                    {
+                        webReq.Headers.Add("X-API-Key: " + ApiKey);
+                    }
 
                     webReq.Method = "GET";
                     webReq.UserAgent = $"ARES V" + version;
