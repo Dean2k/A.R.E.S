@@ -33,22 +33,22 @@ namespace ARES.Modules
                 switch (type)
                 {
                     case "Avatar Name":
-                        url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags,Pin,PinCode&size={amount}&order=TimeDetected,desc&filter=AvatarName,cs,{query}";
+                        url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=Created,TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags,Pin,PinCode&size={amount}&order=Created,desc&filter=AvatarName,cs,{query}";
                         break;
                     case "Avatar ID":
-                        url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags,Pin,PinCode&size=1&order=TimeDetected,desc&filter=AvatarID,eq,{query}";
+                        url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=Created,TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags,Pin,PinCode&size=1&order=Created,desc&filter=AvatarID,eq,{query}";
                         break;
                     case "Author Name":
-                        url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags,Pin,PinCode&size={amount}&order=TimeDetected,desc&filter=AuthorName,cs,{query}";
+                        url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=Created,TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags,Pin,PinCode&size={amount}&order=Created,desc&filter=AuthorName,cs,{query}";
                         break;
                     case "Author ID":
-                        url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags,Pin,PinCode&size={amount}&order=TimeDetected,desc&filter=AuthorID,eq,{query}";
+                        url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=Created,TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags,Pin,PinCode&size={amount}&order=Created,desc&filter=AuthorID,eq,{query}";
                         break;
                 }
             }
             else
             {
-                url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags,Pin,PinCode&size={amount}&order=TimeDetected,desc";
+                url = $"https://{apiStart}.ares-mod.com/records/Avatars?include=Created,TimeDetected,AvatarID,AvatarName,AvatarDescription,AuthorID,AuthorName,PCAssetURL,QUESTAssetURL,ImageURL,ThumbnailURL,UnityVersion,Releasestatus,Tags,Pin,PinCode&size={amount}&order=Created,desc";
             }
             HttpWebRequest webReq = (HttpWebRequest)WebRequest.Create(url);
             webReq.UserAgent = $"ARES V" + version;

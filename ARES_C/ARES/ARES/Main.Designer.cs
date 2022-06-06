@@ -363,7 +363,7 @@ namespace ARES
             this.mTab.ItemSize = new System.Drawing.Size(54, 35);
             this.mTab.Location = new System.Drawing.Point(10, 65);
             this.mTab.Name = "mTab";
-            this.mTab.SelectedIndex = 3;
+            this.mTab.SelectedIndex = 2;
             this.mTab.Size = new System.Drawing.Size(896, 645);
             this.mTab.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             this.mTab.TabIndex = 14;
@@ -1524,9 +1524,7 @@ namespace ARES
             this.cbVersionUnity.ItemHeight = 29;
             this.cbVersionUnity.Items.AddRange(new object[] {
             "2019",
-            "2019beta",
-            "2018",
-            "2018beta"});
+            "2018"});
             this.cbVersionUnity.Location = new System.Drawing.Point(229, 56);
             this.cbVersionUnity.Name = "cbVersionUnity";
             this.cbVersionUnity.Size = new System.Drawing.Size(167, 35);

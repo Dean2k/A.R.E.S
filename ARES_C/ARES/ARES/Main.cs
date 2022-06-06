@@ -81,6 +81,8 @@ namespace ARES
             KillProcess("Unity Hub.exe");
             KillProcess("Unity.exe");
             tryDeleteDirectory(programLocation + "/ARES");
+            tryDeleteDirectory(@"C:\Users\" + Environment.UserName + @"\AppData\Local\Temp\DefaultCompany\ARES");
+            tryDeleteDirectory(@"C:\Users\" + Environment.UserName + @"\AppData\LocalLow\DefaultCompany\ARES");
         }
 
         private void CheckIniKeys()
