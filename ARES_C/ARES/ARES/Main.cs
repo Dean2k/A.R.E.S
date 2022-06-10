@@ -229,9 +229,9 @@ namespace ARES
             try
             {
                 Stats stats = ApiGrab.GetStats(Version);
-                lblSize.Text = stats.Total_database_size;
-                lblPublic.Text = stats.PublicAvatars;
-                lblPrivate.Text = stats.PrivateAvatars;
+                lblSize.Text = String.Format("{0:n0}", Convert.ToInt64(stats.Total_database_size));
+                lblPublic.Text = String.Format("{0:n0}", Convert.ToInt64(stats.PublicAvatars));
+                lblPrivate.Text = String.Format("{0:n0}", Convert.ToInt64(stats.PrivateAvatars));
             }
             catch
             {
@@ -811,7 +811,7 @@ namespace ARES
                     folderDlg.SelectedPath = txtAvatarOutput.Text;
                 if (result == DialogResult.OK || toggleAvatar.Checked && txtAvatarOutput.Text != "")
                 {
-                    var unityVersion = cbVersionUnity.Text + "DLL";
+                    var unityVersion = cbVersionUnity.Text + "DLLnew";
                     var filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
                     var avatarName = Encoding.ASCII.GetString(
                         Encoding.Convert(
@@ -865,6 +865,9 @@ namespace ARES
                     {
                         Directory.Move(folderExtractLocation + @"\ExportedProject\Assets\Shader",
                             folderExtractLocation + @"\ExportedProject\Assets\.Shader");
+                        Directory.Move(folderExtractLocation + @"\ExportedProject\Assets\MonoScript",
+                            folderExtractLocation + @"\ExportedProject\Assets\.MonoScript");
+
                     }
                     catch
                     {
@@ -893,7 +896,7 @@ namespace ARES
                     folderDlg.SelectedPath = txtWorldOutput.Text;
                 if (result == DialogResult.OK || toggleWorld.Checked && txtWorldOutput.Text != "")
                 {
-                    var unityVersion = cbVersionUnity.Text + "DLL";
+                    var unityVersion = cbVersionUnity.Text + "DLLnew";
                     var filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
                     var worldName = Encoding.ASCII.GetString(
                         Encoding.Convert(
