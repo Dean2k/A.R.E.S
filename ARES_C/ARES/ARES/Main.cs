@@ -478,6 +478,7 @@ namespace ARES
                 {
                     avatarImage.Image = bitmap;
                     label.Name = item.AvatarID;
+                    label.DoubleClick += DoubleClickLoad;
                     label.Click += LoadInfo;
                     groupBox.Controls.Add(avatarImage);
                     if (_rippedList.Contains(item.AvatarID))
@@ -573,9 +574,25 @@ namespace ARES
             Locked = false;
         }
 
+        private void DoubleClickLoad(object sender, EventArgs e)
+        {
+            if(_selectedAvatar != null)
+            {
+                Clipboard.SetText(_selectedAvatar.AvatarID);
+            }
+        }
+
         private void LoadInfo(object sender, EventArgs e)
         {
             var img = (Label)sender;
+            if (_selectedAvatar != null)
+            {
+                if(_selectedAvatar.AvatarID == img.Name)
+                {
+                    return;
+                }
+            }
+            
             _selectedAvatar = _avatarList.Find(x => x.AvatarID == img.Name);
             txtAvatarInfo.Text = CoreFunctions.SetAvatarInfo(_selectedAvatar);
 
