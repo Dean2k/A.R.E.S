@@ -2,7 +2,9 @@
 
 ARES is an avatar recovery tool! It is only for educational uses! We do not condone theft of avatars, the tool soley exists to recover avatars from within VRChat back onto new accounts and into their unity packages keeping as much of the avatar in-tact as possible!
 
-Thx to Yui, they have chosen not to be marked as a developer on the project when they might as well be, they taught me everything I know about photon and it is an important part of the project as a whole. If you see him around thank him for me! The same thanks go out to Blaze for showing me a better/more stable way to create buttons ingame!
+For context I [LargestBoi](https://github.com/LargestBoi) am passing over main ARES development over to Dean2K. This is the only fork I actively am watching develop and fully support, I don't develop anything much publically these days but I am so proud to see this application/project that I sunk so much time and effort into surviving and being actively developed. It brings me more joy then you can imagine.
+
+Thx to Yui, they have chosen not to be marked as a developer on the project when they might as well be, they taught me everything I know about photon and it is an important part of the project as a whole. If you see him around thank him for me! The same thanks go out to Blaze for showing me a better/more stable way to create buttons in-game!
 
 Thx to [Blaze](https://github.com/WTFBlaze) for helping me fix a few bugs within the wear avatar by ID button added in V10!
 
