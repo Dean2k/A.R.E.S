@@ -242,15 +242,15 @@ namespace ARES
             cbVersionUnity.SelectedIndex = 0;
 
 
-            var pluginCheck = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).Replace("GUI", "");
-            if (!File.Exists(pluginCheck + @"\Plugins\ARESPlugin.dll") && _apiEnabled)
-            {
-                btnSearch.Enabled = false;
-#if DEBUG
-                btnSearch.Enabled = true;
-                btnHotswap.Enabled = true;
-#endif
-            }
+//            var pluginCheck = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).Replace("GUI", "");
+//            if (!File.Exists(pluginCheck + @"\Plugins\ARESPlugin.dll") && _apiEnabled)
+//            {
+//                btnSearch.Enabled = false;
+//#if DEBUG
+//                btnSearch.Enabled = true;
+//                btnHotswap.Enabled = true;
+//#endif
+//            }
 
             MessageBoxManager.Yes = "PC";
             MessageBoxManager.No = "Quest";
