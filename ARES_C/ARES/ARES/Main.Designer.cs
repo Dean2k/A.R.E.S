@@ -138,6 +138,7 @@ namespace ARES
             this.pbRipped = new System.Windows.Forms.PictureBox();
             this.metroStyleManager = new MetroFramework.Components.MetroStyleManager(this.components);
             this.metroStyleExtender = new MetroFramework.Components.MetroStyleExtender(this.components);
+            this.btnPreview = new MetroFramework.Controls.MetroButton();
             this.groupBox1.SuspendLayout();
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.selectedImage)).BeginInit();
@@ -173,6 +174,7 @@ namespace ARES
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.btnPreview);
             this.groupBox1.Controls.Add(this.btnDownload);
             this.groupBox1.Controls.Add(this.txtAvatarInfo);
             this.groupBox1.Controls.Add(this.cbCopy);
@@ -191,7 +193,7 @@ namespace ARES
             this.btnDownload.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnDownload.FontSize = MetroFramework.MetroButtonSize.Tall;
-            this.btnDownload.Location = new System.Drawing.Point(6, 561);
+            this.btnDownload.Location = new System.Drawing.Point(6, 522);
             this.btnDownload.Name = "btnDownload";
             this.btnDownload.Size = new System.Drawing.Size(258, 35);
             this.btnDownload.TabIndex = 51;
@@ -209,9 +211,9 @@ namespace ARES
             // 
             // 
             this.txtAvatarInfo.CustomButton.Image = null;
-            this.txtAvatarInfo.CustomButton.Location = new System.Drawing.Point(-58, 1);
+            this.txtAvatarInfo.CustomButton.Location = new System.Drawing.Point(-22, 2);
             this.txtAvatarInfo.CustomButton.Name = "";
-            this.txtAvatarInfo.CustomButton.Size = new System.Drawing.Size(315, 315);
+            this.txtAvatarInfo.CustomButton.Size = new System.Drawing.Size(277, 277);
             this.txtAvatarInfo.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
             this.txtAvatarInfo.CustomButton.TabIndex = 1;
             this.txtAvatarInfo.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
@@ -231,7 +233,7 @@ namespace ARES
             this.txtAvatarInfo.SelectionLength = 0;
             this.txtAvatarInfo.SelectionStart = 0;
             this.txtAvatarInfo.ShortcutsEnabled = true;
-            this.txtAvatarInfo.Size = new System.Drawing.Size(258, 317);
+            this.txtAvatarInfo.Size = new System.Drawing.Size(258, 282);
             this.txtAvatarInfo.TabIndex = 49;
             this.txtAvatarInfo.UseSelectable = true;
             this.txtAvatarInfo.UseStyleColors = true;
@@ -262,7 +264,7 @@ namespace ARES
             "Tags",
             "World ID",
             "World Name"});
-            this.cbCopy.Location = new System.Drawing.Point(6, 520);
+            this.cbCopy.Location = new System.Drawing.Point(6, 481);
             this.cbCopy.Name = "cbCopy";
             this.cbCopy.Size = new System.Drawing.Size(167, 35);
             this.cbCopy.Style = MetroFramework.MetroColorStyle.Blue;
@@ -275,7 +277,7 @@ namespace ARES
             this.btnCopy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCopy.FontSize = MetroFramework.MetroButtonSize.Tall;
-            this.btnCopy.Location = new System.Drawing.Point(179, 520);
+            this.btnCopy.Location = new System.Drawing.Point(179, 481);
             this.btnCopy.Name = "btnCopy";
             this.btnCopy.Size = new System.Drawing.Size(85, 35);
             this.btnCopy.TabIndex = 48;
@@ -363,7 +365,7 @@ namespace ARES
             this.mTab.ItemSize = new System.Drawing.Size(54, 35);
             this.mTab.Location = new System.Drawing.Point(10, 65);
             this.mTab.Name = "mTab";
-            this.mTab.SelectedIndex = 2;
+            this.mTab.SelectedIndex = 0;
             this.mTab.Size = new System.Drawing.Size(896, 645);
             this.mTab.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             this.mTab.TabIndex = 14;
@@ -1842,6 +1844,20 @@ namespace ARES
             // 
             this.metroStyleExtender.Theme = MetroFramework.MetroThemeStyle.Dark;
             // 
+            // btnPreview
+            // 
+            this.btnPreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnPreview.FontSize = MetroFramework.MetroButtonSize.Tall;
+            this.btnPreview.Location = new System.Drawing.Point(6, 562);
+            this.btnPreview.Name = "btnPreview";
+            this.btnPreview.Size = new System.Drawing.Size(258, 35);
+            this.btnPreview.TabIndex = 52;
+            this.btnPreview.Text = "Preview VRCA";
+            this.btnPreview.UseSelectable = true;
+            this.btnPreview.UseStyleColors = true;
+            this.btnPreview.Click += new System.EventHandler(this.btnPreview_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1991,6 +2007,7 @@ namespace ARES
         private MetroFramework.Controls.MetroLabel metroLabel19;
         private MetroFramework.Controls.MetroLabel lblPublic;
         private MetroFramework.Controls.MetroLabel metroLabel17;
+        private MetroFramework.Controls.MetroButton btnPreview;
     }
 }
 

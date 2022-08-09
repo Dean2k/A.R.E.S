@@ -2354,5 +2354,45 @@ namespace ARES
             }
             catch { }
         }
+
+        private void btnPreview_Click(object sender, EventArgs e)
+        {
+            string urlVRCA = null;
+            if (_selectedAvatar.PCAssetURL == null)
+            {
+                MessageBox.Show("You are operating in no key mode and can't be used to download or hotswap VRCA's");
+                return;
+            }
+            if (_selectedAvatar.PCAssetURL.ToLower() != "none")
+            {
+                try
+                {
+                    var version = _selectedAvatar.PCAssetURL.Split('/');
+                    version[7] = nmPcVersion.Value.ToString();
+                    urlVRCA = string.Join("/", version);
+                    string commands = string.Format("\"-" + urlVRCA + "\"");
+
+                    Process p = new Process();
+                    ProcessStartInfo psi = new ProcessStartInfo
+                    {
+                        FileName = "AssetViewer.exe",
+                        Arguments = commands,
+                        WorkingDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + @"\AssetViewer\",
+                        //WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden
+                    };
+                    p.StartInfo = psi;
+                    p.Start();
+                }
+                catch {  }
+            }
+            else
+            {
+                MetroMessageBox.Show(this, "PC version doesn't exist", "ERROR", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
+
+            
+        }
     }
 }
