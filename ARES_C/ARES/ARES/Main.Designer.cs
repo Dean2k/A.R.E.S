@@ -34,6 +34,7 @@ namespace ARES
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.flowAvatars = new System.Windows.Forms.FlowLayoutPanel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnPreview = new MetroFramework.Controls.MetroButton();
             this.btnDownload = new MetroFramework.Controls.MetroButton();
             this.txtAvatarInfo = new MetroFramework.Controls.MetroTextBox();
             this.cbCopy = new MetroFramework.Controls.MetroComboBox();
@@ -51,8 +52,8 @@ namespace ARES
             this.btnToggleFavorite = new MetroFramework.Controls.MetroButton();
             this.btnSearchFavorites = new MetroFramework.Controls.MetroButton();
             this.btnBrowserView = new MetroFramework.Controls.MetroButton();
-            this.metroLabel7 = new MetroFramework.Controls.MetroLabel();
-            this.metroLabel6 = new MetroFramework.Controls.MetroLabel();
+            this.lblQuestVersion = new MetroFramework.Controls.MetroLabel();
+            this.lblPCVersion = new MetroFramework.Controls.MetroLabel();
             this.cbLimit = new MetroFramework.Controls.MetroComboBox();
             this.txtSearchTerm = new MetroFramework.Controls.MetroTextBox();
             this.btnHotswap = new MetroFramework.Controls.MetroButton();
@@ -67,10 +68,10 @@ namespace ARES
             this.chkPrivate = new MetroFramework.Controls.MetroCheckBox();
             this.chkPublic = new MetroFramework.Controls.MetroCheckBox();
             this.lblAvatarCount = new MetroFramework.Controls.MetroLabel();
-            this.metroLabel4 = new MetroFramework.Controls.MetroLabel();
-            this.metroLabel3 = new MetroFramework.Controls.MetroLabel();
-            this.metroLabel2 = new MetroFramework.Controls.MetroLabel();
-            this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
+            this.lblCount = new MetroFramework.Controls.MetroLabel();
+            this.lblFilter = new MetroFramework.Controls.MetroLabel();
+            this.lblSearchType = new MetroFramework.Controls.MetroLabel();
+            this.lblSearchTerm = new MetroFramework.Controls.MetroLabel();
             this.mTabSettings = new MetroFramework.Controls.MetroTabPage();
             this.txtApiKey = new MetroFramework.Controls.MetroTextBox();
             this.metroLabel15 = new MetroFramework.Controls.MetroLabel();
@@ -138,7 +139,6 @@ namespace ARES
             this.pbRipped = new System.Windows.Forms.PictureBox();
             this.metroStyleManager = new MetroFramework.Components.MetroStyleManager(this.components);
             this.metroStyleExtender = new MetroFramework.Components.MetroStyleExtender(this.components);
-            this.btnPreview = new MetroFramework.Controls.MetroButton();
             this.groupBox1.SuspendLayout();
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.selectedImage)).BeginInit();
@@ -187,6 +187,20 @@ namespace ARES
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Avatar/World Info";
+            // 
+            // btnPreview
+            // 
+            this.btnPreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnPreview.FontSize = MetroFramework.MetroButtonSize.Tall;
+            this.btnPreview.Location = new System.Drawing.Point(6, 562);
+            this.btnPreview.Name = "btnPreview";
+            this.btnPreview.Size = new System.Drawing.Size(258, 35);
+            this.btnPreview.TabIndex = 52;
+            this.btnPreview.Text = "Preview VRCA";
+            this.btnPreview.UseSelectable = true;
+            this.btnPreview.UseStyleColors = true;
+            this.btnPreview.Click += new System.EventHandler(this.btnPreview_Click);
             // 
             // btnDownload
             // 
@@ -304,6 +318,7 @@ namespace ARES
             this.selectedImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.selectedImage.TabIndex = 0;
             this.selectedImage.TabStop = false;
+            this.selectedImage.DoubleClick += new System.EventHandler(this.selectedImage_DoubleClick);
             // 
             // nmThread
             // 
@@ -380,8 +395,8 @@ namespace ARES
             this.mTabMain.Controls.Add(this.btnToggleFavorite);
             this.mTabMain.Controls.Add(this.btnSearchFavorites);
             this.mTabMain.Controls.Add(this.btnBrowserView);
-            this.mTabMain.Controls.Add(this.metroLabel7);
-            this.mTabMain.Controls.Add(this.metroLabel6);
+            this.mTabMain.Controls.Add(this.lblQuestVersion);
+            this.mTabMain.Controls.Add(this.lblPCVersion);
             this.mTabMain.Controls.Add(this.cbLimit);
             this.mTabMain.Controls.Add(this.txtSearchTerm);
             this.mTabMain.Controls.Add(this.nmQuestVersion);
@@ -398,11 +413,11 @@ namespace ARES
             this.mTabMain.Controls.Add(this.chkPrivate);
             this.mTabMain.Controls.Add(this.chkPublic);
             this.mTabMain.Controls.Add(this.lblAvatarCount);
-            this.mTabMain.Controls.Add(this.metroLabel4);
+            this.mTabMain.Controls.Add(this.lblCount);
             this.mTabMain.Controls.Add(this.flowAvatars);
-            this.mTabMain.Controls.Add(this.metroLabel3);
-            this.mTabMain.Controls.Add(this.metroLabel2);
-            this.mTabMain.Controls.Add(this.metroLabel1);
+            this.mTabMain.Controls.Add(this.lblFilter);
+            this.mTabMain.Controls.Add(this.lblSearchType);
+            this.mTabMain.Controls.Add(this.lblSearchTerm);
             this.mTabMain.HorizontalScrollbarBarColor = true;
             this.mTabMain.HorizontalScrollbarHighlightOnWheel = false;
             this.mTabMain.HorizontalScrollbarSize = 10;
@@ -480,31 +495,31 @@ namespace ARES
             this.btnBrowserView.UseStyleColors = true;
             this.btnBrowserView.Click += new System.EventHandler(this.btnBrowserView_Click);
             // 
-            // metroLabel7
+            // lblQuestVersion
             // 
-            this.metroLabel7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.metroLabel7.AutoSize = true;
-            this.metroLabel7.FontSize = MetroFramework.MetroLabelSize.Tall;
-            this.metroLabel7.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.metroLabel7.Location = new System.Drawing.Point(158, 534);
-            this.metroLabel7.Name = "metroLabel7";
-            this.metroLabel7.Size = new System.Drawing.Size(130, 25);
-            this.metroLabel7.TabIndex = 49;
-            this.metroLabel7.Text = "Quest Version";
-            this.metroLabel7.UseStyleColors = true;
+            this.lblQuestVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblQuestVersion.AutoSize = true;
+            this.lblQuestVersion.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.lblQuestVersion.FontWeight = MetroFramework.MetroLabelWeight.Bold;
+            this.lblQuestVersion.Location = new System.Drawing.Point(158, 534);
+            this.lblQuestVersion.Name = "lblQuestVersion";
+            this.lblQuestVersion.Size = new System.Drawing.Size(130, 25);
+            this.lblQuestVersion.TabIndex = 49;
+            this.lblQuestVersion.Text = "Quest Version";
+            this.lblQuestVersion.UseStyleColors = true;
             // 
-            // metroLabel6
+            // lblPCVersion
             // 
-            this.metroLabel6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.metroLabel6.AutoSize = true;
-            this.metroLabel6.FontSize = MetroFramework.MetroLabelSize.Tall;
-            this.metroLabel6.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.metroLabel6.Location = new System.Drawing.Point(10, 534);
-            this.metroLabel6.Name = "metroLabel6";
-            this.metroLabel6.Size = new System.Drawing.Size(102, 25);
-            this.metroLabel6.TabIndex = 48;
-            this.metroLabel6.Text = "PC Version";
-            this.metroLabel6.UseStyleColors = true;
+            this.lblPCVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblPCVersion.AutoSize = true;
+            this.lblPCVersion.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.lblPCVersion.FontWeight = MetroFramework.MetroLabelWeight.Bold;
+            this.lblPCVersion.Location = new System.Drawing.Point(10, 534);
+            this.lblPCVersion.Name = "lblPCVersion";
+            this.lblPCVersion.Size = new System.Drawing.Size(102, 25);
+            this.lblPCVersion.TabIndex = 48;
+            this.lblPCVersion.Text = "PC Version";
+            this.lblPCVersion.UseStyleColors = true;
             // 
             // cbLimit
             // 
@@ -726,53 +741,53 @@ namespace ARES
             this.lblAvatarCount.Text = "0";
             this.lblAvatarCount.UseStyleColors = true;
             // 
-            // metroLabel4
+            // lblCount
             // 
-            this.metroLabel4.AutoSize = true;
-            this.metroLabel4.FontSize = MetroFramework.MetroLabelSize.Tall;
-            this.metroLabel4.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.metroLabel4.Location = new System.Drawing.Point(9, 139);
-            this.metroLabel4.Name = "metroLabel4";
-            this.metroLabel4.Size = new System.Drawing.Size(68, 25);
-            this.metroLabel4.TabIndex = 34;
-            this.metroLabel4.Text = "Count:";
-            this.metroLabel4.UseStyleColors = true;
+            this.lblCount.AutoSize = true;
+            this.lblCount.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.lblCount.FontWeight = MetroFramework.MetroLabelWeight.Bold;
+            this.lblCount.Location = new System.Drawing.Point(9, 139);
+            this.lblCount.Name = "lblCount";
+            this.lblCount.Size = new System.Drawing.Size(68, 25);
+            this.lblCount.TabIndex = 34;
+            this.lblCount.Text = "Count:";
+            this.lblCount.UseStyleColors = true;
             // 
-            // metroLabel3
+            // lblFilter
             // 
-            this.metroLabel3.AutoSize = true;
-            this.metroLabel3.FontSize = MetroFramework.MetroLabelSize.Tall;
-            this.metroLabel3.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.metroLabel3.Location = new System.Drawing.Point(9, 103);
-            this.metroLabel3.Name = "metroLabel3";
-            this.metroLabel3.Size = new System.Drawing.Size(61, 25);
-            this.metroLabel3.TabIndex = 33;
-            this.metroLabel3.Text = "Filter:";
-            this.metroLabel3.UseStyleColors = true;
+            this.lblFilter.AutoSize = true;
+            this.lblFilter.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.lblFilter.FontWeight = MetroFramework.MetroLabelWeight.Bold;
+            this.lblFilter.Location = new System.Drawing.Point(9, 103);
+            this.lblFilter.Name = "lblFilter";
+            this.lblFilter.Size = new System.Drawing.Size(61, 25);
+            this.lblFilter.TabIndex = 33;
+            this.lblFilter.Text = "Filter:";
+            this.lblFilter.UseStyleColors = true;
             // 
-            // metroLabel2
+            // lblSearchType
             // 
-            this.metroLabel2.AutoSize = true;
-            this.metroLabel2.FontSize = MetroFramework.MetroLabelSize.Tall;
-            this.metroLabel2.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.metroLabel2.Location = new System.Drawing.Point(9, 59);
-            this.metroLabel2.Name = "metroLabel2";
-            this.metroLabel2.Size = new System.Drawing.Size(120, 25);
-            this.metroLabel2.TabIndex = 32;
-            this.metroLabel2.Text = "Search Type:";
-            this.metroLabel2.UseStyleColors = true;
+            this.lblSearchType.AutoSize = true;
+            this.lblSearchType.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.lblSearchType.FontWeight = MetroFramework.MetroLabelWeight.Bold;
+            this.lblSearchType.Location = new System.Drawing.Point(9, 59);
+            this.lblSearchType.Name = "lblSearchType";
+            this.lblSearchType.Size = new System.Drawing.Size(120, 25);
+            this.lblSearchType.TabIndex = 32;
+            this.lblSearchType.Text = "Search Type:";
+            this.lblSearchType.UseStyleColors = true;
             // 
-            // metroLabel1
+            // lblSearchTerm
             // 
-            this.metroLabel1.AutoSize = true;
-            this.metroLabel1.FontSize = MetroFramework.MetroLabelSize.Tall;
-            this.metroLabel1.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.metroLabel1.Location = new System.Drawing.Point(9, 15);
-            this.metroLabel1.Name = "metroLabel1";
-            this.metroLabel1.Size = new System.Drawing.Size(121, 25);
-            this.metroLabel1.TabIndex = 31;
-            this.metroLabel1.Text = "Search Term:";
-            this.metroLabel1.UseStyleColors = true;
+            this.lblSearchTerm.AutoSize = true;
+            this.lblSearchTerm.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.lblSearchTerm.FontWeight = MetroFramework.MetroLabelWeight.Bold;
+            this.lblSearchTerm.Location = new System.Drawing.Point(9, 15);
+            this.lblSearchTerm.Name = "lblSearchTerm";
+            this.lblSearchTerm.Size = new System.Drawing.Size(121, 25);
+            this.lblSearchTerm.TabIndex = 31;
+            this.lblSearchTerm.Text = "Search Term:";
+            this.lblSearchTerm.UseStyleColors = true;
             // 
             // mTabSettings
             // 
@@ -1844,20 +1859,6 @@ namespace ARES
             // 
             this.metroStyleExtender.Theme = MetroFramework.MetroThemeStyle.Dark;
             // 
-            // btnPreview
-            // 
-            this.btnPreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnPreview.FontSize = MetroFramework.MetroButtonSize.Tall;
-            this.btnPreview.Location = new System.Drawing.Point(6, 562);
-            this.btnPreview.Name = "btnPreview";
-            this.btnPreview.Size = new System.Drawing.Size(258, 35);
-            this.btnPreview.TabIndex = 52;
-            this.btnPreview.Text = "Preview VRCA";
-            this.btnPreview.UseSelectable = true;
-            this.btnPreview.UseStyleColors = true;
-            this.btnPreview.Click += new System.EventHandler(this.btnPreview_Click);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1875,6 +1876,7 @@ namespace ARES
             this.Theme = MetroFramework.MetroThemeStyle.Default;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Ares_Close);
             this.Load += new System.EventHandler(this.Main_Load);
+            this.Shown += new System.EventHandler(this.Main_Shown);
             this.groupBox1.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.selectedImage)).EndInit();
@@ -1901,47 +1903,13 @@ namespace ARES
         }
 
         #endregion
-        private System.Windows.Forms.FlowLayoutPanel flowAvatars;
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.PictureBox selectedImage;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
-        private System.Windows.Forms.NumericUpDown nmPcVersion;
-        private System.Windows.Forms.NumericUpDown nmQuestVersion;
         private System.Windows.Forms.NumericUpDown nmThread;
         private System.Windows.Forms.PictureBox pbRipped;
-        private MetroFramework.Controls.MetroTabControl mTab;
-        private MetroFramework.Controls.MetroTabPage mTabMain;
-        private MetroFramework.Controls.MetroTabPage mTabSettings;
-        private MetroFramework.Controls.MetroTabPage metroTabPage2;
-        private MetroFramework.Controls.MetroLabel lblAvatarCount;
-        private MetroFramework.Controls.MetroLabel metroLabel4;
-        private MetroFramework.Controls.MetroLabel metroLabel3;
-        private MetroFramework.Controls.MetroLabel metroLabel2;
-        private MetroFramework.Controls.MetroLabel metroLabel1;
-        private MetroFramework.Controls.MetroCheckBox chkQuest;
-        private MetroFramework.Controls.MetroCheckBox chkPC;
-        private MetroFramework.Controls.MetroCheckBox chkPrivate;
-        private MetroFramework.Controls.MetroCheckBox chkPublic;
-        private MetroFramework.Controls.MetroTabPage metroTabPage3;
-        private MetroFramework.Controls.MetroComboBox cbSearchTerm;
-        private MetroFramework.Controls.MetroButton btnSearch;
-        private MetroFramework.Controls.MetroButton btnStopSearch;
-        private MetroFramework.Controls.MetroButton btnSearchLocal;
-        private MetroFramework.Controls.MetroButton btnRipped;
-        private MetroFramework.Controls.MetroButton btnUnity;
-        private MetroFramework.Controls.MetroButton btnHotswap;
-        private MetroFramework.Controls.MetroComboBox cbLimit;
-        private MetroFramework.Controls.MetroTextBox txtSearchTerm;
         private MetroFramework.Controls.MetroLabel metroLabel5;
         public MetroFramework.Controls.MetroTextBox txtConsole;
-        private MetroFramework.Controls.MetroButton btnCopy;
-        private MetroFramework.Controls.MetroComboBox cbCopy;
         public MetroFramework.Controls.MetroTextBox txtAvatarInfo;
-        private MetroFramework.Controls.MetroButton btnBrowserView;
-        private MetroFramework.Controls.MetroLabel metroLabel7;
-        private MetroFramework.Controls.MetroLabel metroLabel6;
-        private MetroFramework.Controls.MetroButton btnDownload;
         private MetroFramework.Controls.MetroLabel metroLabel8;
         private MetroFramework.Controls.MetroButton btnScan;
         private MetroFramework.Controls.MetroButton btnExtractVRCA;
@@ -1992,22 +1960,56 @@ namespace ARES
         private MetroFramework.Controls.MetroCheckBox cbAutoUpdate;
         public MetroFramework.Controls.MetroTextBox txtApiKey;
         private MetroFramework.Controls.MetroLabel metroLabel15;
-        private MetroFramework.Controls.MetroButton btnToggleFavorite;
-        private MetroFramework.Controls.MetroButton btnSearchFavorites;
-        private MetroFramework.Controls.MetroTabPage mtAvatar;
         private MetroFramework.Controls.MetroButton btnAddComment;
         private MetroFramework.Controls.MetroTextBox txtComment;
         private System.Windows.Forms.DataGridView dgCommentTable;
         private System.Windows.Forms.DataGridViewTextBoxColumn ID;
         private System.Windows.Forms.DataGridViewTextBoxColumn Date;
         private System.Windows.Forms.DataGridViewTextBoxColumn Comment;
-        private MetroFramework.Controls.MetroCheckBox chkPin;
-        private MetroFramework.Controls.MetroButton btnResetScene;
         private MetroFramework.Controls.MetroLabel lblPrivate;
         private MetroFramework.Controls.MetroLabel metroLabel19;
         private MetroFramework.Controls.MetroLabel lblPublic;
         private MetroFramework.Controls.MetroLabel metroLabel17;
-        private MetroFramework.Controls.MetroButton btnPreview;
+        public System.Windows.Forms.FlowLayoutPanel flowAvatars;
+        public System.Windows.Forms.GroupBox groupBox1;
+        public System.Windows.Forms.PictureBox selectedImage;
+        public System.Windows.Forms.NumericUpDown nmPcVersion;
+        public System.Windows.Forms.NumericUpDown nmQuestVersion;
+        public MetroFramework.Controls.MetroTabControl mTab;
+        public MetroFramework.Controls.MetroLabel lblAvatarCount;
+        public MetroFramework.Controls.MetroLabel lblCount;
+        public MetroFramework.Controls.MetroLabel lblFilter;
+        public MetroFramework.Controls.MetroLabel lblSearchType;
+        public MetroFramework.Controls.MetroLabel lblSearchTerm;
+        public MetroFramework.Controls.MetroCheckBox chkQuest;
+        public MetroFramework.Controls.MetroCheckBox chkPC;
+        public MetroFramework.Controls.MetroCheckBox chkPrivate;
+        public MetroFramework.Controls.MetroCheckBox chkPublic;
+        public MetroFramework.Controls.MetroComboBox cbSearchTerm;
+        public MetroFramework.Controls.MetroButton btnSearch;
+        public MetroFramework.Controls.MetroButton btnStopSearch;
+        public MetroFramework.Controls.MetroButton btnSearchLocal;
+        public MetroFramework.Controls.MetroButton btnRipped;
+        public MetroFramework.Controls.MetroButton btnUnity;
+        public MetroFramework.Controls.MetroButton btnHotswap;
+        public MetroFramework.Controls.MetroComboBox cbLimit;
+        public MetroFramework.Controls.MetroTextBox txtSearchTerm;
+        public MetroFramework.Controls.MetroButton btnCopy;
+        public MetroFramework.Controls.MetroComboBox cbCopy;
+        public MetroFramework.Controls.MetroButton btnBrowserView;
+        public MetroFramework.Controls.MetroLabel lblQuestVersion;
+        public MetroFramework.Controls.MetroLabel lblPCVersion;
+        public MetroFramework.Controls.MetroButton btnDownload;
+        public MetroFramework.Controls.MetroButton btnToggleFavorite;
+        public MetroFramework.Controls.MetroButton btnSearchFavorites;
+        public MetroFramework.Controls.MetroCheckBox chkPin;
+        public MetroFramework.Controls.MetroButton btnResetScene;
+        public MetroFramework.Controls.MetroButton btnPreview;
+        public MetroFramework.Controls.MetroTabPage mTabMain;
+        public MetroFramework.Controls.MetroTabPage mTabSettings;
+        public MetroFramework.Controls.MetroTabPage metroTabPage2;
+        public MetroFramework.Controls.MetroTabPage metroTabPage3;
+        public MetroFramework.Controls.MetroTabPage mtAvatar;
     }
 }
 

@@ -12,6 +12,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
+using ARES.Language;
 using ARES.Models;
 using ARES.Modules;
 using ARES.Properties;
@@ -159,6 +160,7 @@ namespace ARES
             CoreFunctions = new CoreFunctions();
             IniFile = new IniFile();
             GenerateHtml = new GenerateHtml();
+            
             mTab.SelectedIndex = 0;
             mTabMain.Show();
             txtAbout.Text = Resources.txtAbout;
@@ -240,17 +242,6 @@ namespace ARES
 
             cbSearchTerm.SelectedIndex = 0;
             cbVersionUnity.SelectedIndex = 0;
-
-
-//            var pluginCheck = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).Replace("GUI", "");
-//            if (!File.Exists(pluginCheck + @"\Plugins\ARESPlugin.dll") && _apiEnabled)
-//            {
-//                btnSearch.Enabled = false;
-//#if DEBUG
-//                btnSearch.Enabled = true;
-//                btnHotswap.Enabled = true;
-//#endif
-//            }
 
             MessageBoxManager.Yes = "PC";
             MessageBoxManager.No = "Quest";
@@ -729,14 +720,14 @@ namespace ARES
             if (fileName == "custom.vrca") fileName = filePath + @"\custom.vrca";
             if (_selectedAvatar.AuthorName != "VRCA")
             {
-                if (_selectedAvatar.PCAssetURL != "None" && _selectedAvatar.QUESTAssetURL != "None" && _selectedAvatar.PCAssetURL != null && _selectedAvatar.QUESTAssetURL != null)
+                if (_selectedAvatar.PCAssetURL.ToLower() != "none" && _selectedAvatar.QUESTAssetURL.ToLower() != "none" && _selectedAvatar.PCAssetURL != null && _selectedAvatar.QUESTAssetURL != null)
                 {
                     var dlgResult = MessageBox.Show("Select which version to download", "VRCA Select",
                         MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
                     if (dlgResult == DialogResult.No)
                     {
-                        if (_selectedAvatar.QUESTAssetURL != "None")
+                        if (_selectedAvatar.QUESTAssetURL.ToLower() != "none")
                         {
                             try
                             {
@@ -755,7 +746,7 @@ namespace ARES
                     }
                     else if (dlgResult == DialogResult.Yes)
                     {
-                        if (_selectedAvatar.PCAssetURL != "None")
+                        if (_selectedAvatar.PCAssetURL.ToLower() != "none")
                         {
                             try
                             {
@@ -777,7 +768,7 @@ namespace ARES
                         return false;
                     }
                 }
-                else if (_selectedAvatar.PCAssetURL != "None" && _selectedAvatar.PCAssetURL != null)
+                else if (_selectedAvatar.PCAssetURL.ToLower() != "none" && _selectedAvatar.PCAssetURL != null)
                 {
                     try
                     {
@@ -787,7 +778,7 @@ namespace ARES
                     }
                     catch { DownloadFile(_selectedAvatar.PCAssetURL, fileName); }
                 }
-                else if (_selectedAvatar.QUESTAssetURL != "None" && _selectedAvatar.QUESTAssetURL != null)
+                else if (_selectedAvatar.QUESTAssetURL.ToLower() != "none" && _selectedAvatar.QUESTAssetURL != null)
                 {
                     try
                     {
@@ -849,7 +840,7 @@ namespace ARES
                     if (!Directory.Exists(folderExtractLocation)) Directory.CreateDirectory(folderExtractLocation);
                     var commands =
                         string.Format(
-                            "/C AssetRipperConsole.exe \"{2}\" \"{3}\\AssetRipperConsole_win64\\{0}\" -o \"{1}\" -q ",
+                            "/C AssetRipper.exe \"{2}\" \"{3}\\AssetRipperConsole_win64\\{0}\" -o \"{1}\" -q ",
                             unityVersion, folderExtractLocation, filePath + @"\custom.vrca", filePath);
 
                     var p = new Process();
@@ -934,7 +925,7 @@ namespace ARES
                     if (!Directory.Exists(folderExtractLocation)) Directory.CreateDirectory(folderExtractLocation);
                     var commands =
                         string.Format(
-                            "/C AssetRipperConsole.exe \"{2}\" \"{3}\\AssetRipperConsole_win64\\{0}\" -o \"{1}\" -q ",
+                            "/C AssetRipper.exe \"{2}\" \"{3}\\AssetRipperConsole_win64\\{0}\" -o \"{1}\" -q ",
                             unityVersion, folderExtractLocation, filePath + @"\custom.vrcw", filePath);
 
                     var p = new Process();
@@ -2393,6 +2384,21 @@ namespace ARES
             }
 
             
+        }
+
+        private void Main_Shown(object sender, EventArgs e)
+        {
+            Words.SetLanguage("English");
+            Words.LoadTabNames(this);
+            Words.LoadMainTabLang(this);
+        }
+
+        private void selectedImage_DoubleClick(object sender, EventArgs e)
+        {
+            if(_selectedAvatar != null)
+            {
+                System.Diagnostics.Process.Start(_selectedAvatar.ImageURL);
+            }
         }
     }
 }

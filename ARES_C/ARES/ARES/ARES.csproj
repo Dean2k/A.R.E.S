@@ -80,7 +80,7 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="System" />
+    <Reference Include="System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -119,6 +119,7 @@
     <Compile Include="HotswapConsole.Designer.cs">
       <DependentUpon>HotswapConsole.cs</DependentUpon>
     </Compile>
+    <Compile Include="Language\Words.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -269,25 +270,7 @@
     <None Include="AssetViewer\AssetViewer_Data\boot.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="AssetViewer\AssetViewer_Data\globalgamemanagers">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="AssetViewer\AssetViewer_Data\globalgamemanagers.assets">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="AssetViewer\AssetViewer_Data\level0">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="AssetViewer\AssetViewer_Data\level0.resS">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="AssetViewer\AssetViewer_Data\Resources\unity default resources">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="AssetViewer\AssetViewer_Data\Resources\unity_builtin_extra">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="AssetViewer\AssetViewer_Data\sharedassets0.assets">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="AssetViewer\MonoBleedingEdge\etc\mono\2.0\Browsers\Compat.browser">
@@ -542,7 +525,7 @@
     <Content Include="AssetRipperConsole_win64\2019DLLnew\VRCSDKBase.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="AssetRipperConsole_win64\AssetRipperConsole.exe">
+    <Content Include="AssetRipperConsole_win64\AssetRipper.exe">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="AssetRipperConsole_win64\capstone.dll">
@@ -579,9 +562,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="AssetViewer\AssetViewer_Data\Managed\Assembly-CSharp.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="AssetViewer\AssetViewer_Data\Managed\Assembly-CSharp.pdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="AssetViewer\AssetViewer_Data\Managed\Mono.Security.dll">
@@ -656,13 +636,7 @@
     <Content Include="AssetViewer\AssetViewer_Data\Managed\Unity.TextMeshPro.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="AssetViewer\AssetViewer_Data\Managed\Unity.TextMeshPro.pdb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="AssetViewer\AssetViewer_Data\Managed\Unity.Timeline.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="AssetViewer\AssetViewer_Data\Managed\Unity.Timeline.pdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="AssetViewer\AssetViewer_Data\Managed\UnityEngine.AccessibilityModule.dll">
@@ -792,9 +766,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="AssetViewer\AssetViewer_Data\Managed\UnityEngine.UI.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="AssetViewer\AssetViewer_Data\Managed\UnityEngine.UI.pdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="AssetViewer\AssetViewer_Data\Managed\UnityEngine.UIElementsModule.dll">
