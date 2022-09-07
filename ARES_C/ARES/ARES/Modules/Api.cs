@@ -169,12 +169,14 @@ namespace ARES.Modules
             return item;
         }
 
-        public RootClass GetVersions(string url)
+        public RootClass GetVersions(string url, string authKey)
         {
             using (WebClient webClient = new WebClient())
             {
                 //Needs a useragent to be able to view images.
-                webClient.Headers.Add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36");
+                webClient.Headers.Add("user-agent",
+                        "UnityPlayer/2019.4.31f1 (UnityWebRequest/1.0, libcurl/7.75.0-DEV)");
+                webClient.Headers.Add("Cookie", $"auth={authKey}");
                 try
                 {
                     string web = webClient.DownloadString(url);

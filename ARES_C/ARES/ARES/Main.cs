@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using ARES.Language;
 using ARES.Models;
@@ -20,7 +21,11 @@ using MetroFramework;
 using MetroFramework.Forms;
 using Microsoft.Win32;
 using Newtonsoft.Json;
+using VRChat.API.Api;
+using VRChat.API.Client;
+using VRChat.API.Model;
 using YamlDotNet.Core.Events;
+using File = System.IO.File;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 using SaveFileDialog = System.Windows.Forms.SaveFileDialog;
 
@@ -69,6 +74,7 @@ namespace ARES
         public WorldClass SelectedWorld;
         public string UnityPath;
         public string Version = "";
+        public static string AuthKey = "";
 
         public Main()
         {
@@ -137,6 +143,27 @@ namespace ARES
                 ApiGrab.ApiKey = IniFile.Read("apiKey");
             }
 
+            if (IniFile.KeyExists("VRCUsername"))
+            {
+                txtVRCUsername.Text = IniFile.Read("VRCUsername");
+            }
+            if (IniFile.KeyExists("VRCPassword"))
+            {
+                txtVRCPassword.Text = IniFile.Read("VRCPassword");
+            }
+
+            if(!string.IsNullOrEmpty(txtVRCPassword.Text) && !string.IsNullOrEmpty(txtVRCPassword.Text))
+            {
+                Configuration Config = new Configuration();
+                Config.Username = txtVRCUsername.Text;
+                Config.Password = txtVRCPassword.Text;
+                AuthenticationApi AuthApi = new AuthenticationApi(Config);
+                SystemApi systemApi = new SystemApi(Config);
+                VRChat.API.Model.CurrentUser CurrentUser = AuthApi.GetCurrentUser();
+                VerifyAuthTokenResult result = AuthApi.VerifyAuthToken();
+                AuthKey = result.Token;
+            }
+
             if (!IniFile.KeyExists("unity"))
             {
                 UnitySetup();
@@ -160,7 +187,7 @@ namespace ARES
             CoreFunctions = new CoreFunctions();
             IniFile = new IniFile();
             GenerateHtml = new GenerateHtml();
-            
+
             mTab.SelectedIndex = 0;
             mTabMain.Show();
             txtAbout.Text = Resources.txtAbout;
@@ -567,23 +594,28 @@ namespace ARES
 
         private void DoubleClickLoad(object sender, EventArgs e)
         {
-            if(_selectedAvatar != null)
+            if (_selectedAvatar != null)
             {
                 Clipboard.SetText(_selectedAvatar.AvatarID);
             }
         }
 
         private void LoadInfo(object sender, EventArgs e)
-        {
+        { 
+            if(AuthKey == "")
+            {
+                MessageBox.Show("please enter VRC Details on Settings page");
+                return;
+            }
             var img = (Label)sender;
             if (_selectedAvatar != null)
             {
-                if(_selectedAvatar.AvatarID == img.Name)
+                if (_selectedAvatar.AvatarID == img.Name)
                 {
                     return;
                 }
             }
-            
+
             _selectedAvatar = _avatarList.Find(x => x.AvatarID == img.Name);
             txtAvatarInfo.Text = CoreFunctions.SetAvatarInfo(_selectedAvatar);
 
@@ -598,7 +630,7 @@ namespace ARES
                     var version = _selectedAvatar.PCAssetURL?.Split('/');
                     var urlCheck =
                         _selectedAvatar.PCAssetURL.Replace(version[6] + "/" + version[7] + "/file", version[6]);
-                    var versionList = ApiGrab.GetVersions(urlCheck);
+                    var versionList = ApiGrab.GetVersions(urlCheck, AuthKey);
                     nmPcVersion.Value = Convert.ToInt32(versionList.versions.LastOrDefault().version);
                 }
                 catch
@@ -618,7 +650,7 @@ namespace ARES
                     var version = _selectedAvatar.QUESTAssetURL.Split('/');
                     var urlCheck =
                         _selectedAvatar.QUESTAssetURL.Replace(version[6] + "/" + version[7] + "/file", version[6]);
-                    var versionList = ApiGrab.GetVersions(urlCheck);
+                    var versionList = ApiGrab.GetVersions(urlCheck, AuthKey);
                     nmQuestVersion.Value = Convert.ToInt32(versionList.versions.LastOrDefault().version);
                 }
                 catch
@@ -657,6 +689,11 @@ namespace ARES
 
         private void btnDownload_Click(object sender, EventArgs e)
         {
+            if (AuthKey == "")
+            {
+                MessageBox.Show("please enter VRC Details on Settings page");
+                return;
+            }
             if (!string.IsNullOrEmpty(txtAvatarInfo.Text))
             {
 
@@ -965,7 +1002,8 @@ namespace ARES
                 try
                 {
                     client.Headers.Add("user-agent",
-                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36");
+                        "UnityPlayer/2019.4.31f1 (UnityWebRequest/1.0, libcurl/7.75.0-DEV)");
+                    client.Headers.Add("Cookie", $"auth={AuthKey}");
                     client.DownloadFile(url, saveName);
                 }
                 catch (Exception ex)
@@ -1038,6 +1076,11 @@ namespace ARES
 
         private void btnHotswap_Click(object sender, EventArgs e)
         {
+            if (AuthKey == "")
+            {
+                MessageBox.Show("please enter VRC Details on Settings page");
+                return;
+            }
             if (_vrcaThread != null)
                 if (_vrcaThread.IsAlive)
                 {
@@ -1830,15 +1873,7 @@ namespace ARES
 
         private void mTab_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (mTab.SelectedIndex == 1)
-            {
-                LoadConfig();
-                if (config != null)
-                    SetCheckBoxes();
-                else
-                    ConfigBox.Visible = false;
-                _loading = false;
-            }
+
         }
 
         private void LoadConfig()
@@ -1853,22 +1888,6 @@ namespace ARES
             }
         }
 
-        private void SetCheckBoxes()
-        {
-            cbConsoleError.Checked = config.ConsoleError;
-            cbStealth.Checked = config.Stealth;
-            cbHWIDSpoof.Checked = config.HWIDSpoof;
-            cbLogAvatars.Checked = config.LogAvatars;
-            cbLogFriendsAvatars.Checked = config.LogFriendsAvatars;
-            cbLogOwnAvatars.Checked = config.LogOwnAvatars;
-            cbLogPrivateAvatars.Checked = config.LogPrivateAvatars;
-            cbLogPublicAvatars.Checked = config.LogPublicAvatars;
-            cbLogToConsole.Checked = config.LogToConsole;
-            cbLogWorlds.Checked = config.LogWorlds;
-            cbCustomNameplates.Checked = config.CustomNameplates;
-            cbAutoUpdate.Checked = config.AutoUpdate;
-        }
-
         private void WriteConfig()
         {
             if (!_loading)
@@ -1876,72 +1895,6 @@ namespace ARES
                 var json = JsonConvert.SerializeObject(config);
                 File.WriteAllText(_fileLocation, json);
             }
-        }
-
-        private void cbUnlimitedFavorites_CheckedChanged(object sender, EventArgs e)
-        {
-            config.CustomNameplates = cbCustomNameplates.Checked;
-            WriteConfig();
-        }
-
-        private void cbStealth_CheckedChanged(object sender, EventArgs e)
-        {
-            config.Stealth = cbStealth.Checked;
-            WriteConfig();
-        }
-
-        private void cbLogAvatars_CheckedChanged(object sender, EventArgs e)
-        {
-            config.LogAvatars = cbLogAvatars.Checked;
-            WriteConfig();
-        }
-
-        private void cbLogWorlds_CheckedChanged(object sender, EventArgs e)
-        {
-            config.LogWorlds = cbLogWorlds.Checked;
-            WriteConfig();
-        }
-
-        private void cbLogFriendsAvatars_CheckedChanged(object sender, EventArgs e)
-        {
-            config.LogFriendsAvatars = cbLogFriendsAvatars.Checked;
-            WriteConfig();
-        }
-
-        private void cbLogOwnAvatars_CheckedChanged(object sender, EventArgs e)
-        {
-            config.LogOwnAvatars = cbLogOwnAvatars.Checked;
-            WriteConfig();
-        }
-
-        private void cbLogPublicAvatars_CheckedChanged(object sender, EventArgs e)
-        {
-            config.LogPublicAvatars = cbLogPublicAvatars.Checked;
-            WriteConfig();
-        }
-
-        private void cbLogPrivateAvatars_CheckedChanged(object sender, EventArgs e)
-        {
-            config.LogPrivateAvatars = cbLogPrivateAvatars.Checked;
-            WriteConfig();
-        }
-
-        private void cbLogToConsole_CheckedChanged(object sender, EventArgs e)
-        {
-            config.LogToConsole = cbLogToConsole.Checked;
-            WriteConfig();
-        }
-
-        private void cbConsoleError_CheckedChanged(object sender, EventArgs e)
-        {
-            config.ConsoleError = cbConsoleError.Checked;
-            WriteConfig();
-        }
-
-        private void cbHWIDSpoof_CheckedChanged(object sender, EventArgs e)
-        {
-            config.HWIDSpoof = cbHWIDSpoof.Checked;
-            WriteConfig();
         }
 
         private void btnLight_Click(object sender, EventArgs e)
@@ -2348,6 +2301,13 @@ namespace ARES
 
         private void btnPreview_Click(object sender, EventArgs e)
         {
+
+
+            if (AuthKey == "")
+            {
+                MessageBox.Show("please enter VRC Details on Settings page");
+                return;
+            }
             string urlVRCA = null;
             if (_selectedAvatar.PCAssetURL == null)
             {
@@ -2356,12 +2316,15 @@ namespace ARES
             }
             if (_selectedAvatar.PCAssetURL.ToLower() != "none")
             {
+                
+                DownloadVrca(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)+ "\\AvatarPreview.vrca");
                 try
                 {
+                    string commands = string.Format($"-{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\\AvatarPreview.vrca");
                     var version = _selectedAvatar.PCAssetURL.Split('/');
                     version[7] = nmPcVersion.Value.ToString();
                     urlVRCA = string.Join("/", version);
-                    string commands = string.Format("\"-" + urlVRCA + "\"");
+                    //string commands = string.Format("\"-" + urlVRCA + "\"");
 
                     Process p = new Process();
                     ProcessStartInfo psi = new ProcessStartInfo
@@ -2374,7 +2337,7 @@ namespace ARES
                     p.StartInfo = psi;
                     p.Start();
                 }
-                catch {  }
+                catch { }
             }
             else
             {
@@ -2383,22 +2346,37 @@ namespace ARES
                 return;
             }
 
-            
+
         }
 
         private void Main_Shown(object sender, EventArgs e)
         {
-            Words.SetLanguage("English");
-            Words.LoadTabNames(this);
-            Words.LoadMainTabLang(this);
+            //Words.SetLanguage("English");
+            //Words.LoadTabNames(this);
+            //Words.LoadMainTabLang(this);
         }
 
         private void selectedImage_DoubleClick(object sender, EventArgs e)
         {
-            if(_selectedAvatar != null)
+            if (_selectedAvatar != null)
             {
                 System.Diagnostics.Process.Start(_selectedAvatar.ImageURL);
             }
+        }
+
+        private void btnSaveVRC_Click(object sender, EventArgs e)
+        {
+            IniFile.Write("VRCUsername", txtVRCUsername.Text);
+            IniFile.Write("VRCPassword", txtVRCPassword.Text);
+            // Authentication credentials
+            Configuration Config = new Configuration();
+            Config.Username = txtVRCUsername.Text;
+            Config.Password = txtVRCPassword.Text;
+            AuthenticationApi AuthApi = new AuthenticationApi(Config);
+            SystemApi systemApi = new SystemApi(Config);
+            VRChat.API.Model.CurrentUser CurrentUser = AuthApi.GetCurrentUser();
+            VerifyAuthTokenResult result = AuthApi.VerifyAuthToken();
+            AuthKey = result.Token;
         }
     }
 }

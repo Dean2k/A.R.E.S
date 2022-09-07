@@ -86,18 +86,6 @@ namespace ARES
             this.btnLight = new MetroFramework.Controls.MetroButton();
             this.btnUnityLoc = new MetroFramework.Controls.MetroButton();
             this.ConfigBox = new System.Windows.Forms.GroupBox();
-            this.cbAutoUpdate = new MetroFramework.Controls.MetroCheckBox();
-            this.cbCustomNameplates = new MetroFramework.Controls.MetroCheckBox();
-            this.cbHWIDSpoof = new MetroFramework.Controls.MetroCheckBox();
-            this.cbStealth = new MetroFramework.Controls.MetroCheckBox();
-            this.cbConsoleError = new MetroFramework.Controls.MetroCheckBox();
-            this.cbLogAvatars = new MetroFramework.Controls.MetroCheckBox();
-            this.cbLogWorlds = new MetroFramework.Controls.MetroCheckBox();
-            this.cbLogFriendsAvatars = new MetroFramework.Controls.MetroCheckBox();
-            this.cbLogPrivateAvatars = new MetroFramework.Controls.MetroCheckBox();
-            this.cbLogToConsole = new MetroFramework.Controls.MetroCheckBox();
-            this.cbLogPublicAvatars = new MetroFramework.Controls.MetroCheckBox();
-            this.cbLogOwnAvatars = new MetroFramework.Controls.MetroCheckBox();
             this.btnHsbClean = new MetroFramework.Controls.MetroButton();
             this.btnApi = new MetroFramework.Controls.MetroButton();
             this.chkLoadImages = new MetroFramework.Controls.MetroCheckBox();
@@ -139,6 +127,11 @@ namespace ARES
             this.pbRipped = new System.Windows.Forms.PictureBox();
             this.metroStyleManager = new MetroFramework.Components.MetroStyleManager(this.components);
             this.metroStyleExtender = new MetroFramework.Components.MetroStyleExtender(this.components);
+            this.txtVRCUsername = new MetroFramework.Controls.MetroTextBox();
+            this.txtVRCPassword = new MetroFramework.Controls.MetroTextBox();
+            this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
+            this.metroLabel2 = new MetroFramework.Controls.MetroLabel();
+            this.btnSaveVRC = new MetroFramework.Controls.MetroButton();
             this.groupBox1.SuspendLayout();
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.selectedImage)).BeginInit();
@@ -380,7 +373,7 @@ namespace ARES
             this.mTab.ItemSize = new System.Drawing.Size(54, 35);
             this.mTab.Location = new System.Drawing.Point(10, 65);
             this.mTab.Name = "mTab";
-            this.mTab.SelectedIndex = 0;
+            this.mTab.SelectedIndex = 1;
             this.mTab.Size = new System.Drawing.Size(896, 645);
             this.mTab.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             this.mTab.TabIndex = 14;
@@ -1022,212 +1015,18 @@ namespace ARES
             this.ConfigBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ConfigBox.BackColor = System.Drawing.Color.Transparent;
-            this.ConfigBox.Controls.Add(this.cbAutoUpdate);
-            this.ConfigBox.Controls.Add(this.cbCustomNameplates);
-            this.ConfigBox.Controls.Add(this.cbHWIDSpoof);
-            this.ConfigBox.Controls.Add(this.cbStealth);
-            this.ConfigBox.Controls.Add(this.cbConsoleError);
-            this.ConfigBox.Controls.Add(this.cbLogAvatars);
-            this.ConfigBox.Controls.Add(this.cbLogWorlds);
-            this.ConfigBox.Controls.Add(this.cbLogFriendsAvatars);
-            this.ConfigBox.Controls.Add(this.cbLogPrivateAvatars);
-            this.ConfigBox.Controls.Add(this.cbLogToConsole);
-            this.ConfigBox.Controls.Add(this.cbLogPublicAvatars);
-            this.ConfigBox.Controls.Add(this.cbLogOwnAvatars);
+            this.ConfigBox.Controls.Add(this.btnSaveVRC);
+            this.ConfigBox.Controls.Add(this.metroLabel2);
+            this.ConfigBox.Controls.Add(this.metroLabel1);
+            this.ConfigBox.Controls.Add(this.txtVRCPassword);
+            this.ConfigBox.Controls.Add(this.txtVRCUsername);
             this.ConfigBox.ForeColor = System.Drawing.Color.White;
             this.ConfigBox.Location = new System.Drawing.Point(289, 473);
             this.ConfigBox.Name = "ConfigBox";
             this.ConfigBox.Size = new System.Drawing.Size(596, 129);
             this.ConfigBox.TabIndex = 65;
             this.ConfigBox.TabStop = false;
-            this.ConfigBox.Text = "ARES Mod Config";
-            // 
-            // cbAutoUpdate
-            // 
-            this.cbAutoUpdate.AutoSize = true;
-            this.cbAutoUpdate.Checked = true;
-            this.cbAutoUpdate.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbAutoUpdate.FontSize = MetroFramework.MetroCheckBoxSize.Medium;
-            this.cbAutoUpdate.FontWeight = MetroFramework.MetroCheckBoxWeight.Bold;
-            this.cbAutoUpdate.Location = new System.Drawing.Point(395, 94);
-            this.cbAutoUpdate.Name = "cbAutoUpdate";
-            this.cbAutoUpdate.Size = new System.Drawing.Size(162, 19);
-            this.cbAutoUpdate.TabIndex = 65;
-            this.cbAutoUpdate.Text = "Auto Update Plugins";
-            this.cbAutoUpdate.UseSelectable = true;
-            this.cbAutoUpdate.UseStyleColors = true;
-            // 
-            // cbCustomNameplates
-            // 
-            this.cbCustomNameplates.AutoSize = true;
-            this.cbCustomNameplates.FontSize = MetroFramework.MetroCheckBoxSize.Medium;
-            this.cbCustomNameplates.FontWeight = MetroFramework.MetroCheckBoxWeight.Bold;
-            this.cbCustomNameplates.Location = new System.Drawing.Point(6, 19);
-            this.cbCustomNameplates.Name = "cbCustomNameplates";
-            this.cbCustomNameplates.Size = new System.Drawing.Size(159, 19);
-            this.cbCustomNameplates.TabIndex = 51;
-            this.cbCustomNameplates.Text = "Custom Nameplates";
-            this.cbCustomNameplates.UseSelectable = true;
-            this.cbCustomNameplates.UseStyleColors = true;
-            this.cbCustomNameplates.CheckedChanged += new System.EventHandler(this.cbUnlimitedFavorites_CheckedChanged);
-            // 
-            // cbHWIDSpoof
-            // 
-            this.cbHWIDSpoof.AutoSize = true;
-            this.cbHWIDSpoof.FontSize = MetroFramework.MetroCheckBoxSize.Medium;
-            this.cbHWIDSpoof.FontWeight = MetroFramework.MetroCheckBoxWeight.Bold;
-            this.cbHWIDSpoof.Location = new System.Drawing.Point(395, 69);
-            this.cbHWIDSpoof.Name = "cbHWIDSpoof";
-            this.cbHWIDSpoof.Size = new System.Drawing.Size(108, 19);
-            this.cbHWIDSpoof.TabIndex = 61;
-            this.cbHWIDSpoof.Text = "HWID Spoof";
-            this.cbHWIDSpoof.UseSelectable = true;
-            this.cbHWIDSpoof.UseStyleColors = true;
-            this.cbHWIDSpoof.CheckedChanged += new System.EventHandler(this.cbHWIDSpoof_CheckedChanged);
-            // 
-            // cbStealth
-            // 
-            this.cbStealth.AutoSize = true;
-            this.cbStealth.Checked = true;
-            this.cbStealth.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbStealth.FontSize = MetroFramework.MetroCheckBoxSize.Medium;
-            this.cbStealth.FontWeight = MetroFramework.MetroCheckBoxWeight.Bold;
-            this.cbStealth.Location = new System.Drawing.Point(6, 44);
-            this.cbStealth.Name = "cbStealth";
-            this.cbStealth.Size = new System.Drawing.Size(71, 19);
-            this.cbStealth.TabIndex = 52;
-            this.cbStealth.Text = "Stealth";
-            this.cbStealth.UseSelectable = true;
-            this.cbStealth.UseStyleColors = true;
-            this.cbStealth.CheckedChanged += new System.EventHandler(this.cbStealth_CheckedChanged);
-            // 
-            // cbConsoleError
-            // 
-            this.cbConsoleError.AutoSize = true;
-            this.cbConsoleError.Checked = true;
-            this.cbConsoleError.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbConsoleError.FontSize = MetroFramework.MetroCheckBoxSize.Medium;
-            this.cbConsoleError.FontWeight = MetroFramework.MetroCheckBoxWeight.Bold;
-            this.cbConsoleError.Location = new System.Drawing.Point(395, 44);
-            this.cbConsoleError.Name = "cbConsoleError";
-            this.cbConsoleError.Size = new System.Drawing.Size(116, 19);
-            this.cbConsoleError.TabIndex = 64;
-            this.cbConsoleError.Text = "Console Error";
-            this.cbConsoleError.UseSelectable = true;
-            this.cbConsoleError.UseStyleColors = true;
-            this.cbConsoleError.CheckedChanged += new System.EventHandler(this.cbConsoleError_CheckedChanged);
-            // 
-            // cbLogAvatars
-            // 
-            this.cbLogAvatars.AutoSize = true;
-            this.cbLogAvatars.Checked = true;
-            this.cbLogAvatars.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbLogAvatars.FontSize = MetroFramework.MetroCheckBoxSize.Medium;
-            this.cbLogAvatars.FontWeight = MetroFramework.MetroCheckBoxWeight.Bold;
-            this.cbLogAvatars.Location = new System.Drawing.Point(6, 69);
-            this.cbLogAvatars.Name = "cbLogAvatars";
-            this.cbLogAvatars.Size = new System.Drawing.Size(105, 19);
-            this.cbLogAvatars.TabIndex = 53;
-            this.cbLogAvatars.Text = "Log Avatars";
-            this.cbLogAvatars.UseSelectable = true;
-            this.cbLogAvatars.UseStyleColors = true;
-            this.cbLogAvatars.CheckedChanged += new System.EventHandler(this.cbLogAvatars_CheckedChanged);
-            // 
-            // cbLogWorlds
-            // 
-            this.cbLogWorlds.AutoSize = true;
-            this.cbLogWorlds.Checked = true;
-            this.cbLogWorlds.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbLogWorlds.FontSize = MetroFramework.MetroCheckBoxSize.Medium;
-            this.cbLogWorlds.FontWeight = MetroFramework.MetroCheckBoxWeight.Bold;
-            this.cbLogWorlds.Location = new System.Drawing.Point(6, 94);
-            this.cbLogWorlds.Name = "cbLogWorlds";
-            this.cbLogWorlds.Size = new System.Drawing.Size(102, 19);
-            this.cbLogWorlds.TabIndex = 54;
-            this.cbLogWorlds.Text = "Log Worlds";
-            this.cbLogWorlds.UseSelectable = true;
-            this.cbLogWorlds.UseStyleColors = true;
-            this.cbLogWorlds.CheckedChanged += new System.EventHandler(this.cbLogWorlds_CheckedChanged);
-            // 
-            // cbLogFriendsAvatars
-            // 
-            this.cbLogFriendsAvatars.AutoSize = true;
-            this.cbLogFriendsAvatars.Checked = true;
-            this.cbLogFriendsAvatars.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbLogFriendsAvatars.FontSize = MetroFramework.MetroCheckBoxSize.Medium;
-            this.cbLogFriendsAvatars.FontWeight = MetroFramework.MetroCheckBoxWeight.Bold;
-            this.cbLogFriendsAvatars.Location = new System.Drawing.Point(187, 19);
-            this.cbLogFriendsAvatars.Name = "cbLogFriendsAvatars";
-            this.cbLogFriendsAvatars.Size = new System.Drawing.Size(157, 19);
-            this.cbLogFriendsAvatars.TabIndex = 55;
-            this.cbLogFriendsAvatars.Text = "Log Friends Avatars";
-            this.cbLogFriendsAvatars.UseSelectable = true;
-            this.cbLogFriendsAvatars.UseStyleColors = true;
-            this.cbLogFriendsAvatars.CheckedChanged += new System.EventHandler(this.cbLogFriendsAvatars_CheckedChanged);
-            // 
-            // cbLogPrivateAvatars
-            // 
-            this.cbLogPrivateAvatars.AutoSize = true;
-            this.cbLogPrivateAvatars.Checked = true;
-            this.cbLogPrivateAvatars.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbLogPrivateAvatars.FontSize = MetroFramework.MetroCheckBoxSize.Medium;
-            this.cbLogPrivateAvatars.FontWeight = MetroFramework.MetroCheckBoxWeight.Bold;
-            this.cbLogPrivateAvatars.Location = new System.Drawing.Point(187, 94);
-            this.cbLogPrivateAvatars.Name = "cbLogPrivateAvatars";
-            this.cbLogPrivateAvatars.Size = new System.Drawing.Size(157, 19);
-            this.cbLogPrivateAvatars.TabIndex = 63;
-            this.cbLogPrivateAvatars.Text = "Log Private Avatars";
-            this.cbLogPrivateAvatars.UseSelectable = true;
-            this.cbLogPrivateAvatars.UseStyleColors = true;
-            this.cbLogPrivateAvatars.CheckedChanged += new System.EventHandler(this.cbLogPrivateAvatars_CheckedChanged);
-            // 
-            // cbLogToConsole
-            // 
-            this.cbLogToConsole.AutoSize = true;
-            this.cbLogToConsole.Checked = true;
-            this.cbLogToConsole.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbLogToConsole.FontSize = MetroFramework.MetroCheckBoxSize.Medium;
-            this.cbLogToConsole.FontWeight = MetroFramework.MetroCheckBoxWeight.Bold;
-            this.cbLogToConsole.Location = new System.Drawing.Point(395, 19);
-            this.cbLogToConsole.Name = "cbLogToConsole";
-            this.cbLogToConsole.Size = new System.Drawing.Size(127, 19);
-            this.cbLogToConsole.TabIndex = 59;
-            this.cbLogToConsole.Text = "Log To Console";
-            this.cbLogToConsole.UseSelectable = true;
-            this.cbLogToConsole.UseStyleColors = true;
-            this.cbLogToConsole.CheckedChanged += new System.EventHandler(this.cbLogToConsole_CheckedChanged);
-            // 
-            // cbLogPublicAvatars
-            // 
-            this.cbLogPublicAvatars.AutoSize = true;
-            this.cbLogPublicAvatars.Checked = true;
-            this.cbLogPublicAvatars.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbLogPublicAvatars.FontSize = MetroFramework.MetroCheckBoxSize.Medium;
-            this.cbLogPublicAvatars.FontWeight = MetroFramework.MetroCheckBoxWeight.Bold;
-            this.cbLogPublicAvatars.Location = new System.Drawing.Point(187, 69);
-            this.cbLogPublicAvatars.Name = "cbLogPublicAvatars";
-            this.cbLogPublicAvatars.Size = new System.Drawing.Size(150, 19);
-            this.cbLogPublicAvatars.TabIndex = 62;
-            this.cbLogPublicAvatars.Text = "Log Public Avatars";
-            this.cbLogPublicAvatars.UseSelectable = true;
-            this.cbLogPublicAvatars.UseStyleColors = true;
-            this.cbLogPublicAvatars.CheckedChanged += new System.EventHandler(this.cbLogPublicAvatars_CheckedChanged);
-            // 
-            // cbLogOwnAvatars
-            // 
-            this.cbLogOwnAvatars.AutoSize = true;
-            this.cbLogOwnAvatars.Checked = true;
-            this.cbLogOwnAvatars.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbLogOwnAvatars.FontSize = MetroFramework.MetroCheckBoxSize.Medium;
-            this.cbLogOwnAvatars.FontWeight = MetroFramework.MetroCheckBoxWeight.Bold;
-            this.cbLogOwnAvatars.Location = new System.Drawing.Point(187, 44);
-            this.cbLogOwnAvatars.Name = "cbLogOwnAvatars";
-            this.cbLogOwnAvatars.Size = new System.Drawing.Size(139, 19);
-            this.cbLogOwnAvatars.TabIndex = 61;
-            this.cbLogOwnAvatars.Text = "Log Own Avatars";
-            this.cbLogOwnAvatars.UseSelectable = true;
-            this.cbLogOwnAvatars.UseStyleColors = true;
-            this.cbLogOwnAvatars.CheckedChanged += new System.EventHandler(this.cbLogOwnAvatars_CheckedChanged);
+            this.ConfigBox.Text = "VRChat Credientials (Really recommended to use a throw away account)";
             // 
             // btnHsbClean
             // 
@@ -1859,6 +1658,112 @@ namespace ARES
             // 
             this.metroStyleExtender.Theme = MetroFramework.MetroThemeStyle.Dark;
             // 
+            // txtVRCUsername
+            // 
+            // 
+            // 
+            // 
+            this.txtVRCUsername.CustomButton.Image = null;
+            this.txtVRCUsername.CustomButton.Location = new System.Drawing.Point(369, 2);
+            this.txtVRCUsername.CustomButton.Name = "";
+            this.txtVRCUsername.CustomButton.Size = new System.Drawing.Size(27, 27);
+            this.txtVRCUsername.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
+            this.txtVRCUsername.CustomButton.TabIndex = 1;
+            this.txtVRCUsername.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.txtVRCUsername.CustomButton.UseSelectable = true;
+            this.txtVRCUsername.CustomButton.Visible = false;
+            this.txtVRCUsername.FontSize = MetroFramework.MetroTextBoxSize.Medium;
+            this.txtVRCUsername.FontWeight = MetroFramework.MetroTextBoxWeight.Bold;
+            this.txtVRCUsername.Lines = new string[0];
+            this.txtVRCUsername.Location = new System.Drawing.Point(178, 19);
+            this.txtVRCUsername.MaxLength = 1000;
+            this.txtVRCUsername.Name = "txtVRCUsername";
+            this.txtVRCUsername.PasswordChar = '\0';
+            this.txtVRCUsername.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.txtVRCUsername.SelectedText = "";
+            this.txtVRCUsername.SelectionLength = 0;
+            this.txtVRCUsername.SelectionStart = 0;
+            this.txtVRCUsername.ShortcutsEnabled = true;
+            this.txtVRCUsername.Size = new System.Drawing.Size(399, 32);
+            this.txtVRCUsername.TabIndex = 77;
+            this.metroToolTip1.SetToolTip(this.txtVRCUsername, "adding a key will remove the 1k search limit");
+            this.txtVRCUsername.UseSelectable = true;
+            this.txtVRCUsername.UseStyleColors = true;
+            this.txtVRCUsername.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
+            this.txtVRCUsername.WaterMarkFont = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            // 
+            // txtVRCPassword
+            // 
+            // 
+            // 
+            // 
+            this.txtVRCPassword.CustomButton.Image = null;
+            this.txtVRCPassword.CustomButton.Location = new System.Drawing.Point(369, 2);
+            this.txtVRCPassword.CustomButton.Name = "";
+            this.txtVRCPassword.CustomButton.Size = new System.Drawing.Size(27, 27);
+            this.txtVRCPassword.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
+            this.txtVRCPassword.CustomButton.TabIndex = 1;
+            this.txtVRCPassword.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.txtVRCPassword.CustomButton.UseSelectable = true;
+            this.txtVRCPassword.CustomButton.Visible = false;
+            this.txtVRCPassword.FontSize = MetroFramework.MetroTextBoxSize.Medium;
+            this.txtVRCPassword.FontWeight = MetroFramework.MetroTextBoxWeight.Bold;
+            this.txtVRCPassword.Lines = new string[0];
+            this.txtVRCPassword.Location = new System.Drawing.Point(178, 57);
+            this.txtVRCPassword.MaxLength = 1000;
+            this.txtVRCPassword.Name = "txtVRCPassword";
+            this.txtVRCPassword.PasswordChar = '*';
+            this.txtVRCPassword.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.txtVRCPassword.SelectedText = "";
+            this.txtVRCPassword.SelectionLength = 0;
+            this.txtVRCPassword.SelectionStart = 0;
+            this.txtVRCPassword.ShortcutsEnabled = true;
+            this.txtVRCPassword.Size = new System.Drawing.Size(399, 32);
+            this.txtVRCPassword.TabIndex = 78;
+            this.metroToolTip1.SetToolTip(this.txtVRCPassword, "adding a key will remove the 1k search limit");
+            this.txtVRCPassword.UseSelectable = true;
+            this.txtVRCPassword.UseStyleColors = true;
+            this.txtVRCPassword.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
+            this.txtVRCPassword.WaterMarkFont = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            // 
+            // metroLabel1
+            // 
+            this.metroLabel1.AutoSize = true;
+            this.metroLabel1.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.metroLabel1.FontWeight = MetroFramework.MetroLabelWeight.Bold;
+            this.metroLabel1.Location = new System.Drawing.Point(7, 19);
+            this.metroLabel1.Name = "metroLabel1";
+            this.metroLabel1.Size = new System.Drawing.Size(165, 25);
+            this.metroLabel1.TabIndex = 77;
+            this.metroLabel1.Text = "VRChat Username";
+            this.metroLabel1.UseStyleColors = true;
+            // 
+            // metroLabel2
+            // 
+            this.metroLabel2.AutoSize = true;
+            this.metroLabel2.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.metroLabel2.FontWeight = MetroFramework.MetroLabelWeight.Bold;
+            this.metroLabel2.Location = new System.Drawing.Point(7, 64);
+            this.metroLabel2.Name = "metroLabel2";
+            this.metroLabel2.Size = new System.Drawing.Size(160, 25);
+            this.metroLabel2.TabIndex = 79;
+            this.metroLabel2.Text = "VRChat Password";
+            this.metroLabel2.UseStyleColors = true;
+            // 
+            // btnSaveVRC
+            // 
+            this.btnSaveVRC.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSaveVRC.FontSize = MetroFramework.MetroButtonSize.Tall;
+            this.btnSaveVRC.Location = new System.Drawing.Point(492, 91);
+            this.btnSaveVRC.Name = "btnSaveVRC";
+            this.btnSaveVRC.Size = new System.Drawing.Size(85, 35);
+            this.btnSaveVRC.TabIndex = 53;
+            this.btnSaveVRC.Text = "Save";
+            this.btnSaveVRC.UseSelectable = true;
+            this.btnSaveVRC.UseStyleColors = true;
+            this.btnSaveVRC.Click += new System.EventHandler(this.btnSaveVRC_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1922,17 +1827,6 @@ namespace ARES
         private MetroFramework.Controls.MetroLabel metroLabel9;
         private MetroFramework.Controls.MetroComboBox cbVersionUnity;
         private MetroFramework.Controls.MetroButton btnHsbClean;
-        private MetroFramework.Controls.MetroCheckBox cbLogToConsole;
-        private MetroFramework.Controls.MetroCheckBox cbLogFriendsAvatars;
-        private MetroFramework.Controls.MetroCheckBox cbLogWorlds;
-        private MetroFramework.Controls.MetroCheckBox cbLogAvatars;
-        private MetroFramework.Controls.MetroCheckBox cbStealth;
-        private MetroFramework.Controls.MetroCheckBox cbCustomNameplates;
-        private MetroFramework.Controls.MetroCheckBox cbHWIDSpoof;
-        private MetroFramework.Controls.MetroCheckBox cbLogPublicAvatars;
-        private MetroFramework.Controls.MetroCheckBox cbLogOwnAvatars;
-        private MetroFramework.Controls.MetroCheckBox cbLogPrivateAvatars;
-        private MetroFramework.Controls.MetroCheckBox cbConsoleError;
         private System.Windows.Forms.GroupBox ConfigBox;
         private MetroFramework.Controls.MetroLabel lblSize;
         private MetroFramework.Controls.MetroLabel metroLabel10;
@@ -1957,7 +1851,6 @@ namespace ARES
         private MetroFramework.Controls.MetroTextBox txtAvatarOutput;
         private MetroFramework.Controls.MetroButton btnCleanLog;
         private MetroFramework.Controls.MetroCheckBox chkNoImages;
-        private MetroFramework.Controls.MetroCheckBox cbAutoUpdate;
         public MetroFramework.Controls.MetroTextBox txtApiKey;
         private MetroFramework.Controls.MetroLabel metroLabel15;
         private MetroFramework.Controls.MetroButton btnAddComment;
@@ -2010,6 +1903,11 @@ namespace ARES
         public MetroFramework.Controls.MetroTabPage metroTabPage2;
         public MetroFramework.Controls.MetroTabPage metroTabPage3;
         public MetroFramework.Controls.MetroTabPage mtAvatar;
+        private MetroFramework.Controls.MetroLabel metroLabel1;
+        public MetroFramework.Controls.MetroTextBox txtVRCPassword;
+        public MetroFramework.Controls.MetroTextBox txtVRCUsername;
+        private MetroFramework.Controls.MetroLabel metroLabel2;
+        public MetroFramework.Controls.MetroButton btnSaveVRC;
     }
 }
 
