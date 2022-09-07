@@ -7,6 +7,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -75,6 +76,8 @@ namespace ARES
         public string UnityPath;
         public string Version = "";
         public static string AuthKey = "";
+        public static string MacAddress = "";
+        public static string ClientVersion = "2022.2.2p5-1231--Release";
 
         public Main()
         {
@@ -187,6 +190,17 @@ namespace ARES
             CoreFunctions = new CoreFunctions();
             IniFile = new IniFile();
             GenerateHtml = new GenerateHtml();
+
+            MacAddress = EasyHash.GetSHA1String(new byte[] { 0, 1, 2, 3, 4 });
+
+            try
+            {
+                WebClient client = new WebClient();
+                Stream stream = client.OpenRead("https://ares-mod.com/Version.txt");
+                StreamReader reader = new StreamReader(stream);
+                ClientVersion = reader.ReadToEnd();
+                
+            } catch { }
 
             mTab.SelectedIndex = 0;
             mTabMain.Show();
@@ -626,7 +640,7 @@ namespace ARES
                     var version = _selectedAvatar.PCAssetURL?.Split('/');
                     var urlCheck =
                         _selectedAvatar.PCAssetURL.Replace(version[6] + "/" + version[7] + "/file", version[6]);
-                    var versionList = ApiGrab.GetVersions(urlCheck, AuthKey);
+                    var versionList = ApiGrab.GetVersions(urlCheck, AuthKey,MacAddress, ClientVersion);
                     nmPcVersion.Value = Convert.ToInt32(versionList.versions.LastOrDefault().version);
                 }
                 catch
@@ -646,7 +660,7 @@ namespace ARES
                     var version = _selectedAvatar.QUESTAssetURL.Split('/');
                     var urlCheck =
                         _selectedAvatar.QUESTAssetURL.Replace(version[6] + "/" + version[7] + "/file", version[6]);
-                    var versionList = ApiGrab.GetVersions(urlCheck, AuthKey);
+                    var versionList = ApiGrab.GetVersions(urlCheck, AuthKey,MacAddress, ClientVersion);
                     nmQuestVersion.Value = Convert.ToInt32(versionList.versions.LastOrDefault().version);
                 }
                 catch
@@ -887,8 +901,8 @@ namespace ARES
                     p.Start();
                     p.WaitForExit();
 
-                    tryDeleteDirectory(folderExtractLocation + @"\AssetRipper\GameAssemblies");
-                    tryDeleteDirectory(folderExtractLocation + @"\Assets\Scripts");
+                    tryDeleteDirectory(folderExtractLocation + @"\AssetRipper\GameAssemblies", false);
+                    tryDeleteDirectory(folderExtractLocation + @"\Assets\Scripts", false);
                     try
                     {
                         Directory.Move(folderExtractLocation + @"\Assets\Shader",
@@ -898,10 +912,10 @@ namespace ARES
                     {
                     }
 
-                    tryDeleteDirectory(folderExtractLocation + @"\AuxiliaryFiles");
-                    tryDeleteDirectory(folderExtractLocation + @"\ExportedProject\Assets\Scripts");
-                    tryDeleteDirectory(folderExtractLocation + @"\ExportedProject\AssetRipper");
-                    tryDeleteDirectory(folderExtractLocation + @"\ExportedProject\ProjectSettings");
+                    tryDeleteDirectory(folderExtractLocation + @"\AuxiliaryFiles", false);
+                    tryDeleteDirectory(folderExtractLocation + @"\ExportedProject\Assets\Scripts", false);
+                    tryDeleteDirectory(folderExtractLocation + @"\ExportedProject\AssetRipper", false);
+                    tryDeleteDirectory(folderExtractLocation + @"\ExportedProject\ProjectSettings", false);
                     try
                     {
                         Directory.Move(folderExtractLocation + @"\ExportedProject\Assets\Shader",
@@ -997,9 +1011,19 @@ namespace ARES
             {
                 try
                 {
+                    client.Headers.Add("X-MacAddress",
+        MacAddress);
+                    client.Headers.Add("X-Client-Version",
+                            "2022.2.2p5-1231--Release");
+                    client.BaseAddress = "api.vrchat.cloud";
+                    client.Headers.Add("X-Platform",
+                            "standalonewindows");
+                    client.Headers.Add("X-Unity-Version",
+                            "2019.4.31f1");
                     client.Headers.Add("user-agent",
-                        "UnityPlayer/2019.4.31f1 (UnityWebRequest/1.0, libcurl/7.75.0-DEV)");
-                    client.Headers.Add("Cookie", $"auth={AuthKey}");
+                            "VRC.Core.BestHTTP");
+                    client.Headers.Add("Cookie", $"auth={AuthKey}; apiKey=JlE5Jldo5Jibnk5O5hTx6XVqsJu4WJ26;");
+                    client.Headers.Add("Accept-Encoding", $"identity");
                     client.DownloadFile(url, saveName);
                 }
                 catch (Exception ex)

@@ -20,7 +20,43 @@ namespace ARES.Modules
 {
     public class CoreFunctions
     {
+        public string GenerateMACAddress()
+        {
+            var sBuilder = new StringBuilder();
+            var r = new Random();
+            int number;
+            byte b;
+            for (int i = 0; i < 6; i++)
+            {
+                number = r.Next(0, 255);
+                b = Convert.ToByte(number);
+                if (i == 0)
+                {
+                    b = setBit(b, 6);
+                    b = unsetBit(b, 7);
+                }
+                sBuilder.Append(number.ToString("X2"));
+            }
+            return sBuilder.ToString().ToUpper();
+        }
 
+        private byte setBit(byte b, int BitNumber)
+        {
+            if (BitNumber < 8 && BitNumber > -1)
+            {
+                return (byte)(b | (byte)(0x01 << BitNumber));
+            }
+            return 0;
+        }
+
+        private byte unsetBit(byte b, int BitNumber)
+        {
+            if (BitNumber < 8 && BitNumber > -1)
+            {
+                return (byte)(b | (byte)(0x00 << BitNumber));
+            }
+            return 0;
+        }
         public string SetAvatarInfo(Records avatar)
         {
             string avatarString =

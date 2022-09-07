@@ -151,6 +151,7 @@
     <Compile Include="Modules\Api.cs" />
     <Compile Include="Models\AresConfig.cs" />
     <Compile Include="Modules\CoreFunctions.cs" />
+    <Compile Include="Modules\EasyHash.cs" />
     <Compile Include="Modules\GenerateHtml.cs" />
     <Compile Include="Modules\HotSwap.cs" />
     <Compile Include="Modules\IniFile.cs" />
