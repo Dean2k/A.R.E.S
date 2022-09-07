@@ -602,11 +602,7 @@ namespace ARES
 
         private void LoadInfo(object sender, EventArgs e)
         { 
-            if(AuthKey == "")
-            {
-                MessageBox.Show("please enter VRC Details on Settings page");
-                return;
-            }
+           
             var img = (Label)sender;
             if (_selectedAvatar != null)
             {
@@ -623,7 +619,7 @@ namespace ARES
             LoadComments();
 
             if (bitmap != null) selectedImage.Image = bitmap;
-            if (_selectedAvatar.PCAssetURL?.Trim() != "None" && _selectedAvatar.PCAssetURL != null)
+            if (_selectedAvatar.PCAssetURL?.Trim() != "None" && _selectedAvatar.PCAssetURL != null && AuthKey != "")
             {
                 try
                 {

@@ -285,6 +285,9 @@
     <None Include="AssetViewer\AssetViewer_Data\boot.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="AssetViewer\AssetViewer_Data\data.unity3d">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="AssetViewer\AssetViewer_Data\Resources\unity default resources">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
