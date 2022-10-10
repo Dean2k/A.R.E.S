@@ -70,21 +70,15 @@ To turn of plugin Auto updating do so via the ingame options or via ARES, you'll
 
 Installation:
 	
-Step One: [DownloadMe](https://github.com/Dean2k/A.R.E.S/releases/latest/download/DRAG.CONTENTS.INTO.VRChat.FOLDER.zip) or run the [installer](https://github.com/Dean2k/A.R.E.S/releases/latest/download/ARES.Installer.exe) and skip to step 3 or 4
+Step One: [DownloadMe](https://github.com/Dean2k/A.R.E.S/releases/latest/download/Release.zip).
 
-Step Two: [Copy the files into your VRChat folder](https://i.imgur.com/izsyjz8.gif).
+Step Two: Extract the files anywhere on you machine, just ensure they arent in system directories.
 
-Step Three: Run VRChat and allow the plugin to fully install the mod, you can now configure your settings by clicking [here](https://i.imgur.com/iXi8VXv.png) then [here](https://i.imgur.com/3y0XZeJ.png) brining you to the [settings screen](https://i.imgur.com/nyV5Sse.png).
+Step Three: Launch into it for a first time setup where you must select your Unity 2019.4.31f1 exe, follow the steps [here](https://rentry.org/LargestGithubSupportUnityInst) to ensure you have the correct unity installation!
 
-Step Four: [Run the "ARES.Updater.exe"](https://i.imgur.com/XfHDP2Z.gif), this will install the GUI and launch into it for a first time setup where you must select your Unity 2019.4.31f1 exe, follow the steps [here](https://rentry.org/LargestGithubSupportUnityInst) to ensure you have the correct unity installation!
+Step Four: Press either [Yes or No](https://i.imgur.com/I4OBNJk.png) to enable/disable API support 
 
-Step Five: Press either [Yes or No](https://i.imgur.com/I4OBNJk.png) to enable/disable API support 
-
-Step Six: After pressing OK [here](https://i.imgur.com/mWTjR3G.png) find your exe and [select it](https://i.imgur.com/BydfbV8.png)!
-
-Step Seven: This will begin creating your HSB, if you don't know what you are doing press [original](https://i.imgur.com/NpcDrMu.png) here to use the regular VRCSDK! If you know what you are doing and want to use a custom SDK just select custom and choose your SDK of choice!
-
-Info: From here onwards you can open ARES via the [ARES.exe](https://i.imgur.com/F3NDgCb.png) in your [GUI Folder](https://i.imgur.com/ovleFKV.png)!
+Step Five: Be sure to enter your API key and VRChat credentials to use ARES with the capability to search/view/download avatars! (2FA not yet supported for VRC accounts)
 
 ARES is now setup, working and ready to use
 
@@ -94,4 +88,4 @@ License:
 
 For other software used within the project please refer to the LICENSE folder in our release binaries and GitHub repos.
 
-Simple, you aren't free to use this code as you please, you are free to read it, learn from it, debug and understand it but redistributing copies of it is a no no. Even edited variants without the developers permission.
+Simple, you aren't free to use this code as you please, you are free to read it, learn from it, debug and understand it but redistributing copies of it is a no no. Even edited variants without ALL developers permission.
