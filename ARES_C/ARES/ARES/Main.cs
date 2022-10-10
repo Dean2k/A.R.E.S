@@ -22,10 +22,7 @@ using MetroFramework;
 using MetroFramework.Forms;
 using Microsoft.Win32;
 using Newtonsoft.Json;
-using VRChat.API.Api;
-using VRChat.API.Client;
-using VRChat.API.Model;
-using YamlDotNet.Core.Events;
+using VRChatAPI;
 using File = System.IO.File;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 using SaveFileDialog = System.Windows.Forms.SaveFileDialog;
@@ -75,9 +72,9 @@ namespace ARES
         public WorldClass SelectedWorld;
         public string UnityPath;
         public string Version = "";
-        public static string AuthKey = "";
-        public static string MacAddress = "";
-        public static string ClientVersion = "2022.2.2p5-1231--Release";
+        public string AuthKey = "";
+        public string MacAddress = "";
+        public VRChatApiClient VrChat;
 
         public Main()
         {
@@ -146,6 +143,16 @@ namespace ARES
                 ApiGrab.ApiKey = IniFile.Read("apiKey");
             }
 
+            if (IniFile.KeyExists("MacAddress"))
+            {
+                MacAddress = IniFile.Read("MacAddress");
+            } else
+            {
+                Random rnd = new Random();
+                MacAddress = EasyHash.GetSHA1String(new byte[] { (byte)rnd.Next(9), (byte)rnd.Next(9), (byte)rnd.Next(9), (byte)rnd.Next(9), (byte)rnd.Next(9) });
+                IniFile.Write("MacAddress", MacAddress);
+            }
+
             if (IniFile.KeyExists("VRCUsername"))
             {
                 txtVRCUsername.Text = IniFile.Read("VRCUsername");
@@ -155,17 +162,7 @@ namespace ARES
                 txtVRCPassword.Text = IniFile.Read("VRCPassword");
             }
 
-            if(!string.IsNullOrEmpty(txtVRCPassword.Text) && !string.IsNullOrEmpty(txtVRCPassword.Text))
-            {
-                Configuration Config = new Configuration();
-                Config.Username = txtVRCUsername.Text;
-                Config.Password = txtVRCPassword.Text;
-                AuthenticationApi AuthApi = new AuthenticationApi(Config);
-                SystemApi systemApi = new SystemApi(Config);
-                VRChat.API.Model.CurrentUser CurrentUser = AuthApi.GetCurrentUser();
-                VerifyAuthTokenResult result = AuthApi.VerifyAuthToken();
-                AuthKey = result.Token;
-            }
+
 
             if (!IniFile.KeyExists("unity"))
             {
@@ -191,16 +188,6 @@ namespace ARES
             IniFile = new IniFile();
             GenerateHtml = new GenerateHtml();
 
-            MacAddress = EasyHash.GetSHA1String(new byte[] { 0, 1, 2, 3, 4 });
-
-            try
-            {
-                WebClient client = new WebClient();
-                Stream stream = client.OpenRead("https://ares-mod.com/Version.txt");
-                StreamReader reader = new StreamReader(stream);
-                ClientVersion = reader.ReadToEnd();
-                
-            } catch { }
 
             mTab.SelectedIndex = 0;
             mTabMain.Show();
@@ -268,6 +255,22 @@ namespace ARES
             }
 
             CheckIniKeys();
+
+            VrChat = new VRChatApiClient(15,MacAddress);
+
+            if (txtVRCUsername.Text != "" && txtVRCPassword.Text != "" && MacAddress != "")
+            {
+                VrChat.CustomApiUser.Login(txtVRCUsername.Text, txtVRCPassword.Text);
+                Thread.Sleep(1000);
+                if (!File.Exists("auth.txt"))
+                {
+                    MessageBox.Show("Login Failed");
+                }
+                else
+                {
+                    AuthKey = File.ReadAllLines("auth.txt")[1];
+                }
+            }
 
             try
             {
@@ -615,8 +618,8 @@ namespace ARES
         }
 
         private void LoadInfo(object sender, EventArgs e)
-        { 
-           
+        {
+
             var img = (Label)sender;
             if (_selectedAvatar != null)
             {
@@ -640,7 +643,7 @@ namespace ARES
                     var version = _selectedAvatar.PCAssetURL?.Split('/');
                     var urlCheck =
                         _selectedAvatar.PCAssetURL.Replace(version[6] + "/" + version[7] + "/file", version[6]);
-                    var versionList = ApiGrab.GetVersions(urlCheck, AuthKey,MacAddress, ClientVersion);
+                    var versionList = VrChat.GetVersions(urlCheck, AuthKey);
                     nmPcVersion.Value = Convert.ToInt32(versionList.versions.LastOrDefault().version);
                 }
                 catch
@@ -660,7 +663,7 @@ namespace ARES
                     var version = _selectedAvatar.QUESTAssetURL.Split('/');
                     var urlCheck =
                         _selectedAvatar.QUESTAssetURL.Replace(version[6] + "/" + version[7] + "/file", version[6]);
-                    var versionList = ApiGrab.GetVersions(urlCheck, AuthKey,MacAddress, ClientVersion);
+                    var versionList = VrChat.GetVersions(urlCheck, AuthKey);
                     nmQuestVersion.Value = Convert.ToInt32(versionList.versions.LastOrDefault().version);
                 }
                 catch
@@ -750,12 +753,15 @@ namespace ARES
             if (SelectedWorld.AuthorName != "VRCW")
             {
                 var version = SelectedWorld.PCAssetURL.Split('/');
-                version[7] = nmPcVersion.Value.ToString();
-                DownloadFile(string.Join("/", version), fileName);
+                if (nmPcVersion.Value > 0)
+                {
+                    version[7] = nmPcVersion.Value.ToString();
+                }
+                VrChat.DownloadFile(string.Join("/", version),AuthKey, fileName);
             }
             else
             {
-                DownloadFile(SelectedWorld.PCAssetURL, fileName);
+                VrChat.DownloadFile(SelectedWorld.PCAssetURL, AuthKey, fileName);
             }
 
             return true;
@@ -779,10 +785,13 @@ namespace ARES
                             try
                             {
                                 var version = _selectedAvatar.QUESTAssetURL.Split('/');
-                                version[7] = nmQuestVersion.Value.ToString();
-                                DownloadFile(string.Join("/", version), fileName);
+                                if (nmQuestVersion.Value > 0)
+                                {
+                                    version[7] = nmQuestVersion.Value.ToString();
+                                }
+                                VrChat.DownloadFile(string.Join("/", version),AuthKey, fileName);
                             }
-                            catch { DownloadFile(_selectedAvatar.QUESTAssetURL, fileName); }
+                            catch { VrChat.DownloadFile(_selectedAvatar.QUESTAssetURL,AuthKey, fileName); }
                         }
                         else
                         {
@@ -798,10 +807,13 @@ namespace ARES
                             try
                             {
                                 var version = _selectedAvatar.PCAssetURL.Split('/');
-                                version[7] = nmPcVersion.Value.ToString();
-                                DownloadFile(string.Join("/", version), fileName);
+                                if (nmPcVersion.Value > 0)
+                                {
+                                    version[7] = nmPcVersion.Value.ToString();
+                                }
+                                VrChat.DownloadFile(string.Join("/", version), AuthKey, fileName);
                             }
-                            catch { DownloadFile(_selectedAvatar.PCAssetURL, fileName); }
+                            catch { VrChat.DownloadFile(_selectedAvatar.PCAssetURL,AuthKey, fileName); }
                         }
                         else
                         {
@@ -820,20 +832,26 @@ namespace ARES
                     try
                     {
                         var version = _selectedAvatar.PCAssetURL.Split('/');
-                        version[7] = nmPcVersion.Value.ToString();
-                        DownloadFile(string.Join("/", version), fileName);
+                        if (nmPcVersion.Value > 0)
+                        {
+                            version[7] = nmPcVersion.Value.ToString();
+                        }
+                        VrChat.DownloadFile(string.Join("/", version),AuthKey, fileName);
                     }
-                    catch { DownloadFile(_selectedAvatar.PCAssetURL, fileName); }
+                    catch { VrChat.DownloadFile(_selectedAvatar.PCAssetURL, AuthKey, fileName); }
                 }
                 else if (_selectedAvatar.QUESTAssetURL.ToLower() != "none" && _selectedAvatar.QUESTAssetURL != null)
                 {
                     try
                     {
                         var version = _selectedAvatar.QUESTAssetURL.Split('/');
-                        version[7] = nmQuestVersion.Value.ToString();
-                        DownloadFile(string.Join("/", version), fileName);
+                        if (nmQuestVersion.Value > 0)
+                        {
+                            version[7] = nmQuestVersion.Value.ToString();
+                        }
+                        VrChat.DownloadFile(string.Join("/", version), AuthKey, fileName);
                     }
-                    catch { DownloadFile(_selectedAvatar.QUESTAssetURL, fileName); }
+                    catch { VrChat.DownloadFile(_selectedAvatar.QUESTAssetURL, AuthKey, fileName); }
                 }
                 else
                 {
@@ -842,7 +860,7 @@ namespace ARES
             }
             else
             {
-                DownloadFile(_selectedAvatar.PCAssetURL, fileName);
+                VrChat.DownloadFile(_selectedAvatar.PCAssetURL,AuthKey, fileName);
             }
 
             return true;
@@ -1002,36 +1020,6 @@ namespace ARES
             {
                 MetroMessageBox.Show(this, "Please select an avatar or world first.", "ERROR", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-            }
-        }
-
-        private void DownloadFile(string url, string saveName)
-        {
-            using (var client = new WebClient())
-            {
-                try
-                {
-                    client.Headers.Add("X-MacAddress",
-        MacAddress);
-                    client.Headers.Add("X-Client-Version",
-                            "2022.2.2p5-1231--Release");
-                    client.BaseAddress = "api.vrchat.cloud";
-                    client.Headers.Add("X-Platform",
-                            "standalonewindows");
-                    client.Headers.Add("X-Unity-Version",
-                            "2019.4.31f1");
-                    client.Headers.Add("user-agent",
-                            "VRC.Core.BestHTTP");
-                    client.Headers.Add("Cookie", $"auth={AuthKey}; apiKey=JlE5Jldo5Jibnk5O5hTx6XVqsJu4WJ26;");
-                    client.Headers.Add("Accept-Encoding", $"identity");
-                    client.DownloadFile(url, saveName);
-                }
-                catch (Exception ex)
-                {
-                    if (ex.Message == "(404) Not Found")
-                        MetroMessageBox.Show(this, "Version doesn't exist or file has been deleted from VRChat servers",
-                            "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
             }
         }
 
@@ -2321,8 +2309,6 @@ namespace ARES
 
         private void btnPreview_Click(object sender, EventArgs e)
         {
-
-
             if (AuthKey == "")
             {
                 MessageBox.Show("please enter VRC Details on Settings page");
@@ -2336,8 +2322,8 @@ namespace ARES
             }
             if (_selectedAvatar.PCAssetURL.ToLower() != "none")
             {
-                
-                DownloadVrca(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)+ "\\AvatarPreview.vrca");
+
+                DownloadVrca(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\AvatarPreview.vrca");
                 try
                 {
                     string commands = string.Format($"-{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}\\AvatarPreview.vrca");
@@ -2389,14 +2375,18 @@ namespace ARES
             IniFile.Write("VRCUsername", txtVRCUsername.Text);
             IniFile.Write("VRCPassword", txtVRCPassword.Text);
             // Authentication credentials
-            Configuration Config = new Configuration();
-            Config.Username = txtVRCUsername.Text;
-            Config.Password = txtVRCPassword.Text;
-            AuthenticationApi AuthApi = new AuthenticationApi(Config);
-            SystemApi systemApi = new SystemApi(Config);
-            VRChat.API.Model.CurrentUser CurrentUser = AuthApi.GetCurrentUser();
-            VerifyAuthTokenResult result = AuthApi.VerifyAuthToken();
-            AuthKey = result.Token;
+            if (txtVRCUsername.Text != "" && txtVRCPassword.Text != "")
+            {
+                VrChat.CustomApiUser.Login(txtVRCUsername.Text, txtVRCPassword.Text);
+                if (!File.Exists("auth.txt"))
+                {
+                    MessageBox.Show("Login Failed");
+                }
+                else
+                {
+                    AuthKey = File.ReadAllLines("auth.txt")[1];
+                }
+            }
         }
     }
 }

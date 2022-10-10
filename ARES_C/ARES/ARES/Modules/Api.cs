@@ -169,39 +169,6 @@ namespace ARES.Modules
             return item;
         }
 
-        public RootClass GetVersions(string url, string authKey, string macAddress, string clientVersion)
-        {
-            using (WebClient webClient = new WebClient())
-            {
-                //Needs a useragent to be able to view images.
-                webClient.Headers.Add("X-MacAddress",
-                        macAddress);
-                webClient.Headers.Add("X-Client-Version",
-                        clientVersion);
-                webClient.BaseAddress = "api.vrchat.cloud";
-                webClient.Headers.Add("X-Platform",
-                        "standalonewindows");
-                webClient.Headers.Add("X-Unity-Version",
-                        "2019.4.31f1");
-                webClient.Headers.Add("user-agent",
-                        "VRC.Core.BestHTTP");
-                webClient.Headers.Add("Cookie", $"auth={authKey}; apiKey=JlE5Jldo5Jibnk5O5hTx6XVqsJu4WJ26;");
-                webClient.Headers.Add("Accept-Encoding", $"identity");
-                try
-                {
-                    string web = webClient.DownloadString(url);
-                    RootClass items = JsonConvert.DeserializeObject<RootClass>(web);
-                    return items;
-                }
-                catch (Exception ex)
-                {
-                    return null;
-                    //skip as its likely avatar is been yeeted from VRC servers
-                }
-            }
-
-        }
-
         public List<Records> GetRipped(List<string> ripped, string version)
         {
             Avatar avatarList = new Avatar { records = new List<Records>() };
