@@ -257,7 +257,7 @@ namespace ARES
             CheckIniKeys();
 
             VrChat = new VRChatApiClient(15,MacAddress);
-
+            txtClientVersion.Text = StaticValues.ClientVersion;
             if (txtVRCUsername.Text != "" && txtVRCPassword.Text != "" && MacAddress != "")
             {
                 VrChat.CustomApiUser.Login(txtVRCUsername.Text, txtVRCPassword.Text);
@@ -773,6 +773,11 @@ namespace ARES
             if (fileName == "custom.vrca") fileName = filePath + @"\custom.vrca";
             if (_selectedAvatar.AuthorName != "VRCA")
             {
+                if (AuthKey == "")
+                {
+                    MessageBox.Show("please enter VRC Details on Settings page");
+                    return false;
+                }
                 if (_selectedAvatar.PCAssetURL.ToLower() != "none" && _selectedAvatar.QUESTAssetURL.ToLower() != "none" && _selectedAvatar.PCAssetURL != null && _selectedAvatar.QUESTAssetURL != null)
                 {
                     var dlgResult = MessageBox.Show("Select which version to download", "VRCA Select",
@@ -1084,11 +1089,7 @@ namespace ARES
 
         private void btnHotswap_Click(object sender, EventArgs e)
         {
-            if (AuthKey == "")
-            {
-                MessageBox.Show("please enter VRC Details on Settings page");
-                return;
-            }
+            
             if (_vrcaThread != null)
                 if (_vrcaThread.IsAlive)
                 {
@@ -1311,6 +1312,7 @@ namespace ARES
         {
             using (var webClient = new WebClient())
             {
+                webClient.Headers.Add("user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.79 Safari/537.36");
                 var data = webClient.DownloadData(
                     "https://source.unsplash.com/random/1200x900?sig=incrementingIdentifier");
                 using (var mem = new MemoryStream(data))
@@ -1492,7 +1494,7 @@ namespace ARES
 
         private void btnLoadVRCA_Click(object sender, EventArgs e)
         {
-            selectedImage.ImageLocation = "https://github.com/Dean2k/A.R.E.S/releases/latest/download/ARESLogo.png";
+            selectedImage.ImageLocation = "https://ares-mod.com/ARESLogo.png";
             var file = SelectFileVrca();
             if (Path.GetExtension(file).ToLower() == ".vrca")
             {
@@ -2387,6 +2389,11 @@ namespace ARES
                     AuthKey = File.ReadAllLines("auth.txt")[1];
                 }
             }
+        }
+
+        private void txtClientVersion_Changed(object sender, EventArgs e)
+        {
+            StaticValues.ClientVersion = txtClientVersion.Text;
         }
     }
 }

@@ -86,6 +86,11 @@ namespace ARES
             this.btnLight = new MetroFramework.Controls.MetroButton();
             this.btnUnityLoc = new MetroFramework.Controls.MetroButton();
             this.ConfigBox = new System.Windows.Forms.GroupBox();
+            this.btnSaveVRC = new MetroFramework.Controls.MetroButton();
+            this.metroLabel2 = new MetroFramework.Controls.MetroLabel();
+            this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
+            this.txtVRCPassword = new MetroFramework.Controls.MetroTextBox();
+            this.txtVRCUsername = new MetroFramework.Controls.MetroTextBox();
             this.btnHsbClean = new MetroFramework.Controls.MetroButton();
             this.btnApi = new MetroFramework.Controls.MetroButton();
             this.chkLoadImages = new MetroFramework.Controls.MetroCheckBox();
@@ -127,11 +132,8 @@ namespace ARES
             this.pbRipped = new System.Windows.Forms.PictureBox();
             this.metroStyleManager = new MetroFramework.Components.MetroStyleManager(this.components);
             this.metroStyleExtender = new MetroFramework.Components.MetroStyleExtender(this.components);
-            this.txtVRCUsername = new MetroFramework.Controls.MetroTextBox();
-            this.txtVRCPassword = new MetroFramework.Controls.MetroTextBox();
-            this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
-            this.metroLabel2 = new MetroFramework.Controls.MetroLabel();
-            this.btnSaveVRC = new MetroFramework.Controls.MetroButton();
+            this.txtClientVersion = new MetroFramework.Controls.MetroTextBox();
+            this.metroLabel3 = new MetroFramework.Controls.MetroLabel();
             this.groupBox1.SuspendLayout();
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.selectedImage)).BeginInit();
@@ -160,7 +162,7 @@ namespace ARES
             this.flowAvatars.Location = new System.Drawing.Point(9, 172);
             this.flowAvatars.Name = "flowAvatars";
             this.flowAvatars.Padding = new System.Windows.Forms.Padding(10);
-            this.flowAvatars.Size = new System.Drawing.Size(843, 358);
+            this.flowAvatars.Size = new System.Drawing.Size(843, 398);
             this.flowAvatars.TabIndex = 7;
             // 
             // groupBox1
@@ -176,7 +178,7 @@ namespace ARES
             this.groupBox1.ForeColor = System.Drawing.Color.White;
             this.groupBox1.Location = new System.Drawing.Point(908, 96);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(270, 610);
+            this.groupBox1.Size = new System.Drawing.Size(270, 650);
             this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Avatar/World Info";
@@ -186,7 +188,7 @@ namespace ARES
             this.btnPreview.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnPreview.FontSize = MetroFramework.MetroButtonSize.Tall;
-            this.btnPreview.Location = new System.Drawing.Point(6, 562);
+            this.btnPreview.Location = new System.Drawing.Point(6, 602);
             this.btnPreview.Name = "btnPreview";
             this.btnPreview.Size = new System.Drawing.Size(258, 35);
             this.btnPreview.TabIndex = 52;
@@ -200,7 +202,7 @@ namespace ARES
             this.btnDownload.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnDownload.FontSize = MetroFramework.MetroButtonSize.Tall;
-            this.btnDownload.Location = new System.Drawing.Point(6, 522);
+            this.btnDownload.Location = new System.Drawing.Point(6, 562);
             this.btnDownload.Name = "btnDownload";
             this.btnDownload.Size = new System.Drawing.Size(258, 35);
             this.btnDownload.TabIndex = 51;
@@ -218,9 +220,9 @@ namespace ARES
             // 
             // 
             this.txtAvatarInfo.CustomButton.Image = null;
-            this.txtAvatarInfo.CustomButton.Location = new System.Drawing.Point(-22, 2);
+            this.txtAvatarInfo.CustomButton.Location = new System.Drawing.Point(-62, 2);
             this.txtAvatarInfo.CustomButton.Name = "";
-            this.txtAvatarInfo.CustomButton.Size = new System.Drawing.Size(277, 277);
+            this.txtAvatarInfo.CustomButton.Size = new System.Drawing.Size(317, 317);
             this.txtAvatarInfo.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
             this.txtAvatarInfo.CustomButton.TabIndex = 1;
             this.txtAvatarInfo.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
@@ -240,7 +242,7 @@ namespace ARES
             this.txtAvatarInfo.SelectionLength = 0;
             this.txtAvatarInfo.SelectionStart = 0;
             this.txtAvatarInfo.ShortcutsEnabled = true;
-            this.txtAvatarInfo.Size = new System.Drawing.Size(258, 282);
+            this.txtAvatarInfo.Size = new System.Drawing.Size(258, 322);
             this.txtAvatarInfo.TabIndex = 49;
             this.txtAvatarInfo.UseSelectable = true;
             this.txtAvatarInfo.UseStyleColors = true;
@@ -271,7 +273,7 @@ namespace ARES
             "Tags",
             "World ID",
             "World Name"});
-            this.cbCopy.Location = new System.Drawing.Point(6, 481);
+            this.cbCopy.Location = new System.Drawing.Point(6, 521);
             this.cbCopy.Name = "cbCopy";
             this.cbCopy.Size = new System.Drawing.Size(167, 35);
             this.cbCopy.Style = MetroFramework.MetroColorStyle.Blue;
@@ -284,7 +286,7 @@ namespace ARES
             this.btnCopy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnCopy.FontSize = MetroFramework.MetroButtonSize.Tall;
-            this.btnCopy.Location = new System.Drawing.Point(179, 481);
+            this.btnCopy.Location = new System.Drawing.Point(179, 521);
             this.btnCopy.Name = "btnCopy";
             this.btnCopy.Size = new System.Drawing.Size(85, 35);
             this.btnCopy.TabIndex = 48;
@@ -335,7 +337,7 @@ namespace ARES
             // 
             this.nmQuestVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.nmQuestVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nmQuestVersion.Location = new System.Drawing.Point(158, 562);
+            this.nmQuestVersion.Location = new System.Drawing.Point(158, 602);
             this.nmQuestVersion.Maximum = new decimal(new int[] {
             100000000,
             0,
@@ -349,7 +351,7 @@ namespace ARES
             // 
             this.nmPcVersion.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.nmPcVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nmPcVersion.Location = new System.Drawing.Point(12, 562);
+            this.nmPcVersion.Location = new System.Drawing.Point(12, 602);
             this.nmPcVersion.Maximum = new decimal(new int[] {
             100000000,
             0,
@@ -374,7 +376,7 @@ namespace ARES
             this.mTab.Location = new System.Drawing.Point(10, 65);
             this.mTab.Name = "mTab";
             this.mTab.SelectedIndex = 1;
-            this.mTab.Size = new System.Drawing.Size(896, 645);
+            this.mTab.Size = new System.Drawing.Size(896, 685);
             this.mTab.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             this.mTab.TabIndex = 14;
             this.mTab.UseSelectable = true;
@@ -416,7 +418,7 @@ namespace ARES
             this.mTabMain.HorizontalScrollbarSize = 10;
             this.mTabMain.Location = new System.Drawing.Point(4, 39);
             this.mTabMain.Name = "mTabMain";
-            this.mTabMain.Size = new System.Drawing.Size(888, 602);
+            this.mTabMain.Size = new System.Drawing.Size(888, 642);
             this.mTabMain.TabIndex = 0;
             this.mTabMain.Text = "Main";
             this.mTabMain.VerticalScrollbar = true;
@@ -428,7 +430,7 @@ namespace ARES
             // 
             this.btnResetScene.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnResetScene.FontSize = MetroFramework.MetroButtonSize.Tall;
-            this.btnResetScene.Location = new System.Drawing.Point(353, 553);
+            this.btnResetScene.Location = new System.Drawing.Point(353, 593);
             this.btnResetScene.Name = "btnResetScene";
             this.btnResetScene.Size = new System.Drawing.Size(120, 35);
             this.btnResetScene.TabIndex = 54;
@@ -479,7 +481,7 @@ namespace ARES
             // 
             this.btnBrowserView.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnBrowserView.FontSize = MetroFramework.MetroButtonSize.Tall;
-            this.btnBrowserView.Location = new System.Drawing.Point(732, 553);
+            this.btnBrowserView.Location = new System.Drawing.Point(732, 593);
             this.btnBrowserView.Name = "btnBrowserView";
             this.btnBrowserView.Size = new System.Drawing.Size(120, 35);
             this.btnBrowserView.TabIndex = 50;
@@ -494,7 +496,7 @@ namespace ARES
             this.lblQuestVersion.AutoSize = true;
             this.lblQuestVersion.FontSize = MetroFramework.MetroLabelSize.Tall;
             this.lblQuestVersion.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.lblQuestVersion.Location = new System.Drawing.Point(158, 534);
+            this.lblQuestVersion.Location = new System.Drawing.Point(158, 574);
             this.lblQuestVersion.Name = "lblQuestVersion";
             this.lblQuestVersion.Size = new System.Drawing.Size(130, 25);
             this.lblQuestVersion.TabIndex = 49;
@@ -507,7 +509,7 @@ namespace ARES
             this.lblPCVersion.AutoSize = true;
             this.lblPCVersion.FontSize = MetroFramework.MetroLabelSize.Tall;
             this.lblPCVersion.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.lblPCVersion.Location = new System.Drawing.Point(10, 534);
+            this.lblPCVersion.Location = new System.Drawing.Point(10, 574);
             this.lblPCVersion.Name = "lblPCVersion";
             this.lblPCVersion.Size = new System.Drawing.Size(102, 25);
             this.lblPCVersion.TabIndex = 48;
@@ -574,7 +576,7 @@ namespace ARES
             // 
             this.btnHotswap.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnHotswap.FontSize = MetroFramework.MetroButtonSize.Tall;
-            this.btnHotswap.Location = new System.Drawing.Point(605, 553);
+            this.btnHotswap.Location = new System.Drawing.Point(605, 593);
             this.btnHotswap.Name = "btnHotswap";
             this.btnHotswap.Size = new System.Drawing.Size(120, 35);
             this.btnHotswap.TabIndex = 45;
@@ -587,7 +589,7 @@ namespace ARES
             // 
             this.btnUnity.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnUnity.FontSize = MetroFramework.MetroButtonSize.Tall;
-            this.btnUnity.Location = new System.Drawing.Point(479, 553);
+            this.btnUnity.Location = new System.Drawing.Point(479, 593);
             this.btnUnity.Name = "btnUnity";
             this.btnUnity.Size = new System.Drawing.Size(120, 35);
             this.btnUnity.TabIndex = 44;
@@ -784,6 +786,8 @@ namespace ARES
             // 
             // mTabSettings
             // 
+            this.mTabSettings.Controls.Add(this.txtClientVersion);
+            this.mTabSettings.Controls.Add(this.metroLabel3);
             this.mTabSettings.Controls.Add(this.txtApiKey);
             this.mTabSettings.Controls.Add(this.metroLabel15);
             this.mTabSettings.Controls.Add(this.chkNoImages);
@@ -809,7 +813,7 @@ namespace ARES
             this.mTabSettings.HorizontalScrollbarSize = 10;
             this.mTabSettings.Location = new System.Drawing.Point(4, 39);
             this.mTabSettings.Name = "mTabSettings";
-            this.mTabSettings.Size = new System.Drawing.Size(888, 602);
+            this.mTabSettings.Size = new System.Drawing.Size(888, 642);
             this.mTabSettings.TabIndex = 1;
             this.mTabSettings.Text = "Settings  ";
             this.mTabSettings.VerticalScrollbarBarColor = true;
@@ -834,7 +838,7 @@ namespace ARES
             this.txtApiKey.FontSize = MetroFramework.MetroTextBoxSize.Medium;
             this.txtApiKey.FontWeight = MetroFramework.MetroTextBoxWeight.Bold;
             this.txtApiKey.Lines = new string[0];
-            this.txtApiKey.Location = new System.Drawing.Point(14, 381);
+            this.txtApiKey.Location = new System.Drawing.Point(14, 372);
             this.txtApiKey.MaxLength = 1000;
             this.txtApiKey.Name = "txtApiKey";
             this.txtApiKey.PasswordChar = '\0';
@@ -858,7 +862,7 @@ namespace ARES
             this.metroLabel15.AutoSize = true;
             this.metroLabel15.FontSize = MetroFramework.MetroLabelSize.Tall;
             this.metroLabel15.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.metroLabel15.Location = new System.Drawing.Point(9, 353);
+            this.metroLabel15.Location = new System.Drawing.Point(9, 344);
             this.metroLabel15.Name = "metroLabel15";
             this.metroLabel15.Size = new System.Drawing.Size(79, 25);
             this.metroLabel15.TabIndex = 76;
@@ -939,7 +943,7 @@ namespace ARES
             "Purple",
             "Red",
             "Yellow"});
-            this.cbThemeColour.Location = new System.Drawing.Point(9, 567);
+            this.cbThemeColour.Location = new System.Drawing.Point(9, 607);
             this.cbThemeColour.Name = "cbThemeColour";
             this.cbThemeColour.Size = new System.Drawing.Size(189, 29);
             this.cbThemeColour.TabIndex = 71;
@@ -952,7 +956,7 @@ namespace ARES
             this.metroLabel12.AutoSize = true;
             this.metroLabel12.FontSize = MetroFramework.MetroLabelSize.Tall;
             this.metroLabel12.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.metroLabel12.Location = new System.Drawing.Point(4, 539);
+            this.metroLabel12.Location = new System.Drawing.Point(4, 579);
             this.metroLabel12.Name = "metroLabel12";
             this.metroLabel12.Size = new System.Drawing.Size(131, 25);
             this.metroLabel12.TabIndex = 70;
@@ -963,7 +967,7 @@ namespace ARES
             // 
             this.btnDark.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnDark.FontSize = MetroFramework.MetroButtonSize.Tall;
-            this.btnDark.Location = new System.Drawing.Point(9, 501);
+            this.btnDark.Location = new System.Drawing.Point(9, 541);
             this.btnDark.Name = "btnDark";
             this.btnDark.Size = new System.Drawing.Size(189, 35);
             this.btnDark.TabIndex = 69;
@@ -978,7 +982,7 @@ namespace ARES
             this.metroLabel11.AutoSize = true;
             this.metroLabel11.FontSize = MetroFramework.MetroLabelSize.Tall;
             this.metroLabel11.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.metroLabel11.Location = new System.Drawing.Point(9, 432);
+            this.metroLabel11.Location = new System.Drawing.Point(9, 472);
             this.metroLabel11.Name = "metroLabel11";
             this.metroLabel11.Size = new System.Drawing.Size(144, 25);
             this.metroLabel11.TabIndex = 68;
@@ -989,7 +993,7 @@ namespace ARES
             // 
             this.btnLight.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnLight.FontSize = MetroFramework.MetroButtonSize.Tall;
-            this.btnLight.Location = new System.Drawing.Point(9, 460);
+            this.btnLight.Location = new System.Drawing.Point(9, 500);
             this.btnLight.Name = "btnLight";
             this.btnLight.Size = new System.Drawing.Size(189, 35);
             this.btnLight.TabIndex = 67;
@@ -1021,12 +1025,118 @@ namespace ARES
             this.ConfigBox.Controls.Add(this.txtVRCPassword);
             this.ConfigBox.Controls.Add(this.txtVRCUsername);
             this.ConfigBox.ForeColor = System.Drawing.Color.White;
-            this.ConfigBox.Location = new System.Drawing.Point(289, 473);
+            this.ConfigBox.Location = new System.Drawing.Point(289, 513);
             this.ConfigBox.Name = "ConfigBox";
             this.ConfigBox.Size = new System.Drawing.Size(596, 129);
             this.ConfigBox.TabIndex = 65;
             this.ConfigBox.TabStop = false;
             this.ConfigBox.Text = "VRChat Credientials (Really recommended to use a throw away account)";
+            // 
+            // btnSaveVRC
+            // 
+            this.btnSaveVRC.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSaveVRC.FontSize = MetroFramework.MetroButtonSize.Tall;
+            this.btnSaveVRC.Location = new System.Drawing.Point(492, 91);
+            this.btnSaveVRC.Name = "btnSaveVRC";
+            this.btnSaveVRC.Size = new System.Drawing.Size(85, 35);
+            this.btnSaveVRC.TabIndex = 53;
+            this.btnSaveVRC.Text = "Save";
+            this.btnSaveVRC.UseSelectable = true;
+            this.btnSaveVRC.UseStyleColors = true;
+            this.btnSaveVRC.Click += new System.EventHandler(this.btnSaveVRC_Click);
+            // 
+            // metroLabel2
+            // 
+            this.metroLabel2.AutoSize = true;
+            this.metroLabel2.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.metroLabel2.FontWeight = MetroFramework.MetroLabelWeight.Bold;
+            this.metroLabel2.Location = new System.Drawing.Point(7, 64);
+            this.metroLabel2.Name = "metroLabel2";
+            this.metroLabel2.Size = new System.Drawing.Size(160, 25);
+            this.metroLabel2.TabIndex = 79;
+            this.metroLabel2.Text = "VRChat Password";
+            this.metroLabel2.UseStyleColors = true;
+            // 
+            // metroLabel1
+            // 
+            this.metroLabel1.AutoSize = true;
+            this.metroLabel1.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.metroLabel1.FontWeight = MetroFramework.MetroLabelWeight.Bold;
+            this.metroLabel1.Location = new System.Drawing.Point(7, 19);
+            this.metroLabel1.Name = "metroLabel1";
+            this.metroLabel1.Size = new System.Drawing.Size(165, 25);
+            this.metroLabel1.TabIndex = 77;
+            this.metroLabel1.Text = "VRChat Username";
+            this.metroLabel1.UseStyleColors = true;
+            // 
+            // txtVRCPassword
+            // 
+            // 
+            // 
+            // 
+            this.txtVRCPassword.CustomButton.Image = null;
+            this.txtVRCPassword.CustomButton.Location = new System.Drawing.Point(369, 2);
+            this.txtVRCPassword.CustomButton.Name = "";
+            this.txtVRCPassword.CustomButton.Size = new System.Drawing.Size(27, 27);
+            this.txtVRCPassword.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
+            this.txtVRCPassword.CustomButton.TabIndex = 1;
+            this.txtVRCPassword.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.txtVRCPassword.CustomButton.UseSelectable = true;
+            this.txtVRCPassword.CustomButton.Visible = false;
+            this.txtVRCPassword.FontSize = MetroFramework.MetroTextBoxSize.Medium;
+            this.txtVRCPassword.FontWeight = MetroFramework.MetroTextBoxWeight.Bold;
+            this.txtVRCPassword.Lines = new string[0];
+            this.txtVRCPassword.Location = new System.Drawing.Point(178, 57);
+            this.txtVRCPassword.MaxLength = 1000;
+            this.txtVRCPassword.Name = "txtVRCPassword";
+            this.txtVRCPassword.PasswordChar = '*';
+            this.txtVRCPassword.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.txtVRCPassword.SelectedText = "";
+            this.txtVRCPassword.SelectionLength = 0;
+            this.txtVRCPassword.SelectionStart = 0;
+            this.txtVRCPassword.ShortcutsEnabled = true;
+            this.txtVRCPassword.Size = new System.Drawing.Size(399, 32);
+            this.txtVRCPassword.TabIndex = 78;
+            this.metroToolTip1.SetToolTip(this.txtVRCPassword, "adding a key will remove the 1k search limit");
+            this.txtVRCPassword.UseSelectable = true;
+            this.txtVRCPassword.UseStyleColors = true;
+            this.txtVRCPassword.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
+            this.txtVRCPassword.WaterMarkFont = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            // 
+            // txtVRCUsername
+            // 
+            // 
+            // 
+            // 
+            this.txtVRCUsername.CustomButton.Image = null;
+            this.txtVRCUsername.CustomButton.Location = new System.Drawing.Point(369, 2);
+            this.txtVRCUsername.CustomButton.Name = "";
+            this.txtVRCUsername.CustomButton.Size = new System.Drawing.Size(27, 27);
+            this.txtVRCUsername.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
+            this.txtVRCUsername.CustomButton.TabIndex = 1;
+            this.txtVRCUsername.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.txtVRCUsername.CustomButton.UseSelectable = true;
+            this.txtVRCUsername.CustomButton.Visible = false;
+            this.txtVRCUsername.FontSize = MetroFramework.MetroTextBoxSize.Medium;
+            this.txtVRCUsername.FontWeight = MetroFramework.MetroTextBoxWeight.Bold;
+            this.txtVRCUsername.Lines = new string[0];
+            this.txtVRCUsername.Location = new System.Drawing.Point(178, 19);
+            this.txtVRCUsername.MaxLength = 1000;
+            this.txtVRCUsername.Name = "txtVRCUsername";
+            this.txtVRCUsername.PasswordChar = '\0';
+            this.txtVRCUsername.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.txtVRCUsername.SelectedText = "";
+            this.txtVRCUsername.SelectionLength = 0;
+            this.txtVRCUsername.SelectionStart = 0;
+            this.txtVRCUsername.ShortcutsEnabled = true;
+            this.txtVRCUsername.Size = new System.Drawing.Size(399, 32);
+            this.txtVRCUsername.TabIndex = 77;
+            this.metroToolTip1.SetToolTip(this.txtVRCUsername, "adding a key will remove the 1k search limit");
+            this.txtVRCUsername.UseSelectable = true;
+            this.txtVRCUsername.UseStyleColors = true;
+            this.txtVRCUsername.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
+            this.txtVRCUsername.WaterMarkFont = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             // 
             // btnHsbClean
             // 
@@ -1103,9 +1213,9 @@ namespace ARES
             // 
             // 
             this.txtConsole.CustomButton.Image = null;
-            this.txtConsole.CustomButton.Location = new System.Drawing.Point(176, 2);
+            this.txtConsole.CustomButton.Location = new System.Drawing.Point(136, 2);
             this.txtConsole.CustomButton.Name = "";
-            this.txtConsole.CustomButton.Size = new System.Drawing.Size(417, 417);
+            this.txtConsole.CustomButton.Size = new System.Drawing.Size(457, 457);
             this.txtConsole.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
             this.txtConsole.CustomButton.TabIndex = 1;
             this.txtConsole.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
@@ -1125,7 +1235,7 @@ namespace ARES
             this.txtConsole.SelectionLength = 0;
             this.txtConsole.SelectionStart = 0;
             this.txtConsole.ShortcutsEnabled = true;
-            this.txtConsole.Size = new System.Drawing.Size(596, 422);
+            this.txtConsole.Size = new System.Drawing.Size(596, 462);
             this.txtConsole.TabIndex = 2;
             this.txtConsole.UseSelectable = true;
             this.txtConsole.UseStyleColors = true;
@@ -1658,123 +1768,66 @@ namespace ARES
             // 
             this.metroStyleExtender.Theme = MetroFramework.MetroThemeStyle.Dark;
             // 
-            // txtVRCUsername
+            // txtClientVersion
             // 
             // 
             // 
             // 
-            this.txtVRCUsername.CustomButton.Image = null;
-            this.txtVRCUsername.CustomButton.Location = new System.Drawing.Point(369, 2);
-            this.txtVRCUsername.CustomButton.Name = "";
-            this.txtVRCUsername.CustomButton.Size = new System.Drawing.Size(27, 27);
-            this.txtVRCUsername.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
-            this.txtVRCUsername.CustomButton.TabIndex = 1;
-            this.txtVRCUsername.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
-            this.txtVRCUsername.CustomButton.UseSelectable = true;
-            this.txtVRCUsername.CustomButton.Visible = false;
-            this.txtVRCUsername.FontSize = MetroFramework.MetroTextBoxSize.Medium;
-            this.txtVRCUsername.FontWeight = MetroFramework.MetroTextBoxWeight.Bold;
-            this.txtVRCUsername.Lines = new string[0];
-            this.txtVRCUsername.Location = new System.Drawing.Point(178, 19);
-            this.txtVRCUsername.MaxLength = 1000;
-            this.txtVRCUsername.Name = "txtVRCUsername";
-            this.txtVRCUsername.PasswordChar = '\0';
-            this.txtVRCUsername.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtVRCUsername.SelectedText = "";
-            this.txtVRCUsername.SelectionLength = 0;
-            this.txtVRCUsername.SelectionStart = 0;
-            this.txtVRCUsername.ShortcutsEnabled = true;
-            this.txtVRCUsername.Size = new System.Drawing.Size(399, 32);
-            this.txtVRCUsername.TabIndex = 77;
-            this.metroToolTip1.SetToolTip(this.txtVRCUsername, "adding a key will remove the 1k search limit");
-            this.txtVRCUsername.UseSelectable = true;
-            this.txtVRCUsername.UseStyleColors = true;
-            this.txtVRCUsername.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
-            this.txtVRCUsername.WaterMarkFont = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtClientVersion.CustomButton.Image = null;
+            this.txtClientVersion.CustomButton.Location = new System.Drawing.Point(228, 2);
+            this.txtClientVersion.CustomButton.Name = "";
+            this.txtClientVersion.CustomButton.Size = new System.Drawing.Size(27, 27);
+            this.txtClientVersion.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
+            this.txtClientVersion.CustomButton.TabIndex = 1;
+            this.txtClientVersion.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.txtClientVersion.CustomButton.UseSelectable = true;
+            this.txtClientVersion.CustomButton.Visible = false;
+            this.txtClientVersion.FontSize = MetroFramework.MetroTextBoxSize.Medium;
+            this.txtClientVersion.FontWeight = MetroFramework.MetroTextBoxWeight.Bold;
+            this.txtClientVersion.Lines = new string[] {
+        "2022.3.1p2-1249--Release"};
+            this.txtClientVersion.Location = new System.Drawing.Point(14, 437);
+            this.txtClientVersion.MaxLength = 1000;
+            this.txtClientVersion.Name = "txtClientVersion";
+            this.txtClientVersion.PasswordChar = '\0';
+            this.txtClientVersion.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.txtClientVersion.SelectedText = "";
+            this.txtClientVersion.SelectionLength = 0;
+            this.txtClientVersion.SelectionStart = 0;
+            this.txtClientVersion.ShortcutsEnabled = true;
+            this.txtClientVersion.Size = new System.Drawing.Size(258, 32);
+            this.txtClientVersion.TabIndex = 77;
+            this.txtClientVersion.Text = "2022.3.1p2-1249--Release";
+            this.metroToolTip1.SetToolTip(this.txtClientVersion, "Change this if its out of date");
+            this.txtClientVersion.UseSelectable = true;
+            this.txtClientVersion.UseStyleColors = true;
+            this.txtClientVersion.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
+            this.txtClientVersion.WaterMarkFont = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtClientVersion.TextChanged += new System.EventHandler(this.txtClientVersion_Changed);
             // 
-            // txtVRCPassword
+            // metroLabel3
             // 
-            // 
-            // 
-            // 
-            this.txtVRCPassword.CustomButton.Image = null;
-            this.txtVRCPassword.CustomButton.Location = new System.Drawing.Point(369, 2);
-            this.txtVRCPassword.CustomButton.Name = "";
-            this.txtVRCPassword.CustomButton.Size = new System.Drawing.Size(27, 27);
-            this.txtVRCPassword.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
-            this.txtVRCPassword.CustomButton.TabIndex = 1;
-            this.txtVRCPassword.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
-            this.txtVRCPassword.CustomButton.UseSelectable = true;
-            this.txtVRCPassword.CustomButton.Visible = false;
-            this.txtVRCPassword.FontSize = MetroFramework.MetroTextBoxSize.Medium;
-            this.txtVRCPassword.FontWeight = MetroFramework.MetroTextBoxWeight.Bold;
-            this.txtVRCPassword.Lines = new string[0];
-            this.txtVRCPassword.Location = new System.Drawing.Point(178, 57);
-            this.txtVRCPassword.MaxLength = 1000;
-            this.txtVRCPassword.Name = "txtVRCPassword";
-            this.txtVRCPassword.PasswordChar = '*';
-            this.txtVRCPassword.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtVRCPassword.SelectedText = "";
-            this.txtVRCPassword.SelectionLength = 0;
-            this.txtVRCPassword.SelectionStart = 0;
-            this.txtVRCPassword.ShortcutsEnabled = true;
-            this.txtVRCPassword.Size = new System.Drawing.Size(399, 32);
-            this.txtVRCPassword.TabIndex = 78;
-            this.metroToolTip1.SetToolTip(this.txtVRCPassword, "adding a key will remove the 1k search limit");
-            this.txtVRCPassword.UseSelectable = true;
-            this.txtVRCPassword.UseStyleColors = true;
-            this.txtVRCPassword.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
-            this.txtVRCPassword.WaterMarkFont = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            // 
-            // metroLabel1
-            // 
-            this.metroLabel1.AutoSize = true;
-            this.metroLabel1.FontSize = MetroFramework.MetroLabelSize.Tall;
-            this.metroLabel1.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.metroLabel1.Location = new System.Drawing.Point(7, 19);
-            this.metroLabel1.Name = "metroLabel1";
-            this.metroLabel1.Size = new System.Drawing.Size(165, 25);
-            this.metroLabel1.TabIndex = 77;
-            this.metroLabel1.Text = "VRChat Username";
-            this.metroLabel1.UseStyleColors = true;
-            // 
-            // metroLabel2
-            // 
-            this.metroLabel2.AutoSize = true;
-            this.metroLabel2.FontSize = MetroFramework.MetroLabelSize.Tall;
-            this.metroLabel2.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.metroLabel2.Location = new System.Drawing.Point(7, 64);
-            this.metroLabel2.Name = "metroLabel2";
-            this.metroLabel2.Size = new System.Drawing.Size(160, 25);
-            this.metroLabel2.TabIndex = 79;
-            this.metroLabel2.Text = "VRChat Password";
-            this.metroLabel2.UseStyleColors = true;
-            // 
-            // btnSaveVRC
-            // 
-            this.btnSaveVRC.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSaveVRC.FontSize = MetroFramework.MetroButtonSize.Tall;
-            this.btnSaveVRC.Location = new System.Drawing.Point(492, 91);
-            this.btnSaveVRC.Name = "btnSaveVRC";
-            this.btnSaveVRC.Size = new System.Drawing.Size(85, 35);
-            this.btnSaveVRC.TabIndex = 53;
-            this.btnSaveVRC.Text = "Save";
-            this.btnSaveVRC.UseSelectable = true;
-            this.btnSaveVRC.UseStyleColors = true;
-            this.btnSaveVRC.Click += new System.EventHandler(this.btnSaveVRC_Click);
+            this.metroLabel3.AutoSize = true;
+            this.metroLabel3.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.metroLabel3.FontWeight = MetroFramework.MetroLabelWeight.Bold;
+            this.metroLabel3.Location = new System.Drawing.Point(9, 409);
+            this.metroLabel3.Name = "metroLabel3";
+            this.metroLabel3.Size = new System.Drawing.Size(197, 25);
+            this.metroLabel3.TabIndex = 78;
+            this.metroLabel3.Text = "VRChat Client Version";
+            this.metroLabel3.UseStyleColors = true;
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.ClientSize = new System.Drawing.Size(1190, 724);
+            this.ClientSize = new System.Drawing.Size(1190, 764);
             this.Controls.Add(this.mTab);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.pbRipped);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(1190, 724);
+            this.MinimumSize = new System.Drawing.Size(1190, 764);
             this.Name = "Main";
             this.Style = MetroFramework.MetroColorStyle.Default;
             this.Text = "A.R.E.S";
@@ -1908,6 +1961,8 @@ namespace ARES
         public MetroFramework.Controls.MetroTextBox txtVRCUsername;
         private MetroFramework.Controls.MetroLabel metroLabel2;
         public MetroFramework.Controls.MetroButton btnSaveVRC;
+        public MetroFramework.Controls.MetroTextBox txtClientVersion;
+        private MetroFramework.Controls.MetroLabel metroLabel3;
     }
 }
 
