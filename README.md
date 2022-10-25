@@ -22,7 +22,7 @@ Thx to [Avatarchik](https://github.com/Avatarchik/UnityPackageExtractor) for the
 
 Thx to [cassell1337](https://github.com/cassell1337) for assisted development of the GUI and old API. No longer developing as of V10.
 
-[Permanent Invite Link To Support Discord Server](https://discord.gg/dhSdMsfgWe)
+[Permanent Invite Link To Support Discord Server](https://discord.gg/vrc-ares)
 
 Features:
 
