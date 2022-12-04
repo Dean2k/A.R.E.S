@@ -84,7 +84,7 @@ namespace ARES.Properties {
         ///   Looks up a localized string similar to Developers:
         ///
         ///ShrekamusChrist
-        ///LargestBoi
+        ///LargestBoi(Retired)
         ///Cassell1337(Retired)
         ///RealBoppr(Retired)
         ///
@@ -99,8 +99,8 @@ namespace ARES.Properties {
         ///GitHub:
         /// -https://github.com/Dean2k/A.R.E.S
         ///Wanna join the community?
-        /// -https://discord.gg/dhSdMsfgWe
-        /// -https://ares-mod.com.
+        /// -https://discord.gg/vrc-ares
+        /// -https://ares-mod.com
         /// </summary>
         internal static string txtAbout {
             get {
