@@ -73,6 +73,8 @@ namespace ARES
             this.lblSearchType = new MetroFramework.Controls.MetroLabel();
             this.lblSearchTerm = new MetroFramework.Controls.MetroLabel();
             this.mTabSettings = new MetroFramework.Controls.MetroTabPage();
+            this.txtClientVersion = new MetroFramework.Controls.MetroTextBox();
+            this.metroLabel3 = new MetroFramework.Controls.MetroLabel();
             this.txtApiKey = new MetroFramework.Controls.MetroTextBox();
             this.metroLabel15 = new MetroFramework.Controls.MetroLabel();
             this.chkNoImages = new MetroFramework.Controls.MetroCheckBox();
@@ -132,8 +134,8 @@ namespace ARES
             this.pbRipped = new System.Windows.Forms.PictureBox();
             this.metroStyleManager = new MetroFramework.Components.MetroStyleManager(this.components);
             this.metroStyleExtender = new MetroFramework.Components.MetroStyleExtender(this.components);
-            this.txtClientVersion = new MetroFramework.Controls.MetroTextBox();
-            this.metroLabel3 = new MetroFramework.Controls.MetroLabel();
+            this.btnDecompWorld = new MetroFramework.Controls.MetroButton();
+            this.metroButton1 = new MetroFramework.Controls.MetroButton();
             this.groupBox1.SuspendLayout();
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.selectedImage)).BeginInit();
@@ -375,7 +377,7 @@ namespace ARES
             this.mTab.ItemSize = new System.Drawing.Size(54, 35);
             this.mTab.Location = new System.Drawing.Point(10, 65);
             this.mTab.Name = "mTab";
-            this.mTab.SelectedIndex = 1;
+            this.mTab.SelectedIndex = 2;
             this.mTab.Size = new System.Drawing.Size(896, 685);
             this.mTab.SizeMode = System.Windows.Forms.TabSizeMode.FillToRight;
             this.mTab.TabIndex = 14;
@@ -821,6 +823,55 @@ namespace ARES
             this.mTabSettings.VerticalScrollbarSize = 10;
             this.mTabSettings.Click += new System.EventHandler(this.mTabSettings_Click);
             // 
+            // txtClientVersion
+            // 
+            // 
+            // 
+            // 
+            this.txtClientVersion.CustomButton.Image = null;
+            this.txtClientVersion.CustomButton.Location = new System.Drawing.Point(228, 2);
+            this.txtClientVersion.CustomButton.Name = "";
+            this.txtClientVersion.CustomButton.Size = new System.Drawing.Size(27, 27);
+            this.txtClientVersion.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
+            this.txtClientVersion.CustomButton.TabIndex = 1;
+            this.txtClientVersion.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.txtClientVersion.CustomButton.UseSelectable = true;
+            this.txtClientVersion.CustomButton.Visible = false;
+            this.txtClientVersion.FontSize = MetroFramework.MetroTextBoxSize.Medium;
+            this.txtClientVersion.FontWeight = MetroFramework.MetroTextBoxWeight.Bold;
+            this.txtClientVersion.Lines = new string[] {
+        "2022.4.1p3-1263--Release"};
+            this.txtClientVersion.Location = new System.Drawing.Point(14, 437);
+            this.txtClientVersion.MaxLength = 1000;
+            this.txtClientVersion.Name = "txtClientVersion";
+            this.txtClientVersion.PasswordChar = '\0';
+            this.txtClientVersion.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.txtClientVersion.SelectedText = "";
+            this.txtClientVersion.SelectionLength = 0;
+            this.txtClientVersion.SelectionStart = 0;
+            this.txtClientVersion.ShortcutsEnabled = true;
+            this.txtClientVersion.Size = new System.Drawing.Size(258, 32);
+            this.txtClientVersion.TabIndex = 77;
+            this.txtClientVersion.Text = "2022.4.1p3-1263--Release";
+            this.metroToolTip1.SetToolTip(this.txtClientVersion, "Change this if its out of date");
+            this.txtClientVersion.UseSelectable = true;
+            this.txtClientVersion.UseStyleColors = true;
+            this.txtClientVersion.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
+            this.txtClientVersion.WaterMarkFont = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtClientVersion.TextChanged += new System.EventHandler(this.txtClientVersion_Changed);
+            // 
+            // metroLabel3
+            // 
+            this.metroLabel3.AutoSize = true;
+            this.metroLabel3.FontSize = MetroFramework.MetroLabelSize.Tall;
+            this.metroLabel3.FontWeight = MetroFramework.MetroLabelWeight.Bold;
+            this.metroLabel3.Location = new System.Drawing.Point(9, 409);
+            this.metroLabel3.Name = "metroLabel3";
+            this.metroLabel3.Size = new System.Drawing.Size(197, 25);
+            this.metroLabel3.TabIndex = 78;
+            this.metroLabel3.Text = "VRChat Client Version";
+            this.metroLabel3.UseStyleColors = true;
+            // 
             // txtApiKey
             // 
             // 
@@ -1244,6 +1295,8 @@ namespace ARES
             // 
             // metroTabPage3
             // 
+            this.metroTabPage3.Controls.Add(this.metroButton1);
+            this.metroTabPage3.Controls.Add(this.btnDecompWorld);
             this.metroTabPage3.Controls.Add(this.toggleWorld);
             this.metroTabPage3.Controls.Add(this.toggleAvatar);
             this.metroTabPage3.Controls.Add(this.btnWorldOut);
@@ -1265,7 +1318,7 @@ namespace ARES
             this.metroTabPage3.HorizontalScrollbarSize = 10;
             this.metroTabPage3.Location = new System.Drawing.Point(4, 39);
             this.metroTabPage3.Name = "metroTabPage3";
-            this.metroTabPage3.Size = new System.Drawing.Size(888, 602);
+            this.metroTabPage3.Size = new System.Drawing.Size(888, 642);
             this.metroTabPage3.TabIndex = 3;
             this.metroTabPage3.Text = "Utility";
             this.metroTabPage3.VerticalScrollbarBarColor = true;
@@ -1520,7 +1573,7 @@ namespace ARES
             this.metroTabPage2.HorizontalScrollbarSize = 10;
             this.metroTabPage2.Location = new System.Drawing.Point(4, 39);
             this.metroTabPage2.Name = "metroTabPage2";
-            this.metroTabPage2.Size = new System.Drawing.Size(888, 602);
+            this.metroTabPage2.Size = new System.Drawing.Size(888, 642);
             this.metroTabPage2.TabIndex = 2;
             this.metroTabPage2.Text = "About";
             this.metroTabPage2.VerticalScrollbarBarColor = true;
@@ -1647,7 +1700,7 @@ namespace ARES
             this.mtAvatar.HorizontalScrollbarSize = 10;
             this.mtAvatar.Location = new System.Drawing.Point(4, 39);
             this.mtAvatar.Name = "mtAvatar";
-            this.mtAvatar.Size = new System.Drawing.Size(888, 602);
+            this.mtAvatar.Size = new System.Drawing.Size(888, 642);
             this.mtAvatar.TabIndex = 4;
             this.mtAvatar.Text = "Avatar Comments";
             this.mtAvatar.VerticalScrollbarBarColor = true;
@@ -1768,54 +1821,25 @@ namespace ARES
             // 
             this.metroStyleExtender.Theme = MetroFramework.MetroThemeStyle.Dark;
             // 
-            // txtClientVersion
+            // btnDecompWorld
             // 
+            this.btnDecompWorld.Location = new System.Drawing.Point(491, 27);
+            this.btnDecompWorld.Name = "btnDecompWorld";
+            this.btnDecompWorld.Size = new System.Drawing.Size(155, 45);
+            this.btnDecompWorld.TabIndex = 55;
+            this.btnDecompWorld.Text = "metroButton1";
+            this.btnDecompWorld.UseSelectable = true;
+            this.btnDecompWorld.Click += new System.EventHandler(this.btnDecompWorld_Click);
             // 
+            // metroButton1
             // 
-            // 
-            this.txtClientVersion.CustomButton.Image = null;
-            this.txtClientVersion.CustomButton.Location = new System.Drawing.Point(228, 2);
-            this.txtClientVersion.CustomButton.Name = "";
-            this.txtClientVersion.CustomButton.Size = new System.Drawing.Size(27, 27);
-            this.txtClientVersion.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
-            this.txtClientVersion.CustomButton.TabIndex = 1;
-            this.txtClientVersion.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
-            this.txtClientVersion.CustomButton.UseSelectable = true;
-            this.txtClientVersion.CustomButton.Visible = false;
-            this.txtClientVersion.FontSize = MetroFramework.MetroTextBoxSize.Medium;
-            this.txtClientVersion.FontWeight = MetroFramework.MetroTextBoxWeight.Bold;
-            this.txtClientVersion.Lines = new string[] {
-        "2022.3.1p2-1249--Release"};
-            this.txtClientVersion.Location = new System.Drawing.Point(14, 437);
-            this.txtClientVersion.MaxLength = 1000;
-            this.txtClientVersion.Name = "txtClientVersion";
-            this.txtClientVersion.PasswordChar = '\0';
-            this.txtClientVersion.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.txtClientVersion.SelectedText = "";
-            this.txtClientVersion.SelectionLength = 0;
-            this.txtClientVersion.SelectionStart = 0;
-            this.txtClientVersion.ShortcutsEnabled = true;
-            this.txtClientVersion.Size = new System.Drawing.Size(258, 32);
-            this.txtClientVersion.TabIndex = 77;
-            this.txtClientVersion.Text = "2022.3.1p2-1249--Release";
-            this.metroToolTip1.SetToolTip(this.txtClientVersion, "Change this if its out of date");
-            this.txtClientVersion.UseSelectable = true;
-            this.txtClientVersion.UseStyleColors = true;
-            this.txtClientVersion.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
-            this.txtClientVersion.WaterMarkFont = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtClientVersion.TextChanged += new System.EventHandler(this.txtClientVersion_Changed);
-            // 
-            // metroLabel3
-            // 
-            this.metroLabel3.AutoSize = true;
-            this.metroLabel3.FontSize = MetroFramework.MetroLabelSize.Tall;
-            this.metroLabel3.FontWeight = MetroFramework.MetroLabelWeight.Bold;
-            this.metroLabel3.Location = new System.Drawing.Point(9, 409);
-            this.metroLabel3.Name = "metroLabel3";
-            this.metroLabel3.Size = new System.Drawing.Size(197, 25);
-            this.metroLabel3.TabIndex = 78;
-            this.metroLabel3.Text = "VRChat Client Version";
-            this.metroLabel3.UseStyleColors = true;
+            this.metroButton1.Location = new System.Drawing.Point(491, 88);
+            this.metroButton1.Name = "metroButton1";
+            this.metroButton1.Size = new System.Drawing.Size(155, 45);
+            this.metroButton1.TabIndex = 56;
+            this.metroButton1.Text = "metroButton1";
+            this.metroButton1.UseSelectable = true;
+            this.metroButton1.Click += new System.EventHandler(this.metroButton1_Click);
             // 
             // Main
             // 
@@ -1963,6 +1987,8 @@ namespace ARES
         public MetroFramework.Controls.MetroButton btnSaveVRC;
         public MetroFramework.Controls.MetroTextBox txtClientVersion;
         private MetroFramework.Controls.MetroLabel metroLabel3;
+        private MetroFramework.Controls.MetroButton btnDecompWorld;
+        private MetroFramework.Controls.MetroButton metroButton1;
     }
 }
 

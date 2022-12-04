@@ -214,21 +214,6 @@ namespace ARES
 
             cbLimit.SelectedIndex = 0;
             var filePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            if (!Directory.Exists(filePath + @"\Logs")) Directory.CreateDirectory(filePath + @"\Logs");
-
-            if (File.Exists(filePath + @"\LatestLog.txt"))
-            {
-                File.Move(filePath + @"\LatestLog.txt", string.Format(filePath + "\\Logs\\{0}.txt",
-                    $"{DateTime.Now:yyyy-MM-dd_HH-mm-ss-fff}"));
-                Thread.Sleep(500);
-                var myFile = File.Create(filePath + @"\LatestLog.txt");
-                myFile.Close();
-            }
-            else
-            {
-                var myFile = File.Create(filePath + @"\LatestLog.txt");
-                myFile.Close();
-            }
 
             if (!File.Exists(filePath + @"\Ripped.txt"))
             {
@@ -290,25 +275,6 @@ namespace ARES
             MessageBoxManager.Yes = "PC";
             MessageBoxManager.No = "Quest";
             MessageBoxManager.Register();
-
-            _localAvatars = CoreFunctions.GetLocalAvatars(this);
-            if (_localAvatars.Count > 0 && _apiEnabled)
-            {
-                _uploadThread = new Thread(() => CoreFunctions.UploadToApi(_localAvatars, this, Version));
-                _uploadThread.Start();
-            }
-
-            _localWorlds = CoreFunctions.GetLocalWorlds(this);
-            if (_localWorlds.Count > 0 && _apiEnabled) CoreFunctions.uploadToApiWorld(_localWorlds, this, Version);
-            try
-            {
-                CoreFunctions.WriteLog("Fetching unity sources", this);
-                _scanThread = new Thread(() => ScanPackage.DownloadOnlineSourcesOnStartup(this));
-                _scanThread.Start();
-            }
-            catch
-            {
-            }
         }
 
         private void UnitySetup()
@@ -1745,41 +1711,42 @@ namespace ARES
 
         private void btnScan_Click(object sender, EventArgs e)
         {
-            if (_scanThread.IsAlive)
-            {
-                MetroMessageBox.Show(this, "Still downloading hashes of files good & bad, please try again later",
-                    "Busy", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
+            MetroMessageBox.Show(this, "Scanner Temp Disabled");
+            //if (_scanThread.IsAlive)
+            //{
+            //    MetroMessageBox.Show(this, "Still downloading hashes of files good & bad, please try again later",
+            //        "Busy", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //    return;
+            //}
 
-            if (Directory.Exists(ScanPackage.UnityTemp)) tryDeleteDirectory(ScanPackage.UnityTemp);
+            //if (Directory.Exists(ScanPackage.UnityTemp)) tryDeleteDirectory(ScanPackage.UnityTemp);
 
-            Directory.CreateDirectory(ScanPackage.UnityTemp);
+            //Directory.CreateDirectory(ScanPackage.UnityTemp);
 
-            var packageSelected = selectPackage();
-            var outPath = "";
+            //var packageSelected = selectPackage();
+            //var outPath = "";
 
-            if (!string.IsNullOrEmpty(packageSelected))
-                outPath = PackageExtractor.ExtractPackage(packageSelected, ScanPackage.UnityTemp);
+            //if (!string.IsNullOrEmpty(packageSelected))
+            //    outPath = PackageExtractor.ExtractPackage(packageSelected, ScanPackage.UnityTemp);
 
-            var scanCount = ScanPackage.CheckFiles(this);
+            //var scanCount = ScanPackage.CheckFiles(this);
 
-            if (scanCount.Item3 > 0)
-            {
-                MessageBox.Show("Bad files were detected please select a new location for cleaned UnityPackage");
-                var fileLocation = createPackage();
-                var blank = new string[0];
-                var rootDir = "Assets/";
-                var pack = Package.FromDirectory(outPath, fileLocation, true, blank, blank);
-                pack.GeneratePackage(rootDir);
-            }
-            else
-            {
-                MessageBox.Show("No Bad files were detected");
-            }
+            //if (scanCount.Item3 > 0)
+            //{
+            //    MessageBox.Show("Bad files were detected please select a new location for cleaned UnityPackage");
+            //    var fileLocation = createPackage();
+            //    var blank = new string[0];
+            //    var rootDir = "Assets/";
+            //    var pack = Package.FromDirectory(outPath, fileLocation, true, blank, blank);
+            //    pack.GeneratePackage(rootDir);
+            //}
+            //else
+            //{
+            //    MessageBox.Show("No Bad files were detected");
+            //}
 
-            MessageBox.Show(
-                $"Bad files detected {scanCount.Item3}, Safe files detected {scanCount.Item1}, Unknown files detected {scanCount.Item2}");
+            //MessageBox.Show(
+            //    $"Bad files detected {scanCount.Item3}, Safe files detected {scanCount.Item1}, Unknown files detected {scanCount.Item2}");
         }
 
         private string selectPackage()
@@ -2394,6 +2361,16 @@ namespace ARES
         private void txtClientVersion_Changed(object sender, EventArgs e)
         {
             StaticValues.ClientVersion = txtClientVersion.Text;
+        }
+
+        private void btnDecompWorld_Click(object sender, EventArgs e)
+        {
+            HotSwap.DecompressToFileStr("custom.vrca", "decomp.vrcw", HotSwapConsole);
+        }
+
+        private void metroButton1_Click(object sender, EventArgs e)
+        {
+            HotSwap.CompressBundle("decomp.vrcw", "comp.vrcw", HotSwapConsole);
         }
     }
 }
