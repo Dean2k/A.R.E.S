@@ -134,8 +134,6 @@ namespace ARES
             this.pbRipped = new System.Windows.Forms.PictureBox();
             this.metroStyleManager = new MetroFramework.Components.MetroStyleManager(this.components);
             this.metroStyleExtender = new MetroFramework.Components.MetroStyleExtender(this.components);
-            this.btnDecompWorld = new MetroFramework.Controls.MetroButton();
-            this.metroButton1 = new MetroFramework.Controls.MetroButton();
             this.groupBox1.SuspendLayout();
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.selectedImage)).BeginInit();
@@ -1295,8 +1293,6 @@ namespace ARES
             // 
             // metroTabPage3
             // 
-            this.metroTabPage3.Controls.Add(this.metroButton1);
-            this.metroTabPage3.Controls.Add(this.btnDecompWorld);
             this.metroTabPage3.Controls.Add(this.toggleWorld);
             this.metroTabPage3.Controls.Add(this.toggleAvatar);
             this.metroTabPage3.Controls.Add(this.btnWorldOut);
@@ -1821,26 +1817,6 @@ namespace ARES
             // 
             this.metroStyleExtender.Theme = MetroFramework.MetroThemeStyle.Dark;
             // 
-            // btnDecompWorld
-            // 
-            this.btnDecompWorld.Location = new System.Drawing.Point(491, 27);
-            this.btnDecompWorld.Name = "btnDecompWorld";
-            this.btnDecompWorld.Size = new System.Drawing.Size(155, 45);
-            this.btnDecompWorld.TabIndex = 55;
-            this.btnDecompWorld.Text = "metroButton1";
-            this.btnDecompWorld.UseSelectable = true;
-            this.btnDecompWorld.Click += new System.EventHandler(this.btnDecompWorld_Click);
-            // 
-            // metroButton1
-            // 
-            this.metroButton1.Location = new System.Drawing.Point(491, 88);
-            this.metroButton1.Name = "metroButton1";
-            this.metroButton1.Size = new System.Drawing.Size(155, 45);
-            this.metroButton1.TabIndex = 56;
-            this.metroButton1.Text = "metroButton1";
-            this.metroButton1.UseSelectable = true;
-            this.metroButton1.Click += new System.EventHandler(this.metroButton1_Click);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1987,8 +1963,6 @@ namespace ARES
         public MetroFramework.Controls.MetroButton btnSaveVRC;
         public MetroFramework.Controls.MetroTextBox txtClientVersion;
         private MetroFramework.Controls.MetroLabel metroLabel3;
-        private MetroFramework.Controls.MetroButton btnDecompWorld;
-        private MetroFramework.Controls.MetroButton metroButton1;
     }
 }
 

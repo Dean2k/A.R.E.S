@@ -2362,15 +2362,5 @@ namespace ARES
         {
             StaticValues.ClientVersion = txtClientVersion.Text;
         }
-
-        private void btnDecompWorld_Click(object sender, EventArgs e)
-        {
-            HotSwap.DecompressToFileStr("custom.vrca", "decomp.vrcw", HotSwapConsole);
-        }
-
-        private void metroButton1_Click(object sender, EventArgs e)
-        {
-            HotSwap.CompressBundle("decomp.vrcw", "comp.vrcw", HotSwapConsole);
-        }
     }
 }
