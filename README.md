@@ -1,4 +1,4 @@
-# DEPRICATION NOTICE : ARES has been discontinued and continued development on a tool that acomlishes the same and more is occuring with [S.A.R.S](https://github.com/Dean2k/S.A.R.S)
+# DEPRICATION NOTICE : A.R.E.S has been discontinued and continued development on a tool that acomlishes the same and more is occuring with [S.A.R.S](https://github.com/Dean2k/S.A.R.S)
 
 # A.R.E.S
 
