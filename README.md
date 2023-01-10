@@ -1,3 +1,5 @@
+# DEPRICATION NOTICE : ARES has been discontinued and continued development on a tool that acomlishes the same and more is occuring with [S.A.R.S](https://github.com/Dean2k/S.A.R.S)
+
 # A.R.E.S
 
 ARES is an avatar recovery tool! It is only for educational uses! We do not condone theft of avatars, the tool soley exists to recover avatars from within VRChat back onto new accounts and into their unity packages keeping as much of the avatar in-tact as possible!
@@ -22,7 +24,7 @@ Thx to [Avatarchik](https://github.com/Avatarchik/UnityPackageExtractor) for the
 
 Thx to [cassell1337](https://github.com/cassell1337) for assisted development of the GUI and old API. No longer developing as of V10.
 
-[Permanent Invite Link To Support Discord Server](https://discord.gg/vrc-ares)
+[Permanent Invite Link To Support Discord Server](https://discord.gg/AvatarRecovery)
 
 Features:
 
